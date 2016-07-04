@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GTKSharp - Part 1 - Cross Platform Toolkits - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp,toolkits" />
+        <meta name="description" content="Exploring the different GUI toolkits available for .Net across different platforms" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GTKSharp - Part 1 - Cross Platform Toolkits"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/"/>
+        <meta property="og:description" content="Exploring the different GUI toolkits available for .Net across different platforms"/>
+        <meta property="article:published_time" content="2016-01-28" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:tag" content="toolkits" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/"
+                       rel="bookmark"
+                       title="Permalink to GTKSharp - Part 1 - Cross Platform Toolkits">
+                        GTKSharp - Part 1 - Cross Platform Toolkits
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-01-28T19:00:00+00:00"> Thu 28 January 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+        /
+	<a href="http://grbd.github.io/tag/toolkits.html">toolkits</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>I decided to have a look into the different toolkit's available for writing .Net code with a GUI that can be used across
+multiple platforms. Some of these platforms would include Microsoft Windows 10, Linux and embedded devices such as the Raspberry Pi</p>
+<p>I've posted some example code here for GtkSharp</p>
+<ul>
+<li><a href="https://github.com/grbd/GBD.Blog.Examples">https://github.com/grbd/GBD.Blog.Examples</a></li>
+</ul>
+<p>There were four main options I looked into</p>
+<ul>
+<li>WinForms</li>
+<li>QtSharp</li>
+<li>Eto.Forms</li>
+<li>GtkSharp</li>
+</ul>
+<h2>WinForms</h2>
+<p><img alt="winformsimg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/WinForms1.png" /></p>
+<p>Winforms is traditionally the toolkit used by Microsoft for .Net / with Visual Studio, it dates back to the good old VB6 days.
+The Xamarin and mono team have put a lot of work into making sure that that this toolkit can run on both windows and Linux via mono.
+However, when you google Winforms and cross compatibility it looks as if the main focus is now on GTK instead as the main alternative.
+The one main advantage to Winforms is that it's designable via Visual Studio's inbuilt GUI. Upon googling most of the opinions online, the code base has been largely untouched for a long while on the mono side.</p>
+<h2>QtSharp</h2>
+<p><img alt="QtFormImage" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/QtForm1.png" /></p>
+<p>Qt for me has the best looking toolkit, also it has QML which is a form of descriptive language for describing the layout of forms similar in some respects to Xaml.
+There's been a few different attempts at a .Net binding for Qt, first there was a very old project called QtSharp, then another project
+to replace that one called Qyoto which seems to have now been abandoned, and finally the latest incarnation which has re-used the name of QtSharp.</p>
+<p>QtSharp uses the CppSharp library as a way of generating the bindings from the c++ Qt libraries into the .Net space.
+At this stage it's still very new and in alpha state, after testing it myself it does appear to actually be able to create and show windows, however there are a couple of gotcha's still.</p>
+<ul>
+<li>The code is still in Alpha state, which means it may be a while before it's ready for production</li>
+<li>Currently CppSharp doesn't support templated functions (c++ generics) so certain function calls and properties are currently unavailable (such as interating over the child controls within a form or container)</li>
+<li>QML based apps are going to require some special coding before they can be used from .Net</li>
+</ul>
+<p>I'm still hopeful this will be useful in the future since I'm quite keen on Qt. Looking at some of the c++ projects online there seems to have been a lot of talk of projects moving from Gtk to Qt due to issues with the newer versions of Gtk and it being largely Gnome focused.
+For now, it still needs a lot of work however.</p>
+<p>For some example code to experiment with QtSharp</p>
+<ul>
+<li><a href="https://github.com/grbd/QtSharp.TestApps">https://github.com/grbd/QtSharp.TestApps</a></li>
+</ul>
+<p>You may also want to check out the official repositories
+(the gitlab repo is the most up-to-date one)</p>
+<ul>
+<li><a href="https://github.com/mono/CppSharp">https://github.com/mono/CppSharp</a></li>
+<li><a href="https://gitlab.com/ddobrev/QtSharp">https://gitlab.com/ddobrev/QtSharp</a></li>
+<li><a href="https://github.com/ddobrev/QtSharp">https://github.com/ddobrev/QtSharp</a></li>
+</ul>
+<h2>Eto.Forms</h2>
+<p><img alt="EtoFormsImg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/EtoForm1.png" /></p>
+<p>Eto.Forms was the next toolkit I looked into.
+It's basically a wrapper that sits on top of other toolkits such as windows forms, GtkSharp, WPF, etc.
+It's one advantage is that it has the ability to create forms based on Xaml similar to WPF Forms</p>
+<p>There are a couple of downsides though</p>
+<ul>
+<li>The range of controls for containers is still a bit limited</li>
+<li>Currently there's no GUI / drag and drop designer, but there is a window to preview the rendered Xaml</li>
+</ul>
+<h2>GtkSharp</h2>
+<p><img alt="GtkSharpImg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/GtkSharp1.png" /></p>
+<p>The final toolkit I tried looking into was GtkSharp. This seems to be a lot more mature than the other toolkits in relation to .Net with bug fixes and patches.
+There does seem to be a bit of confusion over which version to use and how to set it up.
+After a fair bit of digging around online I finally managed to figure out how to get a basic GTK3 based GTKSharp Application up and running
+under .Net. Given that some of the documentation is still a bit sparse when it comes to the GTK3 version I figured I'd put some information
+up on how to get it going with Visual Studio.</p>
+<p>One advantage to GtkSharp which I'm also interested in is the use of cairo for vector graphics, there's also some unofficial methods of getting it to work with Monogame which is a cross platform 3D library originally based on XNA.</p>
+<ul>
+<li><a href="http://www.mono-project.com/docs/gui/gtksharp/">GTK-Sharp</a> - The Main .Net library for creating GTK based GUI Applications</li>
+<li><a href="https://developer.gnome.org/glib/2.46/">GLIB-Sharp</a> - Glib Sharp is a library used by GTK for Core Functionality such as memory management</li>
+<li><a href="https://en.wikipedia.org/wiki/GDK">GDK-Sharp</a> - Gimp Drawing Kit, this is a low level drawing library used by GTK for graphics rendering</li>
+<li>
+<p><a href="https://developer.gnome.org/gio/2.47/">GIO-Sharp</a> - The Gio library deals with low level Gnome IO for Filesystem / Network / Process Handling / DBUS / Application Settings</p>
+</li>
+<li>
+<p><a href="http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cairo/">Cairo-Sharp</a> - Cairo can be used for 2D Vector graphics</p>
+</li>
+<li><a href="http://www.mono-project.com/archived/pangobeginners/">Pango-Sharp</a> - pango handles all of the font and text related functions for GTK</li>
+<li>ATK-Sharp - atk deals with accessibility</li>
+<li><a href="http://cairographics.org/OpenGL/">Open-GL with Cairo</a></li>
+</ul>
+<h2>GTK Versions</h2>
+<p>After a bit of digging around online there appears to be two versions of GtkSharp available at the moment.
+One for GTK2 and one for GTK3</p>
+<h3>GTK2</h3>
+<p>The one for GTK2 is probably more stable and widley used, but the one I'm interested in here is the GTK3 version.
+If you look for the default windows .msi installer on the mono site</p>
+<ul>
+<li><a href="http://www.mono-project.com/docs/gui/gtksharp/installer-for-net-framework/">MSI Instaler</a></li>
+<li><a href="http://www.mono-project.com/download/#download-win">Main Download URL</a></li>
+</ul>
+<p>This is actually the older GTK2 version which installs under "C:\Program Files (x86)\GtkSharp\2.12\" on Windows.
+The official github account for GtkSharp seems to mirror this (latest version 2.12.30)</p>
+<ul>
+<li><a href="https://github.com/mono/gtk-sharp/">https://github.com/mono/gtk-sharp/</a></li>
+</ul>
+<h3>GTK3</h3>
+<p>If you look for the NuGet packages online <a href="https://www.nuget.org/packages?q=gtk-sharp">NuGet Link</a>.
+As far as I can tell I think these versions are unofficial (although quite useful)</p>
+<ul>
+<li>GtkSharp (3.1.3) - GTK3 .Net libraries</li>
+<li>GtkSharp.Win32 - GTK3 C libraries for Windows</li>
+<li>GTKSharp.Linux - GTK3 C libraries for Linux</li>
+</ul>
+<p>This is the version I'll be using in the following articles.
+I suspect although I'm not entirely sure that the source code for this version is based on the below GitHub Link.</p>
+<ul>
+<li><a href="https://github.com/openmedicus/gtk-sharp">https://github.com/openmedicus/gtk-sharp</a></li>
+</ul>
+<p><br>
+<a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/">Part 2 - Setting up Glade</a></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

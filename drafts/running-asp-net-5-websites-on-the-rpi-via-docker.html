@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Running ASP .Net 5 Websites on the Rpi via Docker - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/running-asp-net-5-websites-on-the-rpi-via-docker.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="description" content="Overview TODO Setup Install In order to install the latest Docker tools for Visual Studio we first need to install Docker Toolbox https://www.docker.com/products/docker-toolbox Next we need the latest Docker Tools For Visual Studio 2015. The older versions seem to have certain bugs surrounding the creation ..." />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Running ASP .Net 5 Websites on the Rpi via Docker"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/running-asp-net-5-websites-on-the-rpi-via-docker.html"/>
+        <meta property="og:description" content="Overview TODO Setup Install In order to install the latest Docker tools for Visual Studio we first need to install Docker Toolbox https://www.docker.com/products/docker-toolbox Next we need the latest Docker Tools For Visual Studio 2015. The older versions seem to have certain bugs surrounding the creation ..."/>
+        <meta property="article:published_time" content="2016-01-28" />
+            <meta property="article:section" content="drafts" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/drafts.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog drafts ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/running-asp-net-5-websites-on-the-rpi-via-docker.html"
+                       rel="bookmark"
+                       title="Permalink to Running ASP .Net 5 Websites on the Rpi via Docker">
+                        Running ASP .Net 5 Websites on the Rpi via Docker
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-01-28T21:00:00+00:00"> Thu 28 January 2016</time>
+    </span>
+
+
+
+
+
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>TODO</p>
+<h2>Setup</h2>
+<h3>Install</h3>
+<p>In order to install the latest Docker tools for Visual Studio we first need to install Docker Toolbox</p>
+<ul>
+<li><a href="https://www.docker.com/products/docker-toolbox">https://www.docker.com/products/docker-toolbox</a></li>
+</ul>
+<p>Next we need the latest Docker Tools For Visual Studio 2015.
+The older versions seem to have certain bugs surrounding the creation of images</p>
+<ul>
+<li><a href="https://visualstudiogallery.msdn.microsoft.com/0f5b2caa-ea00-41c8-b8a2-058c7da0b3e4">https://visualstudiogallery.msdn.microsoft.com/0f5b2caa-ea00-41c8-b8a2-058c7da0b3e4</a></li>
+</ul>
+<h2>Docker Base Image</h2>
+<p>On the server side we need a base image with everything needed installed to run a aspnet website
+In this case the best option for a base image seems to be resin/rpi-raspbian:jessie for the rpi</p>
+<p>we can then add to this base image the bits we need for aspnet</p>
+<p>Based on these links:</p>
+<ul>
+<li>https://github.com/aspnet/aspnet-docker/tree/master/1.0.0-rc1-update1</li>
+<li>https://docs.docker.com/engine/userguide/containers/dockerimages/</li>
+</ul>
+<p>TODO include modified aspnet Docker file</p>
+<p>The above is the aspnet docker file with a couple of modifications
+First it uses the <strong>resin/rpi-raspbian:jessie</strong> as a base image instead because we're using a rpi not an x86 machine
+also it installs <strong>ca-certificates</strong> needed for curl</p>
+<p>To Build</p>
+<div class="highlight"><pre><span></span>cd /home/ric/DockerProfiles/garlicbready/rpi-raspbian-aspnet-coreclr/
+docker build -t garlicbready/rpi-raspbian-aspnet:v1 .
+</pre></div>
+
+
+<h2>Publish via VS</h2>
+<h3>Web Application Docker File</h3>
+<p>Within the root of the web application there should be a single Docker File with the following contents
+we can't use the default microsoft/aspnet image since it's x86 based</p>
+<div class="highlight"><pre><span></span>FROM microsoft/aspnet:
+
+ADD . /app
+
+WORKDIR /app/approot
+
+ENTRYPOINT [&quot;./web&quot;]
+</pre></div>
+
+
+<p>replace the FROM statement with
+<code>FROM garlicbready/rpi-raspbian-aspnet-mono:4.2.2.30</code></p>
+<p>add the line for exposing the web port
+<code>EXPOSE 5000</code></p>
+<p>The end result should be</p>
+<div class="highlight"><pre><span></span>FROM garlicbready/rpi-raspbian-aspnet-mono:4.2.2.30
+
+ADD . /app
+EXPOSE 5000
+
+WORKDIR /app/approot
+ENTRYPOINT [&quot;./web&quot;]
+</pre></div>
+
+
+<h3>Project File</h3>
+<p>Change the kestrel binding to the following to listen in on all ip's not just localhost</p>
+<div class="highlight"><pre><span></span> &quot;web&quot;: &quot;Microsoft.AspNet.Server.Kestrel --server.urls=http://*:5000&quot;
+</pre></div>
+
+
+<h3>Visual Studio Publish</h3>
+<p>Next to publish</p>
+<ul>
+<li>Select Build -&gt; Publish WebApplication</li>
+<li>Select Docker Containers</li>
+<li>
+<p>Select Custom Docker Host tickbox, click Okay</p>
+</li>
+<li>
+<p>For the server url use tcp://192.168.111.53:2376</p>
+</li>
+<li>For the Host port pick something like <strong>8080</strong> this is what will be viewable from the outside</li>
+<li>For the Contaimer port pick <strong>5000</strong> by default for the web app</li>
+</ul>
+<p>make sure to use tcp:// not http:// in the url</p>
+<p>this will build the site and create a statement similar to
+docker -H tcp://192.168.111.53:2376 build -t webapplication1 -f "C:\Users\ric\AppData\Local\Temp\PublishTemp\WebApplication188\approot\src\WebApplication1\Dockerfile" "C:\Users\ric\AppData\Local\Temp\PublishTemp\WebApplication188"</p>
+<p>TODO
+it looks like coreclr doesn't currently work
+since the runtimes are set / compiled for x64 via
+ENV DNX_RUNTIME_ID ubuntu.14.04-x64
+so we need a mono based deployment instead</p>
+<p>do we need to enable masquerading?
+iptables -t nat -A  POSTROUTING  -o  wlan0  -j  MASQUERADE</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

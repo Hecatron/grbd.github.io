@@ -1,0 +1,919 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Garlicbreads Blog</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/dotnet.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-06-30T12:00:00+01:00</updated><entry><title>Building GTK3 / GtkSharp under Windows - Manual Build</title><link href="http://grbd.github.io/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/" rel="alternate"></link><published>2016-06-30T12:00:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-30:posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;Looking at the current NuGet packages for GtkSharp and the gtk3 binaries within GtkSharp.Win32.
+These are not for the most recent version of Gtk3.
+I decided to look into the process for building GTK3 and the latest version of GTKSharp under windows.
+This also has the advantage of possibly using 64bit versions of GTK3.&lt;/p&gt;
+&lt;p&gt;The first links I looked into were&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.gtk.org/download/windows.php"&gt;http://www.gtk.org/download/windows.php&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/wingtk/gtk-win32"&gt;https://github.com/wingtk/gtk-win32&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The problem with the gtk-win32 build though is that the dll's lack the "lib" prefix to the dll names.
+This is something that's expected by gtksharp for cross compatibility with linux.
+Since there is interdependence between the different dll's, simply renaming them wouldn't be enough.&lt;/p&gt;
+&lt;h2&gt;Native Libs&lt;/h2&gt;
+&lt;p&gt;Fortunately there's a very easy way to get the dll's we need prebuilt, and that is to just copy them out of MSYS2 &lt;br&gt;
+First we need to install MSYS2 from &lt;a href="https://msys2.github.io/"&gt;https://msys2.github.io/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Next open up a MSYS2 prompt then run the following to update the package database&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Syuu
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To search for a package&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Ss gtk3
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Installing the 32Bit Dll's&lt;/h3&gt;
+&lt;p&gt;Lets now open a MinGW &lt;strong&gt;32bit&lt;/strong&gt; console window (bundled with MSYS2). &lt;br&gt;
+We can use the following to install the dll's we want.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw-w64-i686-gcc mingw-w64-i686-glib2
+pacman -S mingw-w64-i686-pango mingw-w64-i686-atk mingw-w64-i686-gtk3
+pacman -S mingw-w64-i686-zlib mingw-w64-i686-libiconv
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If we now look within &lt;strong&gt;C:\msys64\mingw32\bin&lt;/strong&gt;, we can harvest the native library dll's we want to use with GtkSharp &lt;br&gt;
+Using PE Explorer to look at the dll depends to pick out what I need for GTK3, I came up with the below list for gtk3 3.20.4-1&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;GTK Libs:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;libatk-1.0-0.dll
+libcairo-2.dll
+libcairo-gobject-2.dll
+libgdk_pixbuf-2.0-0.dll
+libgdk-3-0.dll
+libgio-2.0-0.dll
+libglib-2.0-0.dll
+libgmodule-2.0-0.dll
+libgobject-2.0-0.dll
+libgtk-3-0.dll
+libpango-1.0-0.dll
+libpangocairo-1.0-0.dll
+libpangoft2-1.0-0.dll
+libpangowin32-1.0-0.dll
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Dependencies:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;libbz2-1.dll
+libepoxy-0.dll
+libexpat-1.dll
+libffi-6.dll
+libfontconfig-1.dll
+libfreetype-6.dll
+libgcc_s_dw2-1.dll
+libgraphite2.dll
+libharfbuzz-0.dll
+libiconv-2.dll
+libintl-8.dll
+liblzma-5.dll
+libpcre-1.dll
+libpixman-1-0.dll
+libpng16-16.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+libxml2-2.dll
+zlib1.dll
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Installing the 64Bit Dll's&lt;/h3&gt;
+&lt;p&gt;For the 64bit dll's we can do something very similar to the above &lt;br&gt;
+Under a MinGw 64bit console window&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-glib2
+pacman -S mingw-w64-x86_64-pango mingw-w64-x86_64-atk mingw-w64-x86_64-gtk3
+pacman -S mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should result in the equivilent 64bit files to show up under &lt;strong&gt;C:\msys64\mingw64\bin&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;GtkSharp .Net Libs&lt;/h2&gt;
+&lt;h3&gt;The Build process&lt;/h3&gt;
+&lt;p&gt;Next we're going to need to build the gtksharp sources into .Net dll's&lt;/p&gt;
+&lt;p&gt;Just to explain a bit about how the build process works. &lt;br&gt;
+The build process can be described as a 2 stage process&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;gapi-parser&lt;/strong&gt; - generate xml files from original gtk source code libraries&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;configure / make&lt;/strong&gt; - generate some of the cs files from the xml files from stage 1
+    and create the compiled dll's we need to run gtksharp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The first stage is usually done already for us by the person maintaining the source repo. &lt;br&gt;
+Looking at the git repo &lt;a href="https://github.com/openmedicus/gtk-sharp.git"&gt;https://github.com/openmedicus/gtk-sharp.git&lt;/a&gt; this seems to match the version of gtk3 within MSYS2 &lt;br&gt;
+so we should be able to skip over this stage&lt;/p&gt;
+&lt;p&gt;From what I can gather the above step involves&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;extracting the source code for the different gtk libraries into the sources directory located within gtk-sharp.&lt;/li&gt;
+&lt;li&gt;running &lt;em&gt;make api&lt;/em&gt; to generate the .raw files located within each of the source directories such as gdk-api.raw.&lt;/li&gt;
+&lt;li&gt;The input file for this process is sources.xml&lt;/li&gt;
+&lt;li&gt;under the hood the Makefile calls &lt;em&gt;..\parser\gapi-parser sources.xml&lt;/em&gt; &lt;br&gt;&lt;/li&gt;
+&lt;li&gt;The parsing is actually handled via &lt;a href="http://www.mono-project.com/GAPI"&gt;http://www.mono-project.com/GAPI&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The second stage is the part we're interested in, this involves the make build system.
+I've found the easiest way to do this is via the use of MSYS2 / MinGW Console.&lt;/p&gt;
+&lt;h3&gt;Setting up MSYS2&lt;/h3&gt;
+&lt;p&gt;First we need to setup MSYS2 to handle the build process for gtksharp &lt;br&gt;
+Let's start a "MinGw-w64 Win32 Shell" &lt;br&gt;
+One of the first packages we need is gcc so let's install that first&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw-w64-i686-gcc mingw-w64-i686-glib2
+pacman -S mingw-w64-i686-pango mingw-w64-i686-atk mingw-w64-i686-gtk3
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Let's install a couple more packages to help out&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S gzip nasm patch tar xz gettext make coreutils diffutils wget
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Downloading the Source&lt;/h3&gt;
+&lt;p&gt;Next we need to download the source for gtk-sharp. &lt;br&gt;
+Lets create a new directory called &lt;strong&gt;C:\gtk-build&lt;/strong&gt; and download the gtk-sharp source into that directory&lt;/p&gt;
+&lt;p&gt;Using a Visual Studio Developer command prompt:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;cd&lt;/span&gt; C:\gtk-build
+git clone https://github.com/openmedicus/gtk-sharp.git
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Note I had to make a small change to the source to get it to build, the fork is located here &lt;a href="https://github.com/grbd/gtk-sharp.git"&gt;https://github.com/grbd/gtk-sharp.git&lt;/a&gt;&lt;br&gt;
+I've submitted a pull request for this to be submitted to the main tree&lt;/p&gt;
+&lt;h3&gt;Running the Build Scripts&lt;/h3&gt;
+&lt;p&gt;Next we need to run the build scripts from within MSYS2&lt;br&gt;
+The link below is a bit out of date but it was usefull for me to figure out how to handle the build process&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.mono-project.com/archived/compiling_gtksharp/"&gt;http://www.mono-project.com/archived/compiling_gtksharp/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To start the build switch back to the MinGW Prompt we opened earlier and run the following&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:/c/Program&lt;span class="se"&gt;\ &lt;/span&gt;Files&lt;span class="se"&gt;\ \(&lt;/span&gt;x86&lt;span class="se"&gt;\)&lt;/span&gt;/Microsoft&lt;span class="se"&gt;\ &lt;/span&gt;SDKs/Windows/v10.0A/bin/NETFX&lt;span class="se"&gt;\ &lt;/span&gt;4.6&lt;span class="se"&gt;\ &lt;/span&gt;Tools/
+&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;:/c/Windows/Microsoft.NET/Framework/v4.0.30319/
+
+&lt;span class="nb"&gt;cd&lt;/span&gt; /c/gtk-build/gtk-sharp/
+./autogen.sh --prefix&lt;span class="o"&gt;=&lt;/span&gt;/tmp/install
+make
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;End Result&lt;/h3&gt;
+&lt;p&gt;The end result should be a series of .Net dll files located within subdirectories of the gtk-sharp directory. &lt;br&gt;
+I avoided running &lt;em&gt;make install&lt;/em&gt; as that seems to try copying / registering the dll's into the GAC of the local system. &lt;br&gt;
+Instead I'm more interested in using these files along with the native dll libs above for the bundling into NuGet Packages. &lt;br&gt;
+In order to test this out manually&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create a simple test app within Visual Studio&lt;/li&gt;
+&lt;li&gt;Copy and paste all the native dll's mentioned above, along with the .net dll's from gtksharp into the Debug/bin directory
+    (the destination where everything is compiled to for the test application)&lt;/li&gt;
+&lt;li&gt;Manually add references within the test application to the copied .Net dll's&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This should allow you to get an application up and running for testing&lt;/p&gt;
+&lt;h2&gt;Next Step&lt;/h2&gt;
+&lt;p&gt;For the next step I'll probably look into a way of building this more automatically perhaps via a python script.
+With any luck I might be able to get some of my own custom NuGet packages uploaded.&lt;/p&gt;
+&lt;p&gt;Many thanks to those that are maintaining a gtksharp for gtk3,
+This seems to be currently one of the few libraries that is production ready for use as a cross platform Desktop GUI at the moment.&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category><category term="gtk"></category></entry><entry><title>GTKSharp - Part 5 - Themes and ClearText</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/" rel="alternate"></link><published>2016-06-25T23:30:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;One of the interesting features of GtkSharp and GTK3 is it's theming ability.
+Although there doesn't seem to be a lot of documenation on handling this easily within .Net and GtkSharp&lt;/p&gt;
+&lt;p&gt;After a bit of digging around I've recently managed to get themes working with GtkSharp.
+Also I've discovered a fix for cleartext to make the fonts look nicer under windows and to alter the dpi settings. &lt;br&gt;
+As with prior code, I've placed examples within a gitrepo of &lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;GTK 3 Themes&lt;/h2&gt;
+&lt;h3&gt;Theme Versions&lt;/h3&gt;
+&lt;p&gt;The first thing to be aware of is the version of gtk in use, within the NuGet package &lt;em&gt;GtkSharp.Win32&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;When theming it's important to use a theme compatible with the version of gtk used by GtkSharp, currently that's &lt;strong&gt;gtk-3.14&lt;/strong&gt; as of writing with the NuGet package &lt;br&gt;
+With &lt;strong&gt;gtk-3.14&lt;/strong&gt; and upwards the theme engine (which used to be a separate dll in older versions) is now bundled within the gtk libs &lt;br&gt;
+If you pick a theme that complains about "adwaita not found" when loading, it's probably designed for an older version of gtk and is trying to load the engine which is already in memory&lt;/p&gt;
+&lt;p&gt;For a list of themes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.gnome-look.org/"&gt;https://www.gnome-look.org/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Selecting a theme&lt;/h3&gt;
+&lt;p&gt;In order to load in a theme with gtksharp / gtk3 we can use something similar to the below&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For C#&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// Load the Theme&lt;/span&gt;
+&lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoadFromPath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;StyleContext&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddProviderForScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Gdk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Screen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;800&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c"&gt;&amp;#39; Load the Theme&lt;/span&gt;
+&lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt;
+&lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoadFromPath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;StyleContext&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddProviderForScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Gdk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Screen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;By using LoadFromPath to load in the root css file (usually gtk-3.0/gtk.css) &lt;br&gt;
+From that point onwards everything else should be loaded in automatically. &lt;br&gt;
+In order for the above to work, the themes directory needs to be relative to the exe, although an absolute path can be specified.&lt;/p&gt;
+&lt;h3&gt;The old theme selection method&lt;/h3&gt;
+&lt;p&gt;One older method of loading themes within gtksharp was the use of Settings.Default.ThemeName&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;Settings&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ThemeName&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;delorean-dark-theme-3.9&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;With the more recent version of gtksharp / gtk3 this doesn't appear to work. &lt;br&gt;
+However it still might be useful if your using an older version of gtksharp with gtk2&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name"&gt;https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;ClearText&lt;/h3&gt;
+&lt;p&gt;Based on some observations of the end result, I discovered that under windows there was potentially a problem with the default setting for the use of ClearText.
+ClearText has an impact on the visibility / smoothness of the displayed fonts within Gtk and GtkSharp.
+With applications run from MSYS2 with the default theme, compared to an application running from GtkSharp, the fonts do seem to be very different by default&lt;/p&gt;
+&lt;p&gt;This is something that may be fixed eventually within the gtk libs (GtkSharp.Win32)
+But for now one way around this is to use some code similar to the below&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For C#&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;ApplyTheme&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;// Based on this Link http://awesome.naquadah.org/wiki/Better_Font_Rendering&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Get the Global Settings&lt;/span&gt;
+    &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;setts&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Settings&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;// This enables clear text on Win32, makes the text look a lot less crappy&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftRgba&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;rgb&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;// This enlarges the size of the controls based on the dpi&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftDpi&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;96&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;// By Default Anti-aliasing is enabled, if you want to disable it for any reason set this value to 0&lt;/span&gt;
+    &lt;span class="c1"&gt;//setts.XftAntialias = 0&lt;/span&gt;
+    &lt;span class="c1"&gt;// Enable text hinting&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftHinting&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="c1"&gt;//setts.XftHintstyle = &amp;quot;hintslight&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftHintstyle&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;hintfull&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// Load the Theme&lt;/span&gt;
+    &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="c1"&gt;//css_provider.LoadFromPath(&amp;quot;themes/DeLorean-3.14/gtk-3.0/gtk.css&amp;quot;)&lt;/span&gt;
+    &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoadFromPath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;StyleContext&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddProviderForScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Gdk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Screen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;800&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Shared&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;ApplyTheme&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; Based on this Link http://awesome.naquadah.org/wiki/Better_Font_Rendering&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39; Get the Global Settings&lt;/span&gt;
+    &lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;setts&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Settings&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; This enables clear text on Win32, makes the text look a lot less crappy&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftRgba&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;rgb&amp;quot;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; This enlarges the size of the controls based on the dpi&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftDpi&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;96&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; By Default Anti-aliasing is enabled, if you want to disable it for any reason set this value to 0&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;setts.XftAntialias = 0&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; Enable text hinting&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftHinting&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;setts.XftHintstyle = &amp;quot;hintslight&amp;quot;&lt;/span&gt;
+    &lt;span class="n"&gt;setts&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;XftHintstyle&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;hintfull&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39; Load the Theme&lt;/span&gt;
+    &lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CssProvider&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;css_provider.LoadFromPath(&amp;quot;themes/DeLorean-3.14/gtk-3.0/gtk.css&amp;quot;)&lt;/span&gt;
+    &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LoadFromPath&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;StyleContext&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;AddProviderForScreen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Gdk&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Screen&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Default&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;css_provider&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;800&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;End Result&lt;/h2&gt;
+&lt;p&gt;The end result should be a form which looks a lot clearer and can use a custom theme at the same time&lt;/p&gt;
+&lt;h3&gt;No Themes or ClearText&lt;/h3&gt;
+&lt;p&gt;The first example is no theming or cleartext under Windows 10&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example1.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;Themes but no ClearText&lt;/h3&gt;
+&lt;p&gt;This next example has theming but with no cleartext&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example2" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example2.png" /&gt;&lt;/p&gt;
+&lt;h3&gt;Themes and ClearText&lt;/h3&gt;
+&lt;p&gt;This final example has both theming and cleartext enabled&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example3" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example3.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;GTKSharp - Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category></entry><entry><title>GTKSharp - Part 4 - Handles and WithEvents Example</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/" rel="alternate"></link><published>2016-06-25T21:55:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;This is a second example of using GtkSharp within Visual Studio. &lt;br&gt;
+One of the interesting things we can setup is the use of Handles and WithEvents.
+This means that within the code window for the form, we can use the drop down fields in the same way we would with windows forms.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="VSImage" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/VSImage1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="VSImage" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/VSImage2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;I've included example code within &lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt; although for now this is VB only&lt;/p&gt;
+&lt;h2&gt;GtkSharp Handles and WithEvents Example&lt;/h2&gt;
+&lt;p&gt;For this next example we're going to use a similar project to the one used in the last part. &lt;br&gt;
+But this time around we're going to split the code into 2 seperate files.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;TestForm1.glade.vb&lt;/strong&gt; - This acts as a sort of wrapper and makes all the properties of the Form available&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TestForm1.vb&lt;/strong&gt; - This is where our application logic sits similar to what you would use with windows forms&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We'll be using &lt;em&gt;WithEvents&lt;/em&gt; and &lt;em&gt;Handles&lt;/em&gt; instead of the &lt;strong&gt;Builder.Object&lt;/strong&gt; attribute. &lt;br&gt;
+In order to link the properties to the controls on the form we can use code similar to &lt;br&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;SendButton&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SendButton&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;TestForm1.glade.vb&lt;/h3&gt;
+&lt;p&gt;First we need to create a wrapper class for the glade file.
+With windows forms this type of file is usually auto generated and hidden, but in this case we don't have that luxury.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;Imports&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;
+
+&lt;span class="k"&gt;Partial&lt;/span&gt; &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt; &lt;span class="nc"&gt;TestForm1&lt;/span&gt;
+    &lt;span class="k"&gt;Inherits&lt;/span&gt; &lt;span class="n"&gt;Window&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Properties&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Used to load in the glade file resource as a window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="n"&gt;_builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39; Put a list here of all the controls you want to access on the glade form from code&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39; Note When using WithEvents, we need to link to the objects on the form within the constructor&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39; Instead of using the Builder.Object attribute, this seems to be the only way when using WithEvents and Handles&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Connects to the SendButton on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Friend&lt;/span&gt; &lt;span class="k"&gt;WithEvents&lt;/span&gt; &lt;span class="n"&gt;SendButton&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Button&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Connects to the InputText Control on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Friend&lt;/span&gt; &lt;span class="k"&gt;WithEvents&lt;/span&gt; &lt;span class="n"&gt;StdInputTxt&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Entry&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Event queue for all listeners interested in Loaded events. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Event&lt;/span&gt; &lt;span class="n"&gt;Loaded&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;EventHandler&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Constructors / Destructors&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Default Shared Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;returns&amp;gt; A TestForm1. &amp;lt;/returns&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Shared&lt;/span&gt; &lt;span class="k"&gt;Function&lt;/span&gt; &lt;span class="nf"&gt;Create&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;
+        &lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;Nothing&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GtkSharp_AdvForm1_VB.TestForm1.glade&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;Nothing&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;Return&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;Handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Function&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Specialised constructor for use only by derived class. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;builder&amp;quot;&amp;gt; The builder. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;handle&amp;quot;&amp;gt;  The handle. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Protected&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;New&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;handle&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;IntPtr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;MyBase&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;New&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;_builder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;
+        &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Autoconnect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;Me&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c"&gt;&amp;#39; Link the Controls here instead of using Attributes&lt;/span&gt;
+        &lt;span class="n"&gt;SendButton&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SendButton&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;StdInputTxt&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;StdInputTxt&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="c"&gt;&amp;#39; Form Loaded&lt;/span&gt;
+        &lt;span class="k"&gt;RaiseEvent&lt;/span&gt; &lt;span class="n"&gt;Loaded&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;Me&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;Nothing&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;TestForm1.vb&lt;/h3&gt;
+&lt;p&gt;Next we need to create a class to house all of our control logic (similar again to the place where you would put code under windows forms)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;Imports&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;
+
+&lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Example Test Form for GTKSharp and Glade. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="k"&gt;Partial&lt;/span&gt; &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt; &lt;span class="nc"&gt;TestForm1&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Handlers&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;TestForm1_Loaded&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sender&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="kt"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;EventArgs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;Handles&lt;/span&gt; &lt;span class="k"&gt;Me&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Loaded&lt;/span&gt;
+        &lt;span class="c"&gt;&amp;#39; Form Loaded event&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Handle Close of Form, Quit Application. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;o&amp;quot;&amp;gt;    Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;args&amp;quot;&amp;gt; Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;TestForm1_DeleteEvent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;o&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="kt"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;DeleteEventArgs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;Handles&lt;/span&gt; &lt;span class="k"&gt;Me&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;DeleteEvent&lt;/span&gt;
+        &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RetVal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;True&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Handle Click of Button. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;sender&amp;quot;&amp;gt; Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;e&amp;quot;&amp;gt;      Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;SendButton_Clicked&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sender&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="kt"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;EventArgs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;Handles&lt;/span&gt; &lt;span class="n"&gt;SendButton&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Clicked&lt;/span&gt;
+        &lt;span class="n"&gt;StdInputTxt&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Running the Application&lt;/h3&gt;
+&lt;p&gt;When we run the application we should end up with a result similar to that as before.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/Example1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The main difference now is that the setup is very familiar to those used to winforms,
+also we have the option of using the drop downs within the code window to select different items and associated events&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GTKSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"&gt;GTKSharp - Part 5 - Themes and ClearText&lt;/a&gt;&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category></entry><entry><title>GTKSharp - Part 3 - Basic Example with VS and Glade</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/" rel="alternate"></link><published>2016-06-25T19:36:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;It's been a while since I posted my last blog entry so I decided to get a crack on with this one&lt;/p&gt;
+&lt;p&gt;In this post I'm going to show how to get a basic GtkSharp application working using a glade xml file and some C#. &lt;br&gt;
+For the below examples the code is downloadable via a github link: &lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;GtkSharp BasicForm1 Example&lt;/h2&gt;
+&lt;h3&gt;Setting up the Project&lt;/h3&gt;
+&lt;p&gt;First lets create a new C# Solution&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NewSolution1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NewSolution1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Next lets create a new C# Windows Forms Project&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NewProject1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NewProject1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;We don't need Form1.cs since we're repurposing this project for GtkSharp, so lets remove Form1.cs&lt;/p&gt;
+&lt;p&gt;&lt;img alt="RemoveFrom1cs" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/RemoveFrom1cs.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Next right click on the project and select &lt;em&gt;Manage Nuget Packages&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Lets add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
+Within NuGet the gtksharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
+If your using linux and already have gtk installed then the additional binaries shouldn't be needed.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NuGet1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NuGet1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Right click on the project&lt;/li&gt;
+&lt;li&gt;Select &lt;strong&gt;Properies&lt;/strong&gt; from the drop down menu&lt;/li&gt;
+&lt;li&gt;Select the &lt;strong&gt;Build&lt;/strong&gt; tab on the left hand side&lt;/li&gt;
+&lt;li&gt;Make sure the &lt;strong&gt;Platform Target&lt;/strong&gt; is set to &lt;strong&gt;X86&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="ProjectProperties1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/ProjectProperties1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The dotnet version will default to &lt;strong&gt;4.5.1&lt;/strong&gt;, you can leave it at that or increase it to a higher version such as 4.5.2, 4.6 or 4.6.1&lt;/p&gt;
+&lt;h3&gt;Setting up the Program Class&lt;/h3&gt;
+&lt;p&gt;Next we need to alter the code that runs at startup. &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;With Visual Basic you'll need to create a Program.vb file &lt;br&gt;
+With C# There should already be a Program.cs file we can use instead&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Within the project properties make sure that the Program class is selected&lt;/li&gt;
+&lt;li&gt;If you are using Visual Basic, then you will need to untick the option for &lt;strong&gt;Enable Application Framework&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="ProjectProperties2" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/ProjectProperties2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;These are some examples of what the main Program class should look like&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For C#&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;ExampleApp1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; A program. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Program&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; The main entry point for the application. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;        [STAThread]&lt;/span&gt;
+        &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;Main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Init&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="n"&gt;TestForm1&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Create&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="n"&gt;win&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Show&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Run&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;Imports&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;
+
+&lt;span class="k"&gt;Namespace&lt;/span&gt; &lt;span class="nn"&gt;App&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; A program. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt; &lt;span class="nc"&gt;Program&lt;/span&gt;
+
+        &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Main entry-point for this application. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Shared&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;Main&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Init&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;win&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Create&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;win&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Show&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Run&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt;
+
+&lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Namespace&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;TestForm1.glade&lt;/h3&gt;
+&lt;p&gt;Next lets create a glade form to use in our project &lt;br&gt;
+This is one created from the glade application we've used before.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Drag and drop the file saved from glade into the project&lt;/li&gt;
+&lt;li&gt;Make sure to set the &lt;strong&gt;Build Action&lt;/strong&gt; to &lt;strong&gt;Embedded Resource&lt;/strong&gt; for the glade file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="GladeFile1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/GladeFile1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The next thing to be aware of is that the resource path changes somewhat based on if your using a C# or VB based project&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;With VB The resource path is &lt;em&gt;&amp;lt;AssemblyName&amp;gt;.&amp;lt;FileName&amp;gt;&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;With C# The resource path is &lt;em&gt;&amp;lt;AssemblyName&amp;gt;.&amp;lt;Directory&amp;gt;.&amp;lt;FileName&amp;gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In this case since it's a C# Project and the file is in the root of the project. &lt;br&gt;
+The full resource name is &lt;em&gt;ExampleApp1.TestForm1.glade&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It's also possible to associate the .glade file with the glade.exe by right clicking on it within Visual Studio and selecting &lt;em&gt;Open With&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TestForm1.glade&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!-- Generated with glade 3.19.0 --&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;interface&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;requires&lt;/span&gt; &lt;span class="na"&gt;lib=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;gtk+&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;version=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;3.14&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;object&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;GtkWindow&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window1&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;can_focus&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;False&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;child&amp;gt;&lt;/span&gt;
+      &lt;span class="nt"&gt;&amp;lt;object&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;GtkFixed&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;fixed1&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;visible&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;can_focus&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;False&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;child&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;object&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;GtkButton&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;SendButton&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;label&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;translatable=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;yes&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;button&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;width_request&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;91&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;height_request&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;40&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;visible&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;can_focus&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;receives_default&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;/object&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;packing&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;x&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;11&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;y&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;8&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;/packing&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;/child&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;child&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;object&lt;/span&gt; &lt;span class="na"&gt;class=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;GtkEntry&amp;quot;&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;StdInputTxt&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;width_request&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;168&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;height_request&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;80&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;visible&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;can_focus&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;True&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;/object&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;packing&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;x&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;9&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;lt;property&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;y&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;60&lt;span class="nt"&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;lt;/packing&amp;gt;&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;lt;/child&amp;gt;&lt;/span&gt;
+      &lt;span class="nt"&gt;&amp;lt;/object&amp;gt;&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;lt;/child&amp;gt;&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;lt;/object&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/interface&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;TestForm1.cs&lt;/h3&gt;
+&lt;p&gt;The original GTK2 based version of GTKSharp used to include a library called Glade-Sharp which handled the loading in of
+forms via Glade.XML, with the newer GTK3 version this is handled via the GTK.Builder class instead.&lt;/p&gt;
+&lt;p&gt;With the below example we're going to use the &lt;strong&gt;Builder.Object&lt;/strong&gt; attribute.
+This attribute automatically links the named property to the control on the form once it's shown.
+Once the property is linked to the form we can then attach to it's events or change it's properties such as a textbox text value&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TestForm1.cs&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;For C#&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;ExampleApp1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Example Test Form for GTKSharp and Glade. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TestForm1&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Window&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="cp"&gt;#region Properties&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Used to load in the glade file resource as a window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt; &lt;span class="n"&gt;_builder&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="cp"&gt;#pragma warning disable 649&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Connects to the SendButton on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;        [Builder.Object]&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="n"&gt;Button&lt;/span&gt; &lt;span class="n"&gt;SendButton&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Connects to the InputText Control on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;        [Builder.Object]&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="n"&gt;Entry&lt;/span&gt; &lt;span class="n"&gt;StdInputTxt&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="cp"&gt;#pragma warning restore 649&lt;/span&gt;
+
+        &lt;span class="cp"&gt;#endregion&lt;/span&gt;
+
+        &lt;span class="cp"&gt;#region Constructors / Destructors&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Default Shared Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;returns&amp;gt; A TestForm1. &amp;lt;/returns&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt; &lt;span class="nf"&gt;Create&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Builder&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;ExampleApp1.TestForm1.glade&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nf"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;Handle&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Specialised constructor for use only by derived class. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;builder&amp;quot;&amp;gt; The builder. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;handle&amp;quot;&amp;gt;  The handle. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="nf"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Builder&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;IntPtr&lt;/span&gt; &lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;base&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;_builder&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Autoconnect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;this&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;SetupHandlers&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="cp"&gt;#endregion&lt;/span&gt;
+
+        &lt;span class="cp"&gt;#region Handlers&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Sets up the handlers. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;SetupHandlers&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;DeleteEvent&lt;/span&gt; &lt;span class="p"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;OnLocalDeleteEvent&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="n"&gt;SendButton&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Clicked&lt;/span&gt; &lt;span class="p"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;OnSendClick&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Handle Close of Form, Quit Application. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;sender&amp;quot;&amp;gt; Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;a&amp;quot;&amp;gt;      Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;OnLocalDeleteEvent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;object&lt;/span&gt; &lt;span class="n"&gt;sender&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;DeleteEventArgs&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Quit&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RetVal&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Handle Click of Button. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;sender&amp;quot;&amp;gt; Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;a&amp;quot;&amp;gt;      Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;OnSendClick&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;object&lt;/span&gt; &lt;span class="n"&gt;sender&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;EventArgs&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;StdInputTxt&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Text&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="cp"&gt;#endregion&lt;/span&gt;
+
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;strong&gt;For Visual Basic:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;Imports&lt;/span&gt; &lt;span class="nn"&gt;Gtk&lt;/span&gt;
+
+&lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Example Test Form for GTKSharp and Glade. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt; &lt;span class="nc"&gt;TestForm1&lt;/span&gt;
+    &lt;span class="k"&gt;Inherits&lt;/span&gt; &lt;span class="n"&gt;Window&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Properties&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Used to load in the glade file resource as a window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="n"&gt;_builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Connects to the SendButton on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;    &amp;lt;Builder.Object&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="n"&gt;SendButton&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Button&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Connects to the InputText Control on the Glade Window. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;    &amp;lt;Builder.Object&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Private&lt;/span&gt; &lt;span class="n"&gt;StdInputTxt&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Entry&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Constructors / Destructors&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Default Shared Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;returns&amp;gt; A TestForm1. &amp;lt;/returns&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Public&lt;/span&gt; &lt;span class="k"&gt;Shared&lt;/span&gt; &lt;span class="k"&gt;Function&lt;/span&gt; &lt;span class="nf"&gt;Create&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;
+        &lt;span class="k"&gt;Dim&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;Nothing&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;GtkSharp_BasicForm1_VB.TestForm1.glade&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;Nothing&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;Return&lt;/span&gt; &lt;span class="k"&gt;New&lt;/span&gt; &lt;span class="n"&gt;TestForm1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetObject&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;window1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;Handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Function&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Specialised constructor for use only by derived class. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;builder&amp;quot;&amp;gt; The builder. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;handle&amp;quot;&amp;gt;  The handle. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Protected&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;New&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;builder&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;Builder&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;handle&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;IntPtr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;MyBase&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;New&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;_builder&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;builder&lt;/span&gt;
+        &lt;span class="n"&gt;builder&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Autoconnect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;Me&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;SetupHandlers&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="cp"&gt;#Region &amp;quot;Handlers&amp;quot;&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Sets up the handlers. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Protected&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;SetupHandlers&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="k"&gt;AddHandler&lt;/span&gt; &lt;span class="n"&gt;DeleteEvent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;AddressOf&lt;/span&gt; &lt;span class="n"&gt;OnLocalDeleteEvent&lt;/span&gt;
+        &lt;span class="k"&gt;AddHandler&lt;/span&gt; &lt;span class="n"&gt;SendButton&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Clicked&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="ow"&gt;AddressOf&lt;/span&gt; &lt;span class="n"&gt;OnSendClick&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Handle Close of Form, Quit Application. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;sender&amp;quot;&amp;gt; Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;a&amp;quot;&amp;gt;      Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Protected&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;OnLocalDeleteEvent&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sender&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="kt"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;DeleteEventArgs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;Application&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Quit&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RetVal&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;True&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;summary&amp;gt; Handle Click of Button. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;sender&amp;quot;&amp;gt; Source of the event. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="c"&gt;&amp;#39;&amp;#39;&amp;#39; &amp;lt;param name=&amp;quot;a&amp;quot;&amp;gt;      Event information to send to registered event handlers. &amp;lt;/param&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;Protected&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt; &lt;span class="nf"&gt;OnSendClick&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sender&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="kt"&gt;Object&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="ow"&gt;As&lt;/span&gt; &lt;span class="n"&gt;EventArgs&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;StdInputTxt&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Text&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Sub&lt;/span&gt;
+
+&lt;span class="cp"&gt;#End Region&lt;/span&gt;
+
+&lt;span class="k"&gt;End&lt;/span&gt; &lt;span class="k"&gt;Class&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Running the Application&lt;/h3&gt;
+&lt;p&gt;If we now build and run the project, this should result in a window like this.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/Example1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The button just puts &lt;em&gt;Hello World&lt;/em&gt; into the text box&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category></entry><entry><title>GTKSharp - Part 2 - Setting up Glade</title><link href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/" rel="alternate"></link><published>2016-01-29T21:00:00+00:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-01-29:posts/2016/01/29/gtksharp-part-2-setting-up-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;The first step in getting GTKSharp to work is to get glade up and running.
+Glade is an application written to design and create GTK forms via drag and drop.
+This means we can drag and drop controls onto a form then finally export / save an xml file to be used later by Visual Studio.&lt;/p&gt;
+&lt;p&gt;From what I've seen there are two different GUI's available for designing GTK Forms with drag and drop controls
+(Similar to WinForms under Visual Studio)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Stetic - this is an editor included / embedded into the Monodevelop application, it appears to be limited to GTK2 Applications&lt;/li&gt;
+&lt;li&gt;Glade - this is standalone editor which supports both GTK2 and GTK3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For Glade there are two main branches&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Version 3.8 - Which is used for GTK2 Forms&lt;/li&gt;
+&lt;li&gt;Version 3.19 and above - Which is used for the newer GTK3 Forms&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Since I'm looking at using GTK3 and Visual Studio instead of Monodevelop, I'm going to use glade here.
+It is possible to download a version of glade from the website &lt;a href="https://glade.gnome.org/"&gt;https://glade.gnome.org/&lt;/a&gt;
+However, the versions for windows don't appear to be maintained on a regular basis, so seem to be fairly old.
+The MSYS2 versions of glade however seem to be fairly up to date, and it's a lot easier than building from source.&lt;/p&gt;
+&lt;h2&gt;Installing MSYS2&lt;/h2&gt;
+&lt;p&gt;The first step is to make sure we have MSYS2 installed. MSYS2 is a newer replacement for Mingw under windows.
+It's just something that makes running linux applications natively under windows a lot easier.
+So install this first&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://sourceforge.net/projects/msys2/"&gt;http://sourceforge.net/projects/msys2/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/"&gt;http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After the initial install open up a MSYS2 console window.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="msys1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/Msys1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The first thing we want to do is update the core packages for MSYS&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;update-core
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next update any installed packages for MSYS&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Su
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Installing Glade&lt;/h2&gt;
+&lt;p&gt;Next we're going to install glade, make sure you have a MSYS console open &lt;/p&gt;
+&lt;p&gt;To search for the glade packages&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Ss glade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To install for 64Bit Windows&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw64/mingw-w64-x86_64-glade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To install for 32Bit Windows&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw32/mingw-w64-i686-glade
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Running Glade&lt;/h2&gt;
+&lt;p&gt;We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe&lt;/p&gt;
+&lt;p&gt;&lt;img alt="gladeform1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/GladeForm1.png" /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select File -&amp;gt; New&lt;/li&gt;
+&lt;li&gt;Drag and drop a Window from the TopLevels section into the viewing area&lt;/li&gt;
+&lt;li&gt;Drag and drop a fixed control inside the Window Control&lt;/li&gt;
+&lt;li&gt;Drag and drop a button and TextEntry control into the fixed area&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;One important thing to note for the current version of GTKSharp pulled from Nuget (3.1.3)
+This requires the GTK+ version of the glade file to be set to 3.14&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Select File -&amp;gt; Properties&lt;/li&gt;
+&lt;li&gt;Under Toolkit version required: change this from 3.16 to 3.14&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;At this point you can save your new glade file to anywhere you want.
+Later on we'll be using this with GTKSharp and Visual Studio&lt;/p&gt;
+&lt;h2&gt;Copying Across MSYS Files&lt;/h2&gt;
+&lt;p&gt;One of the things I noticed when running glade files from .Net is that the application can have problems finding schema and icon files
+normally associated with GLib when using for example a FileChooserButton&lt;/p&gt;
+&lt;p&gt;There's some more information over at this github link: &lt;a href="https://github.com/openmedicus/gtk-sharp/issues/6"&gt;https://github.com/openmedicus/gtk-sharp/issues/6&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The quick fix to this is just to copy and paste some directories from MSYS into ProgamData under windows&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Source&lt;/th&gt;
+&lt;th&gt;Destination&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;C:\msys64\mingw64\share\glib-2.0\schemas&lt;/td&gt;
+&lt;td&gt;C:\ProgramData\glib-2.0\schemas&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C:\msys64\mingw64\share\icons&lt;/td&gt;
+&lt;td&gt;C:\ProgramData\icons&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;C:\msys64\mingw64\share\themes&lt;/td&gt;
+&lt;td&gt;C:\ProgramData\themes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/"&gt;GTKSharp - Part 1 - Cross Platform Toolkits&lt;/a&gt; &lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GTKSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category><category term="glade"></category></entry><entry><title>GTKSharp - Part 1 - Cross Platform Toolkits</title><link href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/" rel="alternate"></link><published>2016-01-28T19:00:00+00:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-01-28:posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;I decided to have a look into the different toolkit's available for writing .Net code with a GUI that can be used across
+multiple platforms. Some of these platforms would include Microsoft Windows 10, Linux and embedded devices such as the Raspberry Pi&lt;/p&gt;
+&lt;p&gt;I've posted some example code here for GtkSharp&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There were four main options I looked into&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;WinForms&lt;/li&gt;
+&lt;li&gt;QtSharp&lt;/li&gt;
+&lt;li&gt;Eto.Forms&lt;/li&gt;
+&lt;li&gt;GtkSharp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;WinForms&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="winformsimg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/WinForms1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Winforms is traditionally the toolkit used by Microsoft for .Net / with Visual Studio, it dates back to the good old VB6 days.
+The Xamarin and mono team have put a lot of work into making sure that that this toolkit can run on both windows and Linux via mono.
+However, when you google Winforms and cross compatibility it looks as if the main focus is now on GTK instead as the main alternative.
+The one main advantage to Winforms is that it's designable via Visual Studio's inbuilt GUI. Upon googling most of the opinions online, the code base has been largely untouched for a long while on the mono side.&lt;/p&gt;
+&lt;h2&gt;QtSharp&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="QtFormImage" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/QtForm1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Qt for me has the best looking toolkit, also it has QML which is a form of descriptive language for describing the layout of forms similar in some respects to Xaml.
+There's been a few different attempts at a .Net binding for Qt, first there was a very old project called QtSharp, then another project
+to replace that one called Qyoto which seems to have now been abandoned, and finally the latest incarnation which has re-used the name of QtSharp.&lt;/p&gt;
+&lt;p&gt;QtSharp uses the CppSharp library as a way of generating the bindings from the c++ Qt libraries into the .Net space.
+At this stage it's still very new and in alpha state, after testing it myself it does appear to actually be able to create and show windows, however there are a couple of gotcha's still.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The code is still in Alpha state, which means it may be a while before it's ready for production&lt;/li&gt;
+&lt;li&gt;Currently CppSharp doesn't support templated functions (c++ generics) so certain function calls and properties are currently unavailable (such as interating over the child controls within a form or container)&lt;/li&gt;
+&lt;li&gt;QML based apps are going to require some special coding before they can be used from .Net&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I'm still hopeful this will be useful in the future since I'm quite keen on Qt. Looking at some of the c++ projects online there seems to have been a lot of talk of projects moving from Gtk to Qt due to issues with the newer versions of Gtk and it being largely Gnome focused.
+For now, it still needs a lot of work however.&lt;/p&gt;
+&lt;p&gt;For some example code to experiment with QtSharp&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grbd/QtSharp.TestApps"&gt;https://github.com/grbd/QtSharp.TestApps&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You may also want to check out the official repositories
+(the gitlab repo is the most up-to-date one)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/mono/CppSharp"&gt;https://github.com/mono/CppSharp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gitlab.com/ddobrev/QtSharp"&gt;https://gitlab.com/ddobrev/QtSharp&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/ddobrev/QtSharp"&gt;https://github.com/ddobrev/QtSharp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Eto.Forms&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="EtoFormsImg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/EtoForm1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Eto.Forms was the next toolkit I looked into.
+It's basically a wrapper that sits on top of other toolkits such as windows forms, GtkSharp, WPF, etc.
+It's one advantage is that it has the ability to create forms based on Xaml similar to WPF Forms&lt;/p&gt;
+&lt;p&gt;There are a couple of downsides though&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The range of controls for containers is still a bit limited&lt;/li&gt;
+&lt;li&gt;Currently there's no GUI / drag and drop designer, but there is a window to preview the rendered Xaml&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;GtkSharp&lt;/h2&gt;
+&lt;p&gt;&lt;img alt="GtkSharpImg" src="http://grbd.github.io/static/dotnet/gtksharp.1.toolkits/GtkSharp1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;The final toolkit I tried looking into was GtkSharp. This seems to be a lot more mature than the other toolkits in relation to .Net with bug fixes and patches.
+There does seem to be a bit of confusion over which version to use and how to set it up.
+After a fair bit of digging around online I finally managed to figure out how to get a basic GTK3 based GTKSharp Application up and running
+under .Net. Given that some of the documentation is still a bit sparse when it comes to the GTK3 version I figured I'd put some information
+up on how to get it going with Visual Studio.&lt;/p&gt;
+&lt;p&gt;One advantage to GtkSharp which I'm also interested in is the use of cairo for vector graphics, there's also some unofficial methods of getting it to work with Monogame which is a cross platform 3D library originally based on XNA.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.mono-project.com/docs/gui/gtksharp/"&gt;GTK-Sharp&lt;/a&gt; - The Main .Net library for creating GTK based GUI Applications&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://developer.gnome.org/glib/2.46/"&gt;GLIB-Sharp&lt;/a&gt; - Glib Sharp is a library used by GTK for Core Functionality such as memory management&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/GDK"&gt;GDK-Sharp&lt;/a&gt; - Gimp Drawing Kit, this is a low level drawing library used by GTK for graphics rendering&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://developer.gnome.org/gio/2.47/"&gt;GIO-Sharp&lt;/a&gt; - The Gio library deals with low level Gnome IO for Filesystem / Network / Process Handling / DBUS / Application Settings&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cairo/"&gt;Cairo-Sharp&lt;/a&gt; - Cairo can be used for 2D Vector graphics&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mono-project.com/archived/pangobeginners/"&gt;Pango-Sharp&lt;/a&gt; - pango handles all of the font and text related functions for GTK&lt;/li&gt;
+&lt;li&gt;ATK-Sharp - atk deals with accessibility&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://cairographics.org/OpenGL/"&gt;Open-GL with Cairo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;GTK Versions&lt;/h2&gt;
+&lt;p&gt;After a bit of digging around online there appears to be two versions of GtkSharp available at the moment.
+One for GTK2 and one for GTK3&lt;/p&gt;
+&lt;h3&gt;GTK2&lt;/h3&gt;
+&lt;p&gt;The one for GTK2 is probably more stable and widley used, but the one I'm interested in here is the GTK3 version.
+If you look for the default windows .msi installer on the mono site&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.mono-project.com/docs/gui/gtksharp/installer-for-net-framework/"&gt;MSI Instaler&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.mono-project.com/download/#download-win"&gt;Main Download URL&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is actually the older GTK2 version which installs under "C:\Program Files (x86)\GtkSharp\2.12\" on Windows.
+The official github account for GtkSharp seems to mirror this (latest version 2.12.30)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/mono/gtk-sharp/"&gt;https://github.com/mono/gtk-sharp/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;GTK3&lt;/h3&gt;
+&lt;p&gt;If you look for the NuGet packages online &lt;a href="https://www.nuget.org/packages?q=gtk-sharp"&gt;NuGet Link&lt;/a&gt;.
+As far as I can tell I think these versions are unofficial (although quite useful)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GtkSharp (3.1.3) - GTK3 .Net libraries&lt;/li&gt;
+&lt;li&gt;GtkSharp.Win32 - GTK3 C libraries for Windows&lt;/li&gt;
+&lt;li&gt;GTKSharp.Linux - GTK3 C libraries for Linux&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This is the version I'll be using in the following articles.
+I suspect although I'm not entirely sure that the source code for this version is based on the below GitHub Link.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/openmedicus/gtk-sharp"&gt;https://github.com/openmedicus/gtk-sharp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br&gt;
+&lt;a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="dotnet"></category><category term="gtksharp"></category><category term="toolkits"></category></entry></feed>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GTKSharp - Part 4 - Handles and WithEvents Example - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp" />
+        <meta name="description" content="A second example using GTKSharp and Visual Studio with Handles and WithEvents" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GTKSharp - Part 4 - Handles and WithEvents Example"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"/>
+        <meta property="og:description" content="A second example using GTKSharp and Visual Studio with Handles and WithEvents"/>
+        <meta property="article:published_time" content="2016-06-25" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"
+                       rel="bookmark"
+                       title="Permalink to GTKSharp - Part 4 - Handles and WithEvents Example">
+                        GTKSharp - Part 4 - Handles and WithEvents Example
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-06-25T21:55:00+01:00"> Sat 25 June 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>This is a second example of using GtkSharp within Visual Studio. <br>
+One of the interesting things we can setup is the use of Handles and WithEvents.
+This means that within the code window for the form, we can use the drop down fields in the same way we would with windows forms.</p>
+<p><img alt="VSImage" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/VSImage1.png" /></p>
+<p><img alt="VSImage" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/VSImage2.png" /></p>
+<p>I've included example code within <a href="https://github.com/grbd/GBD.Blog.Examples">https://github.com/grbd/GBD.Blog.Examples</a> although for now this is VB only</p>
+<h2>GtkSharp Handles and WithEvents Example</h2>
+<p>For this next example we're going to use a similar project to the one used in the last part. <br>
+But this time around we're going to split the code into 2 seperate files.</p>
+<ul>
+<li><strong>TestForm1.glade.vb</strong> - This acts as a sort of wrapper and makes all the properties of the Form available</li>
+<li><strong>TestForm1.vb</strong> - This is where our application logic sits similar to what you would use with windows forms</li>
+</ul>
+<p>We'll be using <em>WithEvents</em> and <em>Handles</em> instead of the <strong>Builder.Object</strong> attribute. <br>
+In order to link the properties to the controls on the form we can use code similar to <br></p>
+<div class="highlight"><pre><span></span><span class="n">SendButton</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;SendButton&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3>TestForm1.glade.vb</h3>
+<p>First we need to create a wrapper class for the glade file.
+With windows forms this type of file is usually auto generated and hidden, but in this case we don't have that luxury.</p>
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="k">Imports</span> <span class="nn">Gtk</span>
+
+<span class="k">Partial</span> <span class="k">Public</span> <span class="k">Class</span> <span class="nc">TestForm1</span>
+    <span class="k">Inherits</span> <span class="n">Window</span>
+
+<span class="cp">#Region &quot;Properties&quot;</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Used to load in the glade file resource as a window. &lt;/summary&gt;</span>
+    <span class="k">Private</span> <span class="n">_builder</span> <span class="ow">As</span> <span class="n">Builder</span>
+
+    <span class="c">&#39; Put a list here of all the controls you want to access on the glade form from code</span>
+
+    <span class="c">&#39; Note When using WithEvents, we need to link to the objects on the form within the constructor</span>
+    <span class="c">&#39; Instead of using the Builder.Object attribute, this seems to be the only way when using WithEvents and Handles</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Connects to the SendButton on the Glade Window. &lt;/summary&gt;</span>
+    <span class="k">Friend</span> <span class="k">WithEvents</span> <span class="n">SendButton</span> <span class="ow">As</span> <span class="n">Button</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Connects to the InputText Control on the Glade Window. &lt;/summary&gt;</span>
+    <span class="k">Friend</span> <span class="k">WithEvents</span> <span class="n">StdInputTxt</span> <span class="ow">As</span> <span class="n">Entry</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Event queue for all listeners interested in Loaded events. &lt;/summary&gt;</span>
+    <span class="k">Public</span> <span class="k">Event</span> <span class="n">Loaded</span> <span class="ow">As</span> <span class="n">EventHandler</span>
+
+<span class="cp">#End Region</span>
+
+<span class="cp">#Region &quot;Constructors / Destructors&quot;</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Default Shared Constructor. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;returns&gt; A TestForm1. &lt;/returns&gt;</span>
+    <span class="k">Public</span> <span class="k">Shared</span> <span class="k">Function</span> <span class="nf">Create</span><span class="p">()</span> <span class="ow">As</span> <span class="n">TestForm1</span>
+        <span class="k">Dim</span> <span class="n">builder</span> <span class="ow">As</span> <span class="k">New</span> <span class="n">Builder</span><span class="p">(</span><span class="k">Nothing</span><span class="p">,</span> <span class="s">&quot;GtkSharp_AdvForm1_VB.TestForm1.glade&quot;</span><span class="p">,</span> <span class="k">Nothing</span><span class="p">)</span>
+        <span class="k">Return</span> <span class="k">New</span> <span class="n">TestForm1</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;window1&quot;</span><span class="p">).</span><span class="n">Handle</span><span class="p">)</span>
+    <span class="k">End</span> <span class="k">Function</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Specialised constructor for use only by derived class. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;builder&quot;&gt; The builder. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;handle&quot;&gt;  The handle. &lt;/param&gt;</span>
+    <span class="k">Protected</span> <span class="k">Sub</span> <span class="nf">New</span><span class="p">(</span><span class="n">builder</span> <span class="ow">As</span> <span class="n">Builder</span><span class="p">,</span> <span class="n">handle</span> <span class="ow">As</span> <span class="n">IntPtr</span><span class="p">)</span>
+        <span class="k">MyBase</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">_builder</span> <span class="o">=</span> <span class="n">builder</span>
+        <span class="n">builder</span><span class="p">.</span><span class="n">Autoconnect</span><span class="p">(</span><span class="k">Me</span><span class="p">)</span>
+
+        <span class="c">&#39; Link the Controls here instead of using Attributes</span>
+        <span class="n">SendButton</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;SendButton&quot;</span><span class="p">)</span>
+        <span class="n">StdInputTxt</span> <span class="o">=</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;StdInputTxt&quot;</span><span class="p">)</span>
+
+        <span class="c">&#39; Form Loaded</span>
+        <span class="k">RaiseEvent</span> <span class="n">Loaded</span><span class="p">(</span><span class="k">Me</span><span class="p">,</span> <span class="k">Nothing</span><span class="p">)</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+<span class="cp">#End Region</span>
+
+<span class="k">End</span> <span class="k">Class</span>
+</pre></div>
+
+
+<h3>TestForm1.vb</h3>
+<p>Next we need to create a class to house all of our control logic (similar again to the place where you would put code under windows forms)</p>
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="k">Imports</span> <span class="nn">Gtk</span>
+
+<span class="c">&#39;&#39;&#39; &lt;summary&gt; Example Test Form for GTKSharp and Glade. &lt;/summary&gt;</span>
+<span class="k">Partial</span> <span class="k">Public</span> <span class="k">Class</span> <span class="nc">TestForm1</span>
+
+<span class="cp">#Region &quot;Handlers&quot;</span>
+
+    <span class="k">Private</span> <span class="k">Sub</span> <span class="nf">TestForm1_Loaded</span><span class="p">(</span><span class="n">sender</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="n">e</span> <span class="ow">As</span> <span class="n">EventArgs</span><span class="p">)</span> <span class="k">Handles</span> <span class="k">Me</span><span class="p">.</span><span class="n">Loaded</span>
+        <span class="c">&#39; Form Loaded event</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Handle Close of Form, Quit Application. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;o&quot;&gt;    Source of the event. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;args&quot;&gt; Event information to send to registered event handlers. &lt;/param&gt;</span>
+    <span class="k">Private</span> <span class="k">Sub</span> <span class="nf">TestForm1_DeleteEvent</span><span class="p">(</span><span class="n">o</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="n">args</span> <span class="ow">As</span> <span class="n">DeleteEventArgs</span><span class="p">)</span> <span class="k">Handles</span> <span class="k">Me</span><span class="p">.</span><span class="n">DeleteEvent</span>
+        <span class="n">Application</span><span class="p">.</span><span class="n">Quit</span><span class="p">()</span>
+        <span class="n">args</span><span class="p">.</span><span class="n">RetVal</span> <span class="o">=</span> <span class="k">True</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Handle Click of Button. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;sender&quot;&gt; Source of the event. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;e&quot;&gt;      Event information to send to registered event handlers. &lt;/param&gt;</span>
+    <span class="k">Private</span> <span class="k">Sub</span> <span class="nf">SendButton_Clicked</span><span class="p">(</span><span class="n">sender</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="n">e</span> <span class="ow">As</span> <span class="n">EventArgs</span><span class="p">)</span> <span class="k">Handles</span> <span class="n">SendButton</span><span class="p">.</span><span class="n">Clicked</span>
+        <span class="n">StdInputTxt</span><span class="p">.</span><span class="n">Text</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+<span class="cp">#End Region</span>
+
+<span class="k">End</span> <span class="k">Class</span>
+</pre></div>
+
+
+<h3>Running the Application</h3>
+<p>When we run the application we should end up with a result similar to that as before.</p>
+<p><img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.4.example2/Example1.png" /></p>
+<p>The main difference now is that the setup is very familiar to those used to winforms,
+also we have the option of using the drop downs within the code window to select different items and associated events</p>
+<p><br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/">GTKSharp - Part 3 - Basic Example with VS and Glade</a><br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/">GTKSharp - Part 5 - Themes and ClearText</a></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

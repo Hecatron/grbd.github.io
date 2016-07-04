@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Using roslyn - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/using-roslyn.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="description" content="Testing under Linux Prepring the Sources first git clone next remove the line from packages.config within Examples.Process1 for GTK.Win32 Next lets get nuget wget http://dist.nuget.org/win-x86-commandline/latest/nuget.exe chmod +x Nuget.exe Import the mozilla certs mozroots --import --sync Next lets restore the ..." />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Using roslyn"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/using-roslyn.html"/>
+        <meta property="og:description" content="Testing under Linux Prepring the Sources first git clone next remove the line from packages.config within Examples.Process1 for GTK.Win32 Next lets get nuget wget http://dist.nuget.org/win-x86-commandline/latest/nuget.exe chmod +x Nuget.exe Import the mozilla certs mozroots --import --sync Next lets restore the ..."/>
+        <meta property="article:published_time" content="2016-01-28" />
+            <meta property="article:section" content="drafts" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/drafts.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog drafts ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/using-roslyn.html"
+                       rel="bookmark"
+                       title="Permalink to Using roslyn">
+                        Using roslyn
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-01-28T21:00:00+00:00"> Thu 28 January 2016</time>
+    </span>
+
+
+
+
+
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h3>Testing under Linux</h3>
+<h4>Prepring the Sources</h4>
+<p>first git clone
+next remove the line from packages.config within Examples.Process1 for GTK.Win32</p>
+<p>Next lets get nuget
+wget http://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+chmod +x Nuget.exe</p>
+<p>Import the mozilla certs
+mozroots --import --sync</p>
+<p>Next lets restore the dependencies for the solution
+mono ./nuget.exe restore solution.sln</p>
+<h4>Building using xbuild</h4>
+<h5>Building Project</h5>
+<ol>
+<li>Within Visual Studio remove System.Deployment reference since this isn't present in Mono</li>
+<li>Within the Project File change ToolsVersion="4.0"</li>
+<li>move obj and bin to x_obj and x_bin</li>
+</ol>
+<p>Next build the project
+xbuild</p>
+<h1>Override the framework version</h1>
+<p>xbuild /p:TargetFrameworkVersion="v4.5" GtkSharp3.sln
+mono ./whatever.exe</p>
+<p>TODO GtkSharp works with C#, but for VB the glade file couldn't be found</p>
+<h5>Depends</h5>
+<p>http://dlafferty.blogspot.co.uk/2013/08/building-your-microsoft-solution-with.html</p>
+<ol>
+<li>
+<p>there seems to be some issues with Nuget in some cases running under linux
+https://github.com/NuGet/Home/issues/1448
+downloading the deps under windows seems to be the way to go for now at least
+also I think the sources section needs to be removed from Nuget.config for roslyn</p>
+</li>
+<li>
+<p>need to make sure mono-basic is installed under gentoo, although is needs to be the newest version (4.0.1)
+http://download.mono-project.com/sources/mono-basic/
+copying and pasting the ebuild seems to do the trick, this gives us the VB compiler vbnc which can be called during xbuild</p>
+</li>
+<li>
+<p>use layman -a dotnet for latest mono
+http://download.mono-project.com/sources/</p>
+</li>
+</ol>
+<h5>Roslyn</h5>
+<ol>
+<li>based on the roslyn instructions from
+https://github.com/mono/roslyn
+I've created a package called mono-pcl for the pcl libraries
+install this first</li>
+</ol>
+<p>It looks like there's a branch in the roslyn mainline called "MonoGac", but I can't get it to work
+trying the mono version of roslyn instead
+2. download roslyn under windows with
+git clone https://github.com/grbd/roslyn.git
+cd roslyn</p>
+<ol>
+<li>
+<p>if running nuget for the first time
+mozroots --import --sync</p>
+</li>
+<li>
+<p>restore packages via Nuget
+mono src/.nuget/NuGet.exe restore src/Roslyn.sln
+This should download the required packages to the ./packages subdirectory</p>
+</li>
+<li>
+<p>edit the props file as mentioned in the mono roslyn readme, also edit props for vb entries in addition
+cp patches/Microsoft.Net.ToolsetCompilers.props packages/Microsoft.Net.ToolsetCompilers.1.0.0-rc1-20150122-03/build/</p>
+</li>
+<li>
+<p>copy to linux
+xbuild as in the readme
+xbuild src/Tools/Source/FakeSign/FakeSign.csproj
+xbuild src/Compilers/CSharp/csc/csc.csproj</p>
+</li>
+<li>
+<p>for vbnc it doesnt appear to support linq
+only VB8 not VB9
+http://stackoverflow.com/questions/26179560/mac-mono-vb-linq-not-compiling</p>
+</li>
+</ol>
+<p>xbuild src/Compilers/VisualBasic/vbc/vbc.vbproj</p>
+<p>src/Tools/Source/CompilerGeneratorTools/Source/VisualBasicSyntaxGenerator/VisualBasicSyntaxGenerator.vbproj
+src/Tools/Source/CompilerGeneratorTools/Source/VisualBasicErrorFactsGenerator/VisualBasicErrorFactsGenerator.vbproj</p>
+<p>New method</p>
+<ol>
+<li>
+<p>emerge clang-3.7.1-r100
+make sure the clang, lldb, xml use flags are enabled for llvm
+lldb is part of the llvm package</p>
+</li>
+<li>
+<p>emerge dev-util/lttng-tools dev-util/lttng-ust</p>
+</li>
+<li>
+<p>get coreclr
+git clone https://github.com/dotnet/coreclr.git</p>
+</li>
+<li>
+<p>run cmake
+cd coreclr
+mkdir build
+cd build
+cmake ../ -DCMAKE_BUILD_TYPE:=RELEASE</p>
+</li>
+<li>
+<p>run ./build.sh</p>
+</li>
+<li>
+<p>get latest roslyn source</p>
+</li>
+<li>
+<p>within the Makefile replace the MONO_PATH with
+MONO_PATH= /usr/bin/mono</p>
+</li>
+<li>
+<p>install coreclr for arm
+mono ./nuget.exe install Microsoft.NETCore.Runtime.CoreCLR-arm -Pre</p>
+</li>
+<li>
+<p>edit build/scripts/crossgen.sh set CROSSGEN_UTIL to
+CROSSGEN_UTIL=$HOME/.nuget/packages/Microsoft.NETCore.Runtime.CoreCLR-arm/1.0.1-beta-23504/tools/crossgen</p>
+</li>
+</ol>
+<p>RuntimeIndentifier = x64
+BaseNuGetRuntimeIdentifier = ubuntu.14.04
+$(BaseNuGetRuntimeIdentifier)-$(RuntimeIndentifier)
+ubuntu.14.04-x64</p>
+<p>x. run the build script
+./cibuild.sh</p>
+<p>TODO for kernel may need to replace bootcode.bin on the Noobs partition, and perhaps update the Noobs partition</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

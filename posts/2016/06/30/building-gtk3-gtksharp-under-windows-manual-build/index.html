@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Building GTK3 / GtkSharp under Windows - Manual Build - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp,gtk" />
+        <meta name="description" content="Building GTK3 under Windows" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Building GTK3 / GtkSharp under Windows - Manual Build"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/"/>
+        <meta property="og:description" content="Building GTK3 under Windows"/>
+        <meta property="article:published_time" content="2016-06-30" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:tag" content="gtk" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/"
+                       rel="bookmark"
+                       title="Permalink to Building GTK3 / GtkSharp under Windows - Manual Build">
+                        Building GTK3 / GtkSharp under Windows - Manual Build
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-06-30T12:00:00+01:00"> Thu 30 June 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+        /
+	<a href="http://grbd.github.io/tag/gtk.html">gtk</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>Looking at the current NuGet packages for GtkSharp and the gtk3 binaries within GtkSharp.Win32.
+These are not for the most recent version of Gtk3.
+I decided to look into the process for building GTK3 and the latest version of GTKSharp under windows.
+This also has the advantage of possibly using 64bit versions of GTK3.</p>
+<p>The first links I looked into were</p>
+<ul>
+<li><a href="http://www.gtk.org/download/windows.php">http://www.gtk.org/download/windows.php</a></li>
+<li><a href="https://github.com/wingtk/gtk-win32">https://github.com/wingtk/gtk-win32</a></li>
+</ul>
+<p>The problem with the gtk-win32 build though is that the dll's lack the "lib" prefix to the dll names.
+This is something that's expected by gtksharp for cross compatibility with linux.
+Since there is interdependence between the different dll's, simply renaming them wouldn't be enough.</p>
+<h2>Native Libs</h2>
+<p>Fortunately there's a very easy way to get the dll's we need prebuilt, and that is to just copy them out of MSYS2 <br>
+First we need to install MSYS2 from <a href="https://msys2.github.io/">https://msys2.github.io/</a></p>
+<p>Next open up a MSYS2 prompt then run the following to update the package database</p>
+<div class="highlight"><pre><span></span>pacman -Syuu
+</pre></div>
+
+
+<p>To search for a package</p>
+<div class="highlight"><pre><span></span>pacman -Ss gtk3
+</pre></div>
+
+
+<h3>Installing the 32Bit Dll's</h3>
+<p>Lets now open a MinGW <strong>32bit</strong> console window (bundled with MSYS2). <br>
+We can use the following to install the dll's we want.</p>
+<div class="highlight"><pre><span></span>pacman -S mingw-w64-i686-gcc mingw-w64-i686-glib2
+pacman -S mingw-w64-i686-pango mingw-w64-i686-atk mingw-w64-i686-gtk3
+pacman -S mingw-w64-i686-zlib mingw-w64-i686-libiconv
+</pre></div>
+
+
+<p>If we now look within <strong>C:\msys64\mingw32\bin</strong>, we can harvest the native library dll's we want to use with GtkSharp <br>
+Using PE Explorer to look at the dll depends to pick out what I need for GTK3, I came up with the below list for gtk3 3.20.4-1</p>
+<p><strong>GTK Libs:</strong></p>
+<div class="highlight"><pre><span></span>libatk-1.0-0.dll
+libcairo-2.dll
+libcairo-gobject-2.dll
+libgdk_pixbuf-2.0-0.dll
+libgdk-3-0.dll
+libgio-2.0-0.dll
+libglib-2.0-0.dll
+libgmodule-2.0-0.dll
+libgobject-2.0-0.dll
+libgtk-3-0.dll
+libpango-1.0-0.dll
+libpangocairo-1.0-0.dll
+libpangoft2-1.0-0.dll
+libpangowin32-1.0-0.dll
+</pre></div>
+
+
+<p><strong>Dependencies:</strong></p>
+<div class="highlight"><pre><span></span>libbz2-1.dll
+libepoxy-0.dll
+libexpat-1.dll
+libffi-6.dll
+libfontconfig-1.dll
+libfreetype-6.dll
+libgcc_s_dw2-1.dll
+libgraphite2.dll
+libharfbuzz-0.dll
+libiconv-2.dll
+libintl-8.dll
+liblzma-5.dll
+libpcre-1.dll
+libpixman-1-0.dll
+libpng16-16.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+libxml2-2.dll
+zlib1.dll
+</pre></div>
+
+
+<h3>Installing the 64Bit Dll's</h3>
+<p>For the 64bit dll's we can do something very similar to the above <br>
+Under a MinGw 64bit console window</p>
+<div class="highlight"><pre><span></span>pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-glib2
+pacman -S mingw-w64-x86_64-pango mingw-w64-x86_64-atk mingw-w64-x86_64-gtk3
+pacman -S mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
+</pre></div>
+
+
+<p>This should result in the equivilent 64bit files to show up under <strong>C:\msys64\mingw64\bin</strong></p>
+<h2>GtkSharp .Net Libs</h2>
+<h3>The Build process</h3>
+<p>Next we're going to need to build the gtksharp sources into .Net dll's</p>
+<p>Just to explain a bit about how the build process works. <br>
+The build process can be described as a 2 stage process</p>
+<ul>
+<li><strong>gapi-parser</strong> - generate xml files from original gtk source code libraries</li>
+<li><strong>configure / make</strong> - generate some of the cs files from the xml files from stage 1
+    and create the compiled dll's we need to run gtksharp</li>
+</ul>
+<p>The first stage is usually done already for us by the person maintaining the source repo. <br>
+Looking at the git repo <a href="https://github.com/openmedicus/gtk-sharp.git">https://github.com/openmedicus/gtk-sharp.git</a> this seems to match the version of gtk3 within MSYS2 <br>
+so we should be able to skip over this stage</p>
+<p>From what I can gather the above step involves</p>
+<ul>
+<li>extracting the source code for the different gtk libraries into the sources directory located within gtk-sharp.</li>
+<li>running <em>make api</em> to generate the .raw files located within each of the source directories such as gdk-api.raw.</li>
+<li>The input file for this process is sources.xml</li>
+<li>under the hood the Makefile calls <em>..\parser\gapi-parser sources.xml</em> <br></li>
+<li>The parsing is actually handled via <a href="http://www.mono-project.com/GAPI">http://www.mono-project.com/GAPI</a></li>
+</ul>
+<p>The second stage is the part we're interested in, this involves the make build system.
+I've found the easiest way to do this is via the use of MSYS2 / MinGW Console.</p>
+<h3>Setting up MSYS2</h3>
+<p>First we need to setup MSYS2 to handle the build process for gtksharp <br>
+Let's start a "MinGw-w64 Win32 Shell" <br>
+One of the first packages we need is gcc so let's install that first</p>
+<div class="highlight"><pre><span></span>pacman -S mingw-w64-i686-gcc mingw-w64-i686-glib2
+pacman -S mingw-w64-i686-pango mingw-w64-i686-atk mingw-w64-i686-gtk3
+</pre></div>
+
+
+<p>Let's install a couple more packages to help out</p>
+<div class="highlight"><pre><span></span>pacman -S gzip nasm patch tar xz gettext make coreutils diffutils wget
+</pre></div>
+
+
+<h3>Downloading the Source</h3>
+<p>Next we need to download the source for gtk-sharp. <br>
+Lets create a new directory called <strong>C:\gtk-build</strong> and download the gtk-sharp source into that directory</p>
+<p>Using a Visual Studio Developer command prompt:</p>
+<div class="highlight"><pre><span></span><span class="k">cd</span> C:\gtk-build
+git clone https://github.com/openmedicus/gtk-sharp.git
+</pre></div>
+
+
+<p>Note I had to make a small change to the source to get it to build, the fork is located here <a href="https://github.com/grbd/gtk-sharp.git">https://github.com/grbd/gtk-sharp.git</a><br>
+I've submitted a pull request for this to be submitted to the main tree</p>
+<h3>Running the Build Scripts</h3>
+<p>Next we need to run the build scripts from within MSYS2<br>
+The link below is a bit out of date but it was usefull for me to figure out how to handle the build process</p>
+<ul>
+<li><a href="http://www.mono-project.com/archived/compiling_gtksharp/">http://www.mono-project.com/archived/compiling_gtksharp/</a></li>
+</ul>
+<p>To start the build switch back to the MinGW Prompt we opened earlier and run the following</p>
+<div class="highlight"><pre><span></span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/c/Program<span class="se">\ </span>Files<span class="se">\ \(</span>x86<span class="se">\)</span>/Microsoft<span class="se">\ </span>SDKs/Windows/v10.0A/bin/NETFX<span class="se">\ </span>4.6<span class="se">\ </span>Tools/
+<span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/c/Windows/Microsoft.NET/Framework/v4.0.30319/
+
+<span class="nb">cd</span> /c/gtk-build/gtk-sharp/
+./autogen.sh --prefix<span class="o">=</span>/tmp/install
+make
+</pre></div>
+
+
+<h3>End Result</h3>
+<p>The end result should be a series of .Net dll files located within subdirectories of the gtk-sharp directory. <br>
+I avoided running <em>make install</em> as that seems to try copying / registering the dll's into the GAC of the local system. <br>
+Instead I'm more interested in using these files along with the native dll libs above for the bundling into NuGet Packages. <br>
+In order to test this out manually</p>
+<ul>
+<li>Create a simple test app within Visual Studio</li>
+<li>Copy and paste all the native dll's mentioned above, along with the .net dll's from gtksharp into the Debug/bin directory
+    (the destination where everything is compiled to for the test application)</li>
+<li>Manually add references within the test application to the copied .Net dll's</li>
+</ul>
+<p>This should allow you to get an application up and running for testing</p>
+<h2>Next Step</h2>
+<p>For the next step I'll probably look into a way of building this more automatically perhaps via a python script.
+With any luck I might be able to get some of my own custom NuGet packages uploaded.</p>
+<p>Many thanks to those that are maintaining a gtksharp for gtk3,
+This seems to be currently one of the few libraries that is production ready for use as a cross platform Desktop GUI at the moment.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

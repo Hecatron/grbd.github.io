@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GTKSharp - Part 2 - Setting up Glade - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp,glade" />
+        <meta name="description" content="Getting glade up and running under windows using Msys2 for designing gui&#39;s with drag and drop" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GTKSharp - Part 2 - Setting up Glade"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"/>
+        <meta property="og:description" content="Getting glade up and running under windows using Msys2 for designing gui&#39;s with drag and drop"/>
+        <meta property="article:published_time" content="2016-01-29" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:tag" content="glade" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"
+                       rel="bookmark"
+                       title="Permalink to GTKSharp - Part 2 - Setting up Glade">
+                        GTKSharp - Part 2 - Setting up Glade
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-01-29T21:00:00+00:00"> Fri 29 January 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+        /
+	<a href="http://grbd.github.io/tag/glade.html">glade</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>The first step in getting GTKSharp to work is to get glade up and running.
+Glade is an application written to design and create GTK forms via drag and drop.
+This means we can drag and drop controls onto a form then finally export / save an xml file to be used later by Visual Studio.</p>
+<p>From what I've seen there are two different GUI's available for designing GTK Forms with drag and drop controls
+(Similar to WinForms under Visual Studio)</p>
+<ul>
+<li>Stetic - this is an editor included / embedded into the Monodevelop application, it appears to be limited to GTK2 Applications</li>
+<li>Glade - this is standalone editor which supports both GTK2 and GTK3</li>
+</ul>
+<p>For Glade there are two main branches</p>
+<ul>
+<li>Version 3.8 - Which is used for GTK2 Forms</li>
+<li>Version 3.19 and above - Which is used for the newer GTK3 Forms</li>
+</ul>
+<p>Since I'm looking at using GTK3 and Visual Studio instead of Monodevelop, I'm going to use glade here.
+It is possible to download a version of glade from the website <a href="https://glade.gnome.org/">https://glade.gnome.org/</a>
+However, the versions for windows don't appear to be maintained on a regular basis, so seem to be fairly old.
+The MSYS2 versions of glade however seem to be fairly up to date, and it's a lot easier than building from source.</p>
+<h2>Installing MSYS2</h2>
+<p>The first step is to make sure we have MSYS2 installed. MSYS2 is a newer replacement for Mingw under windows.
+It's just something that makes running linux applications natively under windows a lot easier.
+So install this first</p>
+<ul>
+<li><a href="http://sourceforge.net/projects/msys2/">http://sourceforge.net/projects/msys2/</a></li>
+<li><a href="http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/">http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/</a></li>
+</ul>
+<p>After the initial install open up a MSYS2 console window.</p>
+<p><img alt="msys1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/Msys1.png" /></p>
+<p>The first thing we want to do is update the core packages for MSYS</p>
+<div class="highlight"><pre><span></span>update-core
+</pre></div>
+
+
+<p>Next update any installed packages for MSYS</p>
+<div class="highlight"><pre><span></span>pacman -Su
+</pre></div>
+
+
+<h2>Installing Glade</h2>
+<p>Next we're going to install glade, make sure you have a MSYS console open </p>
+<p>To search for the glade packages</p>
+<div class="highlight"><pre><span></span>pacman -Ss glade
+</pre></div>
+
+
+<p>To install for 64Bit Windows</p>
+<div class="highlight"><pre><span></span>pacman -S mingw64/mingw-w64-x86_64-glade
+</pre></div>
+
+
+<p>To install for 32Bit Windows</p>
+<div class="highlight"><pre><span></span>pacman -S mingw32/mingw-w64-i686-glade
+</pre></div>
+
+
+<h2>Running Glade</h2>
+<p>We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe</p>
+<p><img alt="gladeform1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/GladeForm1.png" /></p>
+<ul>
+<li>Select File -&gt; New</li>
+<li>Drag and drop a Window from the TopLevels section into the viewing area</li>
+<li>Drag and drop a fixed control inside the Window Control</li>
+<li>Drag and drop a button and TextEntry control into the fixed area</li>
+</ul>
+<p>One important thing to note for the current version of GTKSharp pulled from Nuget (3.1.3)
+This requires the GTK+ version of the glade file to be set to 3.14</p>
+<ul>
+<li>Select File -&gt; Properties</li>
+<li>Under Toolkit version required: change this from 3.16 to 3.14</li>
+</ul>
+<p>At this point you can save your new glade file to anywhere you want.
+Later on we'll be using this with GTKSharp and Visual Studio</p>
+<h2>Copying Across MSYS Files</h2>
+<p>One of the things I noticed when running glade files from .Net is that the application can have problems finding schema and icon files
+normally associated with GLib when using for example a FileChooserButton</p>
+<p>There's some more information over at this github link: <a href="https://github.com/openmedicus/gtk-sharp/issues/6">https://github.com/openmedicus/gtk-sharp/issues/6</a></p>
+<p>The quick fix to this is just to copy and paste some directories from MSYS into ProgamData under windows</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Destination</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C:\msys64\mingw64\share\glib-2.0\schemas</td>
+<td>C:\ProgramData\glib-2.0\schemas</td>
+</tr>
+<tr>
+<td>C:\msys64\mingw64\share\icons</td>
+<td>C:\ProgramData\icons</td>
+</tr>
+<tr>
+<td>C:\msys64\mingw64\share\themes</td>
+<td>C:\ProgramData\themes</td>
+</tr>
+</tbody>
+</table>
+<p><br>
+<a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/">GTKSharp - Part 1 - Cross Platform Toolkits</a> <br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/">GTKSharp - Part 3 - Basic Example with VS and Glade</a></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GTKSharp - Part 5 - Themes and ClearText - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp" />
+        <meta name="description" content="Using themes within GtkSharp and enabling cleartype font text" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GTKSharp - Part 5 - Themes and ClearText"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"/>
+        <meta property="og:description" content="Using themes within GtkSharp and enabling cleartype font text"/>
+        <meta property="article:published_time" content="2016-06-25" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"
+                       rel="bookmark"
+                       title="Permalink to GTKSharp - Part 5 - Themes and ClearText">
+                        GTKSharp - Part 5 - Themes and ClearText
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-06-25T23:30:00+01:00"> Sat 25 June 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>One of the interesting features of GtkSharp and GTK3 is it's theming ability.
+Although there doesn't seem to be a lot of documenation on handling this easily within .Net and GtkSharp</p>
+<p>After a bit of digging around I've recently managed to get themes working with GtkSharp.
+Also I've discovered a fix for cleartext to make the fonts look nicer under windows and to alter the dpi settings. <br>
+As with prior code, I've placed examples within a gitrepo of <a href="https://github.com/grbd/GBD.Blog.Examples">https://github.com/grbd/GBD.Blog.Examples</a>.</p>
+<h2>GTK 3 Themes</h2>
+<h3>Theme Versions</h3>
+<p>The first thing to be aware of is the version of gtk in use, within the NuGet package <em>GtkSharp.Win32</em></p>
+<p>When theming it's important to use a theme compatible with the version of gtk used by GtkSharp, currently that's <strong>gtk-3.14</strong> as of writing with the NuGet package <br>
+With <strong>gtk-3.14</strong> and upwards the theme engine (which used to be a separate dll in older versions) is now bundled within the gtk libs <br>
+If you pick a theme that complains about "adwaita not found" when loading, it's probably designed for an older version of gtk and is trying to load the engine which is already in memory</p>
+<p>For a list of themes:</p>
+<ul>
+<li><a href="https://www.gnome-look.org/">https://www.gnome-look.org/</a></li>
+</ul>
+<h3>Selecting a theme</h3>
+<p>In order to load in a theme with gtksharp / gtk3 we can use something similar to the below</p>
+<p><strong>For C#</strong></p>
+<div class="highlight"><pre><span></span><span class="c1">// Load the Theme</span>
+<span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span> <span class="n">css_provider</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span><span class="p">();</span>
+<span class="n">css_provider</span><span class="p">.</span><span class="n">LoadFromPath</span><span class="p">(</span><span class="s">&quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&quot;</span><span class="p">);</span>
+<span class="n">Gtk</span><span class="p">.</span><span class="n">StyleContext</span><span class="p">.</span><span class="n">AddProviderForScreen</span><span class="p">(</span><span class="n">Gdk</span><span class="p">.</span><span class="n">Screen</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">css_provider</span><span class="p">,</span> <span class="m">800</span><span class="p">);</span>
+</pre></div>
+
+
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="c">&#39; Load the Theme</span>
+<span class="k">Dim</span> <span class="n">css_provider</span> <span class="ow">As</span> <span class="k">New</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span>
+<span class="n">css_provider</span><span class="p">.</span><span class="n">LoadFromPath</span><span class="p">(</span><span class="s">&quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&quot;</span><span class="p">)</span>
+<span class="n">Gtk</span><span class="p">.</span><span class="n">StyleContext</span><span class="p">.</span><span class="n">AddProviderForScreen</span><span class="p">(</span><span class="n">Gdk</span><span class="p">.</span><span class="n">Screen</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">css_provider</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+</pre></div>
+
+
+<p>By using LoadFromPath to load in the root css file (usually gtk-3.0/gtk.css) <br>
+From that point onwards everything else should be loaded in automatically. <br>
+In order for the above to work, the themes directory needs to be relative to the exe, although an absolute path can be specified.</p>
+<h3>The old theme selection method</h3>
+<p>One older method of loading themes within gtksharp was the use of Settings.Default.ThemeName</p>
+<div class="highlight"><pre><span></span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ThemeName</span> <span class="o">=</span> <span class="s">&quot;delorean-dark-theme-3.9&quot;</span>
+</pre></div>
+
+
+<p>With the more recent version of gtksharp / gtk3 this doesn't appear to work. <br>
+However it still might be useful if your using an older version of gtksharp with gtk2</p>
+<ul>
+<li><a href="https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name">https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name</a></li>
+</ul>
+<h3>ClearText</h3>
+<p>Based on some observations of the end result, I discovered that under windows there was potentially a problem with the default setting for the use of ClearText.
+ClearText has an impact on the visibility / smoothness of the displayed fonts within Gtk and GtkSharp.
+With applications run from MSYS2 with the default theme, compared to an application running from GtkSharp, the fonts do seem to be very different by default</p>
+<p>This is something that may be fixed eventually within the gtk libs (GtkSharp.Win32)
+But for now one way around this is to use some code similar to the below</p>
+<p><strong>For C#</strong></p>
+<div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">ApplyTheme</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Based on this Link http://awesome.naquadah.org/wiki/Better_Font_Rendering</span>
+
+    <span class="c1">// Get the Global Settings</span>
+    <span class="kt">var</span> <span class="n">setts</span> <span class="p">=</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">;</span>
+    <span class="c1">// This enables clear text on Win32, makes the text look a lot less crappy</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftRgba</span> <span class="p">=</span> <span class="s">&quot;rgb&quot;</span><span class="p">;</span>
+    <span class="c1">// This enlarges the size of the controls based on the dpi</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftDpi</span> <span class="p">=</span> <span class="m">96</span><span class="p">;</span>
+    <span class="c1">// By Default Anti-aliasing is enabled, if you want to disable it for any reason set this value to 0</span>
+    <span class="c1">//setts.XftAntialias = 0</span>
+    <span class="c1">// Enable text hinting</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftHinting</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="c1">//setts.XftHintstyle = &quot;hintslight&quot;</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftHintstyle</span> <span class="p">=</span> <span class="s">&quot;hintfull&quot;</span><span class="p">;</span>
+
+    <span class="c1">// Load the Theme</span>
+    <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span> <span class="n">css_provider</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span><span class="p">();</span>
+    <span class="c1">//css_provider.LoadFromPath(&quot;themes/DeLorean-3.14/gtk-3.0/gtk.css&quot;)</span>
+    <span class="n">css_provider</span><span class="p">.</span><span class="n">LoadFromPath</span><span class="p">(</span><span class="s">&quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&quot;</span><span class="p">);</span>
+    <span class="n">Gtk</span><span class="p">.</span><span class="n">StyleContext</span><span class="p">.</span><span class="n">AddProviderForScreen</span><span class="p">(</span><span class="n">Gdk</span><span class="p">.</span><span class="n">Screen</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">css_provider</span><span class="p">,</span> <span class="m">800</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="k">Public</span> <span class="k">Shared</span> <span class="k">Sub</span> <span class="nf">ApplyTheme</span><span class="p">()</span>
+    <span class="c">&#39; Based on this Link http://awesome.naquadah.org/wiki/Better_Font_Rendering</span>
+
+    <span class="c">&#39; Get the Global Settings</span>
+    <span class="k">Dim</span> <span class="n">setts</span> <span class="o">=</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span>
+    <span class="c">&#39; This enables clear text on Win32, makes the text look a lot less crappy</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftRgba</span> <span class="o">=</span> <span class="s">&quot;rgb&quot;</span>
+    <span class="c">&#39; This enlarges the size of the controls based on the dpi</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftDpi</span> <span class="o">=</span> <span class="mi">96</span>
+    <span class="c">&#39; By Default Anti-aliasing is enabled, if you want to disable it for any reason set this value to 0</span>
+    <span class="c">&#39;setts.XftAntialias = 0</span>
+    <span class="c">&#39; Enable text hinting</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftHinting</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c">&#39;setts.XftHintstyle = &quot;hintslight&quot;</span>
+    <span class="n">setts</span><span class="p">.</span><span class="n">XftHintstyle</span> <span class="o">=</span> <span class="s">&quot;hintfull&quot;</span>
+
+    <span class="c">&#39; Load the Theme</span>
+    <span class="k">Dim</span> <span class="n">css_provider</span> <span class="ow">As</span> <span class="k">New</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span>
+    <span class="c">&#39;css_provider.LoadFromPath(&quot;themes/DeLorean-3.14/gtk-3.0/gtk.css&quot;)</span>
+    <span class="n">css_provider</span><span class="p">.</span><span class="n">LoadFromPath</span><span class="p">(</span><span class="s">&quot;themes/DeLorean-Dark-3.14/gtk-3.0/gtk.css&quot;</span><span class="p">)</span>
+    <span class="n">Gtk</span><span class="p">.</span><span class="n">StyleContext</span><span class="p">.</span><span class="n">AddProviderForScreen</span><span class="p">(</span><span class="n">Gdk</span><span class="p">.</span><span class="n">Screen</span><span class="p">.</span><span class="n">Default</span><span class="p">,</span> <span class="n">css_provider</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+
+<span class="k">End</span> <span class="k">Sub</span>
+</pre></div>
+
+
+<h2>End Result</h2>
+<p>The end result should be a form which looks a lot clearer and can use a custom theme at the same time</p>
+<h3>No Themes or ClearText</h3>
+<p>The first example is no theming or cleartext under Windows 10</p>
+<p><img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example1.png" /></p>
+<h3>Themes but no ClearText</h3>
+<p>This next example has theming but with no cleartext</p>
+<p><img alt="Example2" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example2.png" /></p>
+<h3>Themes and ClearText</h3>
+<p>This final example has both theming and cleartext enabled</p>
+<p><img alt="Example3" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example3.png" /></p>
+<p><br>
+<br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/">GTKSharp - Part 4 - Handles and WithEvents Example</a></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

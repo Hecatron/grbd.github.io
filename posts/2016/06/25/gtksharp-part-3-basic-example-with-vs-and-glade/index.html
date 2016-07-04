@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>GTKSharp - Part 3 - Basic Example with VS and Glade - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="dotnet,gtksharp" />
+        <meta name="description" content="Using GTKSharp version 3 within Visual Studio under windows" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="GTKSharp - Part 3 - Basic Example with VS and Glade"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"/>
+        <meta property="og:description" content="Using GTKSharp version 3 within Visual Studio under windows"/>
+        <meta property="article:published_time" content="2016-06-25" />
+            <meta property="article:section" content="dotnet" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog dotnet ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"
+                       rel="bookmark"
+                       title="Permalink to GTKSharp - Part 3 - Basic Example with VS and Glade">
+                        GTKSharp - Part 3 - Basic Example with VS and Glade
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-06-25T19:36:00+01:00"> Sat 25 June 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>It's been a while since I posted my last blog entry so I decided to get a crack on with this one</p>
+<p>In this post I'm going to show how to get a basic GtkSharp application working using a glade xml file and some C#. <br>
+For the below examples the code is downloadable via a github link: <a href="https://github.com/grbd/GBD.Blog.Examples">https://github.com/grbd/GBD.Blog.Examples</a></p>
+<h2>GtkSharp BasicForm1 Example</h2>
+<h3>Setting up the Project</h3>
+<p>First lets create a new C# Solution</p>
+<p><img alt="NewSolution1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NewSolution1.png" /></p>
+<p>Next lets create a new C# Windows Forms Project</p>
+<p><img alt="NewProject1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NewProject1.png" /></p>
+<p>We don't need Form1.cs since we're repurposing this project for GtkSharp, so lets remove Form1.cs</p>
+<p><img alt="RemoveFrom1cs" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/RemoveFrom1cs.png" /></p>
+<p>Next right click on the project and select <em>Manage Nuget Packages</em></p>
+<p>Lets add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
+Within NuGet the gtksharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
+If your using linux and already have gtk installed then the additional binaries shouldn't be needed.</p>
+<p><img alt="NuGet1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/NuGet1.png" /></p>
+<p>Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment</p>
+<ul>
+<li>Right click on the project</li>
+<li>Select <strong>Properies</strong> from the drop down menu</li>
+<li>Select the <strong>Build</strong> tab on the left hand side</li>
+<li>Make sure the <strong>Platform Target</strong> is set to <strong>X86</strong></li>
+</ul>
+<p><img alt="ProjectProperties1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/ProjectProperties1.png" /></p>
+<p>The dotnet version will default to <strong>4.5.1</strong>, you can leave it at that or increase it to a higher version such as 4.5.2, 4.6 or 4.6.1</p>
+<h3>Setting up the Program Class</h3>
+<p>Next we need to alter the code that runs at startup. <br></p>
+<p>With Visual Basic you'll need to create a Program.vb file <br>
+With C# There should already be a Program.cs file we can use instead</p>
+<ul>
+<li>Within the project properties make sure that the Program class is selected</li>
+<li>If you are using Visual Basic, then you will need to untick the option for <strong>Enable Application Framework</strong></li>
+</ul>
+<p><img alt="ProjectProperties2" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/ProjectProperties2.png" /></p>
+<p>These are some examples of what the main Program class should look like</p>
+<p><strong>For C#</strong></p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Gtk</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">ExampleApp1</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt; A program. &lt;/summary&gt;</span>
+    <span class="k">static</span> <span class="k">class</span> <span class="nc">Program</span> <span class="p">{</span>
+        <span class="c1">/// &lt;summary&gt; The main entry point for the application. &lt;/summary&gt;</span>
+<span class="na">        [STAThread]</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Application</span><span class="p">.</span><span class="n">Init</span><span class="p">();</span>
+            <span class="n">TestForm1</span> <span class="n">win</span> <span class="p">=</span> <span class="n">TestForm1</span><span class="p">.</span><span class="n">Create</span><span class="p">();</span>
+            <span class="n">win</span><span class="p">.</span><span class="n">Show</span><span class="p">();</span>
+            <span class="n">Application</span><span class="p">.</span><span class="n">Run</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="k">Imports</span> <span class="nn">Gtk</span>
+
+<span class="k">Namespace</span> <span class="nn">App</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; A program. &lt;/summary&gt;</span>
+    <span class="k">Public</span> <span class="k">Class</span> <span class="nc">Program</span>
+
+        <span class="c">&#39;&#39;&#39; &lt;summary&gt; Main entry-point for this application. &lt;/summary&gt;</span>
+        <span class="k">Public</span> <span class="k">Shared</span> <span class="k">Sub</span> <span class="nf">Main</span><span class="p">()</span>
+            <span class="n">Application</span><span class="p">.</span><span class="n">Init</span><span class="p">()</span>
+            <span class="k">Dim</span> <span class="n">win</span> <span class="ow">As</span> <span class="n">TestForm1</span> <span class="o">=</span> <span class="n">TestForm1</span><span class="p">.</span><span class="n">Create</span><span class="p">()</span>
+            <span class="n">win</span><span class="p">.</span><span class="n">Show</span><span class="p">()</span>
+            <span class="n">Application</span><span class="p">.</span><span class="n">Run</span><span class="p">()</span>
+        <span class="k">End</span> <span class="k">Sub</span>
+
+    <span class="k">End</span> <span class="k">Class</span>
+
+<span class="k">End</span> <span class="k">Namespace</span>
+</pre></div>
+
+
+<h3>TestForm1.glade</h3>
+<p>Next lets create a glade form to use in our project <br>
+This is one created from the glade application we've used before.</p>
+<ul>
+<li>Drag and drop the file saved from glade into the project</li>
+<li>Make sure to set the <strong>Build Action</strong> to <strong>Embedded Resource</strong> for the glade file</li>
+</ul>
+<p><img alt="GladeFile1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/GladeFile1.png" /></p>
+<p>The next thing to be aware of is that the resource path changes somewhat based on if your using a C# or VB based project</p>
+<ul>
+<li>With VB The resource path is <em>&lt;AssemblyName&gt;.&lt;FileName&gt;</em></li>
+<li>With C# The resource path is <em>&lt;AssemblyName&gt;.&lt;Directory&gt;.&lt;FileName&gt;</em></li>
+</ul>
+<p>In this case since it's a C# Project and the file is in the root of the project. <br>
+The full resource name is <em>ExampleApp1.TestForm1.glade</em></p>
+<p>It's also possible to associate the .glade file with the glade.exe by right clicking on it within Visual Studio and selecting <em>Open With</em></p>
+<p><strong>TestForm1.glade</strong></p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="c">&lt;!-- Generated with glade 3.19.0 --&gt;</span>
+<span class="nt">&lt;interface&gt;</span>
+  <span class="nt">&lt;requires</span> <span class="na">lib=</span><span class="s">&quot;gtk+&quot;</span> <span class="na">version=</span><span class="s">&quot;3.14&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;object</span> <span class="na">class=</span><span class="s">&quot;GtkWindow&quot;</span> <span class="na">id=</span><span class="s">&quot;window1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;can_focus&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;child&gt;</span>
+      <span class="nt">&lt;object</span> <span class="na">class=</span><span class="s">&quot;GtkFixed&quot;</span> <span class="na">id=</span><span class="s">&quot;fixed1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;visible&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;can_focus&quot;</span><span class="nt">&gt;</span>False<span class="nt">&lt;/property&gt;</span>
+        <span class="nt">&lt;child&gt;</span>
+          <span class="nt">&lt;object</span> <span class="na">class=</span><span class="s">&quot;GtkButton&quot;</span> <span class="na">id=</span><span class="s">&quot;SendButton&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;label&quot;</span> <span class="na">translatable=</span><span class="s">&quot;yes&quot;</span><span class="nt">&gt;</span>button<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;width_request&quot;</span><span class="nt">&gt;</span>91<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;height_request&quot;</span><span class="nt">&gt;</span>40<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;visible&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;can_focus&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;receives_default&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+          <span class="nt">&lt;/object&gt;</span>
+          <span class="nt">&lt;packing&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;x&quot;</span><span class="nt">&gt;</span>11<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;y&quot;</span><span class="nt">&gt;</span>8<span class="nt">&lt;/property&gt;</span>
+          <span class="nt">&lt;/packing&gt;</span>
+        <span class="nt">&lt;/child&gt;</span>
+        <span class="nt">&lt;child&gt;</span>
+          <span class="nt">&lt;object</span> <span class="na">class=</span><span class="s">&quot;GtkEntry&quot;</span> <span class="na">id=</span><span class="s">&quot;StdInputTxt&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;width_request&quot;</span><span class="nt">&gt;</span>168<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;height_request&quot;</span><span class="nt">&gt;</span>80<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;visible&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;can_focus&quot;</span><span class="nt">&gt;</span>True<span class="nt">&lt;/property&gt;</span>
+          <span class="nt">&lt;/object&gt;</span>
+          <span class="nt">&lt;packing&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;x&quot;</span><span class="nt">&gt;</span>9<span class="nt">&lt;/property&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;y&quot;</span><span class="nt">&gt;</span>60<span class="nt">&lt;/property&gt;</span>
+          <span class="nt">&lt;/packing&gt;</span>
+        <span class="nt">&lt;/child&gt;</span>
+      <span class="nt">&lt;/object&gt;</span>
+    <span class="nt">&lt;/child&gt;</span>
+  <span class="nt">&lt;/object&gt;</span>
+<span class="nt">&lt;/interface&gt;</span>
+</pre></div>
+
+
+<h3>TestForm1.cs</h3>
+<p>The original GTK2 based version of GTKSharp used to include a library called Glade-Sharp which handled the loading in of
+forms via Glade.XML, with the newer GTK3 version this is handled via the GTK.Builder class instead.</p>
+<p>With the below example we're going to use the <strong>Builder.Object</strong> attribute.
+This attribute automatically links the named property to the control on the form once it's shown.
+Once the property is linked to the form we can then attach to it's events or change it's properties such as a textbox text value</p>
+<p><strong>TestForm1.cs</strong></p>
+<p><strong>For C#</strong></p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Gtk</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">ExampleApp1</span> <span class="p">{</span>
+
+    <span class="c1">/// &lt;summary&gt; Example Test Form for GTKSharp and Glade. &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">TestForm1</span> <span class="p">:</span> <span class="n">Window</span> <span class="p">{</span>
+        <span class="cp">#region Properties</span>
+
+        <span class="c1">/// &lt;summary&gt; Used to load in the glade file resource as a window. &lt;/summary&gt;</span>
+        <span class="k">private</span> <span class="n">Builder</span> <span class="n">_builder</span><span class="p">;</span>
+
+<span class="cp">#pragma warning disable 649</span>
+
+        <span class="c1">/// &lt;summary&gt; Connects to the SendButton on the Glade Window. &lt;/summary&gt;</span>
+<span class="na">        [Builder.Object]</span>
+        <span class="k">private</span> <span class="n">Button</span> <span class="n">SendButton</span><span class="p">;</span>
+
+        <span class="c1">/// &lt;summary&gt; Connects to the InputText Control on the Glade Window. &lt;/summary&gt;</span>
+<span class="na">        [Builder.Object]</span>
+        <span class="k">private</span> <span class="n">Entry</span> <span class="n">StdInputTxt</span><span class="p">;</span>
+<span class="cp">#pragma warning restore 649</span>
+
+        <span class="cp">#endregion</span>
+
+        <span class="cp">#region Constructors / Destructors</span>
+        <span class="c1">/// &lt;summary&gt; Default Shared Constructor. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;returns&gt; A TestForm1. &lt;/returns&gt;</span>
+        <span class="k">public</span> <span class="k">static</span> <span class="n">TestForm1</span> <span class="nf">Create</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Builder</span> <span class="n">builder</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Builder</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="s">&quot;ExampleApp1.TestForm1.glade&quot;</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">TestForm1</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;window1&quot;</span><span class="p">).</span><span class="n">Handle</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Specialised constructor for use only by derived class. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;builder&quot;&gt; The builder. &lt;/param&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;handle&quot;&gt;  The handle. &lt;/param&gt;</span>
+        <span class="k">protected</span> <span class="nf">TestForm1</span><span class="p">(</span><span class="n">Builder</span> <span class="n">builder</span><span class="p">,</span> <span class="n">IntPtr</span> <span class="n">handle</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_builder</span> <span class="p">=</span> <span class="n">builder</span><span class="p">;</span>
+            <span class="n">builder</span><span class="p">.</span><span class="n">Autoconnect</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+            <span class="n">SetupHandlers</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="cp">#endregion</span>
+
+        <span class="cp">#region Handlers</span>
+
+        <span class="c1">/// &lt;summary&gt; Sets up the handlers. &lt;/summary&gt;</span>
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">SetupHandlers</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">DeleteEvent</span> <span class="p">+=</span> <span class="n">OnLocalDeleteEvent</span><span class="p">;</span>
+            <span class="n">SendButton</span><span class="p">.</span><span class="n">Clicked</span> <span class="p">+=</span> <span class="n">OnSendClick</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Handle Close of Form, Quit Application. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;sender&quot;&gt; Source of the event. &lt;/param&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;a&quot;&gt;      Event information to send to registered event handlers. &lt;/param&gt;</span>
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">OnLocalDeleteEvent</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">DeleteEventArgs</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Application</span><span class="p">.</span><span class="n">Quit</span><span class="p">();</span>
+            <span class="n">a</span><span class="p">.</span><span class="n">RetVal</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Handle Click of Button. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;sender&quot;&gt; Source of the event. &lt;/param&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;a&quot;&gt;      Event information to send to registered event handlers. &lt;/param&gt;</span>
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">OnSendClick</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">StdInputTxt</span><span class="p">.</span><span class="n">Text</span> <span class="p">=</span> <span class="s">&quot;Hello World&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="cp">#endregion</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p><strong>For Visual Basic:</strong></p>
+<div class="highlight"><pre><span></span><span class="k">Imports</span> <span class="nn">Gtk</span>
+
+<span class="c">&#39;&#39;&#39; &lt;summary&gt; Example Test Form for GTKSharp and Glade. &lt;/summary&gt;</span>
+<span class="k">Public</span> <span class="k">Class</span> <span class="nc">TestForm1</span>
+    <span class="k">Inherits</span> <span class="n">Window</span>
+
+<span class="cp">#Region &quot;Properties&quot;</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Used to load in the glade file resource as a window. &lt;/summary&gt;</span>
+    <span class="k">Private</span> <span class="n">_builder</span> <span class="ow">As</span> <span class="n">Builder</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Connects to the SendButton on the Glade Window. &lt;/summary&gt;</span>
+<span class="na">    &lt;Builder.Object&gt;</span>
+    <span class="k">Private</span> <span class="n">SendButton</span> <span class="ow">As</span> <span class="n">Button</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Connects to the InputText Control on the Glade Window. &lt;/summary&gt;</span>
+<span class="na">    &lt;Builder.Object&gt;</span>
+    <span class="k">Private</span> <span class="n">StdInputTxt</span> <span class="ow">As</span> <span class="n">Entry</span>
+
+<span class="cp">#End Region</span>
+
+<span class="cp">#Region &quot;Constructors / Destructors&quot;</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Default Shared Constructor. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;returns&gt; A TestForm1. &lt;/returns&gt;</span>
+    <span class="k">Public</span> <span class="k">Shared</span> <span class="k">Function</span> <span class="nf">Create</span><span class="p">()</span> <span class="ow">As</span> <span class="n">TestForm1</span>
+        <span class="k">Dim</span> <span class="n">builder</span> <span class="ow">As</span> <span class="k">New</span> <span class="n">Builder</span><span class="p">(</span><span class="k">Nothing</span><span class="p">,</span> <span class="s">&quot;GtkSharp_BasicForm1_VB.TestForm1.glade&quot;</span><span class="p">,</span> <span class="k">Nothing</span><span class="p">)</span>
+        <span class="k">Return</span> <span class="k">New</span> <span class="n">TestForm1</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="n">builder</span><span class="p">.</span><span class="n">GetObject</span><span class="p">(</span><span class="s">&quot;window1&quot;</span><span class="p">).</span><span class="n">Handle</span><span class="p">)</span>
+    <span class="k">End</span> <span class="k">Function</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Specialised constructor for use only by derived class. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;builder&quot;&gt; The builder. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;handle&quot;&gt;  The handle. &lt;/param&gt;</span>
+    <span class="k">Protected</span> <span class="k">Sub</span> <span class="nf">New</span><span class="p">(</span><span class="n">builder</span> <span class="ow">As</span> <span class="n">Builder</span><span class="p">,</span> <span class="n">handle</span> <span class="ow">As</span> <span class="n">IntPtr</span><span class="p">)</span>
+        <span class="k">MyBase</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="n">_builder</span> <span class="o">=</span> <span class="n">builder</span>
+        <span class="n">builder</span><span class="p">.</span><span class="n">Autoconnect</span><span class="p">(</span><span class="k">Me</span><span class="p">)</span>
+        <span class="n">SetupHandlers</span><span class="p">()</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+<span class="cp">#End Region</span>
+
+<span class="cp">#Region &quot;Handlers&quot;</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Sets up the handlers. &lt;/summary&gt;</span>
+    <span class="k">Protected</span> <span class="k">Sub</span> <span class="nf">SetupHandlers</span><span class="p">()</span>
+        <span class="k">AddHandler</span> <span class="n">DeleteEvent</span><span class="p">,</span> <span class="ow">AddressOf</span> <span class="n">OnLocalDeleteEvent</span>
+        <span class="k">AddHandler</span> <span class="n">SendButton</span><span class="p">.</span><span class="n">Clicked</span><span class="p">,</span> <span class="ow">AddressOf</span> <span class="n">OnSendClick</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Handle Close of Form, Quit Application. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;sender&quot;&gt; Source of the event. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;a&quot;&gt;      Event information to send to registered event handlers. &lt;/param&gt;</span>
+    <span class="k">Protected</span> <span class="k">Sub</span> <span class="nf">OnLocalDeleteEvent</span><span class="p">(</span><span class="n">sender</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="n">a</span> <span class="ow">As</span> <span class="n">DeleteEventArgs</span><span class="p">)</span>
+        <span class="n">Application</span><span class="p">.</span><span class="n">Quit</span><span class="p">()</span>
+        <span class="n">a</span><span class="p">.</span><span class="n">RetVal</span> <span class="o">=</span> <span class="k">True</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+    <span class="c">&#39;&#39;&#39; &lt;summary&gt; Handle Click of Button. &lt;/summary&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;sender&quot;&gt; Source of the event. &lt;/param&gt;</span>
+    <span class="c">&#39;&#39;&#39; &lt;param name=&quot;a&quot;&gt;      Event information to send to registered event handlers. &lt;/param&gt;</span>
+    <span class="k">Protected</span> <span class="k">Sub</span> <span class="nf">OnSendClick</span><span class="p">(</span><span class="n">sender</span> <span class="ow">As</span> <span class="kt">Object</span><span class="p">,</span> <span class="n">a</span> <span class="ow">As</span> <span class="n">EventArgs</span><span class="p">)</span>
+        <span class="n">StdInputTxt</span><span class="p">.</span><span class="n">Text</span> <span class="o">=</span> <span class="s">&quot;Hello World&quot;</span>
+    <span class="k">End</span> <span class="k">Sub</span>
+
+<span class="cp">#End Region</span>
+
+<span class="k">End</span> <span class="k">Class</span>
+</pre></div>
+
+
+<h3>Running the Application</h3>
+<p>If we now build and run the project, this should result in a window like this.</p>
+<p><img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.3.example1/Example1.png" /></p>
+<p>The button just puts <em>Hello World</em> into the text box</p>
+<p><br>
+<a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/">Part 2 - Setting up Glade</a><br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/">Part 4 - Handles and WithEvents Example</a></p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Ooznest CNC Oxbot - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/ooznest-cnc-oxbot.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="cnc,spindle,3dscan" />
+        <meta name="description" content="Quick summary of a CNC machine I&#39;ve been working on" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Ooznest CNC Oxbot"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/ooznest-cnc-oxbot.html"/>
+        <meta property="og:description" content="Quick summary of a CNC machine I&#39;ve been working on"/>
+        <meta property="article:published_time" content="2016-07-03" />
+            <meta property="article:section" content="cnc" />
+            <meta property="article:tag" content="cnc" />
+            <meta property="article:tag" content="spindle" />
+            <meta property="article:tag" content="3dscan" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/cnc.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog cnc ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/ooznest-cnc-oxbot.html"
+                       rel="bookmark"
+                       title="Permalink to Ooznest CNC Oxbot">
+                        Ooznest CNC Oxbot
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-07-03T15:10:00+01:00"> Sun 03 July 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/cnc.html">cnc</a>
+        /
+	<a href="http://grbd.github.io/tag/spindle.html">spindle</a>
+        /
+	<a href="http://grbd.github.io/tag/3dscan.html">3dscan</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>Something I picked up a while back was a Ox CNC from <a href="http://ooznest.co.uk/">Ooznest</a>
+My plan at the moment is to set this up initially as a CNC, but then add other parts to it later on for 3D printing etc.</p>
+<h2>3D Printers vs CNC's</h2>
+<p>Typically with 3D printers they use additive manufacturing where a layer of plastic (usually abs or pla) is placed on top in layers.
+With a CNC instead this uses subtractive manufacturing where you remove material from a block of wood or metal to make the part you want.</p>
+<p>The different approaches tend to have an influence on the overal design of the machine.
+With a 3D printer typically speed is what you're aiming for as well as cheapness in some cases.
+With a CNC instead the main focus in on rigidity and strength, instead of placing plastic down in layers you are forcing a milling bit
+into a block of material to remove wood, plastic or metal.</p>
+<p>So in other words with a CNC you want something which is very strong and beefy where the frame isn't going to flex or bend under tension.
+Usually you'll see Nema 17 stepper motor's with a 3D printer, and Nema 23 stepper motors or higher with a CNC, this provides additional force
+to push against the part being milled.</p>
+<p>Ultimately there are different trade off's with different approaches.
+Something which is big and heavy doesn't respond well to rapid changes in speed or acceleration which can lead to overshooting.
+Something which is very lightweight responds much better in this situation to high speed movement.
+That being said my thoughts are that it should be possible to compensate for the overshoot via the use of more complicated
+motion control systems such as machinekit to try and get the best of both worlds.</p>
+<h2>Current Setup</h2>
+<p>For the mechanical kit, this is the </p>
+<h2>Future Goals</h2>
+<p>At the moment the main focus is to get the device working as a CNC hopefully with a better spindle.
+Later on I've got a few different ideas for interchangeable heads.
+This should include 3D printing, EDM, UV Exposure via a Blu-ray head for making PCB's, built in inductive calipers for postiional feedback and so on.</p>
+<p>For the electronics I'm going to try and move across to a beaglebone green using <a href="http://www.machinekit.io/">Machinekit</a>.
+Machinekit is able to use the PRU's (coprocessor's) on a Beaglebone for real-time motion control and support for additional G-Codes.
+There's an interesting talk about it here compared to other motion control systems <a href="https://www.youtube.com/watch?v=LdJ8xjCJIGo">Link</a></p>
+<p>For the front end I'm going to try and use a Rpi3 with a 3D interface.
+Some of the more recent kernels now have hardware accelerated 3D support now built in
+compared to a lot of other Rpi similar boards which currently lack this at the moment.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

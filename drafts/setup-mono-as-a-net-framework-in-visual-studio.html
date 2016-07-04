@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Setup Mono as a .Net Framework in Visual Studio - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/setup-mono-as-a-net-framework-in-visual-studio.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="toolkits,mono" />
+        <meta name="description" content="Registering the mono framework under windows, and how the different versions of mono compare against the standard .net framework versions" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Setup Mono as a .Net Framework in Visual Studio"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/setup-mono-as-a-net-framework-in-visual-studio.html"/>
+        <meta property="og:description" content="Registering the mono framework under windows, and how the different versions of mono compare against the standard .net framework versions"/>
+        <meta property="article:published_time" content="2016-01-29" />
+            <meta property="article:section" content="drafts" />
+            <meta property="article:tag" content="toolkits" />
+            <meta property="article:tag" content="mono" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/drafts.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog drafts ATOM Feed"/>
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/setup-mono-as-a-net-framework-in-visual-studio.html"
+                       rel="bookmark"
+                       title="Permalink to Setup Mono as a .Net Framework in Visual Studio">
+                        Setup Mono as a .Net Framework in Visual Studio
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-01-29T18:00:00+00:00"> Fri 29 January 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/toolkits.html">toolkits</a>
+        /
+	<a href="http://grbd.github.io/tag/mono.html">mono</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <p>I think this might be the easiest way to get cross platform vb apps to run
+this way we don't need to compile on the RPI</p>
+<p>https://erictummers.wordpress.com/2012/01/25/target-mono-from-visual-studio/</p>
+<h2>Install Mono</h2>
+<ol>
+<li>Install latest mono
+http://www.mono-project.com/download/#download-win</li>
+</ol>
+<h2>Register Mono .Net version 4.0</h2>
+<ol>
+<li>Next we're going to register the mono framework in Visual Studio's list of frameworks</li>
+</ol>
+<p>Copy C:\Program Files (x86)\Mono\lib\mono\4.0 -&gt; C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework.NETFramework\v4.0\Profile\mono
+(Copy and paste the 4.0 directory to Profile, then rename it to mono</p>
+<p>Within the directory C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework.NETFramework\v4.0\Profile\mono
+Create a subdirectory RedistList, within this create a file FrameworkList.xml with the following content
+change the version number to whichever version of mono your using</p>
+<?xml version="1.0" encoding="UTF-8"?>
+<FileList ToolsVersion="4.0" RuntimeVersion="4.0" Name=".NET Framework 4 Mono Profile" Redist="Mono_4.0"> 
+</FileList>
+
+<p>Next create a .reg file with the following content
+(each entry is for if you run a x32 or x64 app)</p>
+<p>[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft.NETFramework\v4.0.30319\SKUs.NETFramework,Version=v4.0,Profile=Mono]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft.NETFramework\v4.0.30319\SKUs.NETFramework,Version=v4.0,Profile=Mono]</p>
+<h2>Register Mono .Net version 4.5</h2>
+<p>.Net 4.6 appears to be not available for windows xp
+but I belive is compatible with mono 4.0 and above</p>
+<p>Copy C:\Program Files (x86)\Mono\lib\mono\4.5 -&gt; C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework.NETFramework\v4.6.1\Profile\mono
+(Copy and paste the 4.5 directory to Profile, then rename it to mono</p>
+<p>Within the directory C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework.NETFramework\v4.6.1\Profile\mono
+Create a subdirectory RedistList, within this create a file FrameworkList.xml with the following content
+change the version number to whichever version of mono your using</p>
+<?xml version="1.0" encoding="UTF-8"?>
+<FileList ToolsVersion="4.0" RuntimeVersion="4.5" Name=".NET Framework 4.5 Mono Profile" Redist="Mono_4.5"> 
+</FileList>
+
+<p>Next create a .reg file with the following content
+(each entry is for if you run a x32 or x64 app)</p>
+<p>[HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft.NETFramework\v4.0.30319\SKUs.NETFramework,Version=v4.6.1,Profile=Mono]
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft.NETFramework\v4.0.30319\SKUs.NETFramework,Version=v4.6.1,Profile=Mono]</p>
+<h2>Project References</h2>
+<p>For any warnings about System.Deployment, remove the reference from your list of references since mono doesn't have it</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>
