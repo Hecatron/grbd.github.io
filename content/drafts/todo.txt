@@ -1,0 +1,5 @@
+# TODO
+
+  * Look into manually building gtk for gtkshark
+  * Look into embedding the new monogame sdl version into gtksharp
+  http://www.ogre3d.org/addonforums/viewtopic.php?f=1&t=818

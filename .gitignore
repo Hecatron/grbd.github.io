@@ -1,0 +1,7 @@
+*.egg-*
+*.pyc
+.eggs
+dist
+*.suo
+output/
+todo/
