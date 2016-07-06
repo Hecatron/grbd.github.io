@@ -2,7 +2,6 @@ Title: Scanning in of the spindle in 3D - Part 1
 Summary: Scanning in of the spindle in 3D - Part 1
 Date: 2016-07-05 9:00
 Tags: cnc, spindle, 3dscan
-Status: draft
 
 ## Overview
 
@@ -48,29 +47,28 @@ Next I needed to install the following bits of software
 
 First I needed to take pictures, lots and lots of pictures from every angle around the device
 
-TODO Add images
-
+![TPicture1]({filename}/static/cnc/cnc.2.aldispindle.2/TPicture1.jpg)
 
 ## Using Visual SFM
 
 Next I needed to import the images into Visual SFM. <br>
 Click the folder with the plus button next to it, then select the directory, and select all images with Ctrl-A.
 
-TODO image of clicking folder plus sign
+![VSFM1]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM1.png)
 
 Next we click the X shaped button with an arrow *Compute Missing Matches*
 
-TODO image of clicking icon
+![VSFM2]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM2.png)
 
 Next we click the double arrow for *Compute 3D Reconstruction*
 
-TODO image of clicking icon
+![VSFM3]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM3.png)
 
 Next we click *Run Dense Reconstruction* <br>
 Select a destination for the file to save <br>
 This next part can take a long time to run (maybe 20 - 30 mins)
 
-TODO image of clicking icon
+![VSFM4]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM4.png)
 
 Once the last step is complete, we can hit the *TAB* key to get a view of the model so far <br>
 At this stage we can now just close Visual SFM and switch to Meshlab

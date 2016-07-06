@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from pelican.utils import path_to_url, get_relative_path
 
 AUTHOR = 'Grbd'
-SITENAME = 'Garlicbreads Blog'
+SITENAME = 'The Grbd Blog'
 SITEURL = 'http://localhost/MainBlog'
 RELATIVE_URLS = True
 USE_FOLDER_AS_CATEGORY = True
