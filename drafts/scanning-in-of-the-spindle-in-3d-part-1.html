@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Scanning in of the spindle in 3D - Part 1 - Garlicbreads Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/scanning-in-of-the-spindle-in-3d-part-1.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="cnc,spindle,3dscan" />
+        <meta name="description" content="Scanning in of the spindle in 3D - Part 1" />
+
+        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Scanning in of the spindle in 3D - Part 1"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/scanning-in-of-the-spindle-in-3d-part-1.html"/>
+        <meta property="og:description" content="Scanning in of the spindle in 3D - Part 1"/>
+        <meta property="article:published_time" content="2016-07-05" />
+            <meta property="article:section" content="cnc" />
+            <meta property="article:tag" content="cnc" />
+            <meta property="article:tag" content="spindle" />
+            <meta property="article:tag" content="3dscan" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/cnc.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Garlicbreads Blog cnc ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+Garlicbreads Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>Garlicbreads Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/scanning-in-of-the-spindle-in-3d-part-1.html"
+                       rel="bookmark"
+                       title="Permalink to Scanning in of the spindle in 3D - Part 1">
+                        Scanning in of the spindle in 3D - Part 1
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-07-05T09:00:00+01:00"> Tue 05 July 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/cnc.html">cnc</a>
+        /
+	<a href="http://grbd.github.io/tag/spindle.html">spindle</a>
+        /
+	<a href="http://grbd.github.io/tag/3dscan.html">3dscan</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>In order to make a bracket to mount the spindle to the Ox, I decided to try a 3D scan of the outer case of the spindle
+so that I could accurately create a bracket that would fit around the outside</p>
+<p>To begin with I tried an XBox 360 with some different types of software, but I felt that the end result wasn't accurate enough
+so I decided to try something called Photogrammetry instead</p>
+<p>The following is based on the following <a href="https://www.youtube.com/watch?v=D6eqW6yk50k">Youtube clip</a> from Phil Nolan,
+many thanks to Phil for putting the time in to detail how perform scans with this software.</p>
+<h2>Software</h2>
+<h3>Options</h3>
+<p>There's a few different options for the software depending on if you want something free or commercial</p>
+<ul>
+<li><a href="http://ccwu.me/vsfm/">Visual SFM</a> - Seems to be one of the most commonly used free softwares, although techically not open source</li>
+<li><a href="https://github.com/OpenDroneMap/OpenDroneMap">OpenDroneMap</a> - Free / Open Source but Linux only</li>
+<li>
+<p><a href="http://184.106.205.13/arcteam/ppt.php">Python Photogrammetry Toolbox</a> - Free / Open Source, GUI seems a bit limited</p>
+</li>
+<li>
+<p><a href="http://www.agisoft.com/features/standard-edition/">PhotoScan Standard</a> - Commercial</p>
+</li>
+<li><a href="http://recap360.autodesk.com/">ReCap 360</a> - Free / Commercial</li>
+<li><a href="http://www.123dapp.com/catch">123D Catch</a> - Free / Commercial</li>
+</ul>
+<p>Since I'm using Windows 10 x64 with a Nvidia card, and the tutorial already covers it, I decided to go for Visual SFM</p>
+<p>If you want to try out the Python Photogrammetry Toolbox instead, then you'll need <br>
+Python 2.7 - 64bit, Pillow python module (installed by pip), Qt 4.8.7 (32bit mingw version), PyQt4 - 64bit (for python 2.7 / Qt 4.8.4)
+and the Python Photogrammetry Toolbox + GUI</p>
+<h3>Install</h3>
+<p>Next I needed to install the following bits of software</p>
+<ul>
+<li><a href="http://ccwu.me/vsfm/">Visual SFM</a> - I used the Windows x64 Version with Cuda support for Nvidia graphics cards</li>
+<li><a href="http://www.di.ens.fr/cmvs/">CMVS For Windows</a> <a href="https://github.com/pmoulon/CMVS-PMVS/tree/master/binariesWin-Linux/Win64-VS2010">Link2</a> - This needs to be extracted into the same directory as Visual SFM</li>
+<li><a href="http://meshlab.sourceforge.net/">Meshlab 1.3.3</a></li>
+</ul>
+<h2>Taking Pictures</h2>
+<p>First I needed to take pictures, lots and lots of pictures from every angle around the device</p>
+<p>TODO Add images</p>
+<h2>Using Visual SFM</h2>
+<p>Next I needed to import the images into Visual SFM. <br>
+Click the folder with the plus button next to it, then select the directory, and select all images with Ctrl-A.</p>
+<p>TODO image of clicking folder plus sign</p>
+<p>Next we click the X shaped button with an arrow <em>Compute Missing Matches</em></p>
+<p>TODO image of clicking icon</p>
+<p>Next we click the double arrow for <em>Compute 3D Reconstruction</em></p>
+<p>TODO image of clicking icon</p>
+<p>Next we click <em>Run Dense Reconstruction</em> <br>
+Select a destination for the file to save <br>
+This next part can take a long time to run (maybe 20 - 30 mins)</p>
+<p>TODO image of clicking icon</p>
+<p>Once the last step is complete, we can hit the <em>TAB</em> key to get a view of the model so far <br>
+At this stage we can now just close Visual SFM and switch to Meshlab</p>
+<p>TODO image of model</p>
+<h2>Meshlab</h2>
+<h3>Loading into Meshlab</h3>
+<ul>
+<li>Next open Meshlab</li>
+<li>Open the saved mvm file that Visual SFM saved before</li>
+</ul>
+<p>TODO Add images</p>
+<ul>
+<li>The model / point cloud seems to default to upside down, so we need to rotate it right side up</li>
+<li>Middle mouse button to pan, scroll wheel to zoom in</li>
+<li>Select the button to show the layers panel</li>
+</ul>
+<p>TODO image of model</p>
+<ul>
+<li>Select the eye button next to the main layer to hide it</li>
+</ul>
+<p>TODO image of icon</p>
+<ul>
+<li>Select File -&gt; Import Mesh</li>
+<li>Select the PLY file that Visual SFM exported</li>
+</ul>
+<p>TODO image of prompt</p>
+<h3>Removing artifacts within Meshlab</h3>
+<p>Next we need to remove any background parts that are not required</p>
+<ul>
+<li>Click the Rectangular selection tool icon</li>
+<li>Highlight any points to be removed</li>
+<li>Click the delete points icon</li>
+<li>Rinse and repeat to remove all remaining artifacts</li>
+</ul>
+<p>TODO image of model with bits removed</p>
+<h3>Generate new Mesh</h3>
+<ul>
+<li>Next select the Filters Menu -&gt; Point Set -&gt; Surface Reconstruction Poisson</li>
+<li>Set the Octree Depth to 12</li>
+<li>Set the Solver Divide to 7</li>
+<li>Leave the other two at 1</li>
+<li>Click Apply</li>
+</ul>
+<p>TODO image of modal</p>
+<ul>
+<li>We can now hide the ply mesh, this should give us a view of the end result</li>
+</ul>
+<p>TODO Image</p>
+<h3>Cleanup</h3>
+<p>Next we need to do a bit of cleanup</p>
+<ul>
+<li>Select the 3rd layer in the list</li>
+<li>Select Filter Menu -&gt; Selection -&gt; Select non manifold edges</li>
+<li>Select Delete</li>
+</ul>
+<p>TODO Image</p>
+<p>Next we need to create a UV Map</p>
+<ul>
+<li>Select Filters Menu -&gt; Texture -&gt; Parameterisation _ texturing from registered rasters</li>
+<li>For texture size we can use 2048</li>
+<li>Click Apply</li>
+</ul>
+<p>TODO image of prompt</p>
+<h3>Export Mesh</h3>
+<p>The final step is just to export the mesh</p>
+<ul>
+<li>Select File Menu -&gt; Export Mesh As</li>
+<li>Choose a file format in the drop down (TODO look into best one for Solidworks)</li>
+<li>Choose a file name to save as</li>
+</ul>
+<p>In the next part I'll try and import this into solidworks and parse it into an actual part. <br>
+At which point I can then use it to base a bracket around.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://localhost/MainBlog/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

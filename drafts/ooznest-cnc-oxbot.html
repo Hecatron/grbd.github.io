@@ -29,7 +29,7 @@
 
 
     <!-- Bootstrap -->
-        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.darkly.min.css" type="text/css"/>
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
     <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
@@ -42,6 +42,8 @@
 
         <link href="http://grbd.github.io/feeds/cnc.atom.xml" type="application/atom+xml" rel="alternate"
               title="Garlicbreads Blog cnc ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -68,7 +70,6 @@ Garlicbreads Blog            </a>
                         </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-              <li><a href="http://grbd.github.io/archives.html"><i class="fa fa-th-list"></i><span class="icon-label">Archives</span></a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -142,8 +143,31 @@ Something which is big and heavy doesn't respond well to rapid changes in speed 
 Something which is very lightweight responds much better in this situation to high speed movement.
 That being said my thoughts are that it should be possible to compensate for the overshoot via the use of more complicated
 motion control systems such as machinekit to try and get the best of both worlds.</p>
-<h2>Current Setup</h2>
-<p>For the mechanical kit, this is the </p>
+<h2>Build</h2>
+<h3>Mechanical</h3>
+<p>for the CNC itself I'm currently using a ooznest Ox CNC, this is similar to the default CNC but has slight modified plates.
+This CNC comes in kit form with an option for black anodized frame. The parts for the kit are all openbuilds related parts (except for the plates).</p>
+<ul>
+<li><a href="http://ooznest.co.uk/3D-Printer-CNC-Kits-Bundles/OX-CNC-Machine">ooznest Ox CNC</a></li>
+</ul>
+<h3>Electronics</h3>
+<p>For the electronics for now I've decided to use an Arduino Due which is a 32bit processor and a Radds board</p>
+<ul>
+<li>http://ooznest.co.uk/RADDS-3D-Printer-Controller-Board</li>
+</ul>
+<p>Currently I've got no end stops, but I am working on the brackets needed to mount some inductive sensors in the right places, as well as brackets for the cable chain</p>
+<h3>Software</h3>
+<p>For the board firmware I'm using a modified version of TinyG2 for use with the Due / Radds board</p>
+<ul>
+<li><a href="https://github.com/grbd/GBD.OxBot.FirmwareG2">Radds Firmware</a></li>
+</ul>
+<p>For the controlling software I'm currently using Chillipepr</p>
+<ul>
+<li>]http://chilipeppr.com/tinyg</li>
+<li><a href="http://chilipeppr.com/tinyg#com-chilipeppr-widget-serialport-download">Serial Port JSON Server</a></li>
+</ul>
+<h2>Setup</h2>
+<p>TODO add settings / how to build firmware</p>
 <h2>Future Goals</h2>
 <p>At the moment the main focus is to get the device working as a CNC hopefully with a better spindle.
 Later on I've got a few different ideas for interchangeable heads.
@@ -197,7 +221,7 @@ compared to a lot of other Rpi similar boards which currently lack this at the m
       <hr>
       <div class="row">
          <div class="col-xs-10">&copy; 2016 Grbd
-            &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
             <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
             <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
          <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
