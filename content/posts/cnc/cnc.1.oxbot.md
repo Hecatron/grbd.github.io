@@ -30,14 +30,37 @@ That being said my thoughts are that it should be possible to compensate for the
 motion control systems such as machinekit to try and get the best of both worlds.
 
 
-## Current Setup
+## Build
 
-For the mechanical kit, this is the 
+### Mechanical
 
+for the CNC itself I'm currently using a ooznest Ox CNC, this is similar to the default CNC but has slight modified plates.
+This CNC comes in kit form with an option for black anodized frame. The parts for the kit are all openbuilds related parts (except for the plates).
 
+  * [ooznest Ox CNC](http://ooznest.co.uk/3D-Printer-CNC-Kits-Bundles/OX-CNC-Machine)
 
+### Electronics
 
+For the electronics for now I've decided to use an Arduino Due which is a 32bit processor and a Radds board
 
+  * http://ooznest.co.uk/RADDS-3D-Printer-Controller-Board
+
+Currently I've got no end stops, but I am working on the brackets needed to mount some inductive sensors in the right places, as well as brackets for the cable chain
+
+### Software
+
+For the board firmware I'm using a modified version of TinyG2 for use with the Due / Radds board
+
+  * [Radds Firmware](https://github.com/grbd/GBD.OxBot.FirmwareG2)
+
+For the controlling software I'm currently using Chillipepr
+
+  * ]http://chilipeppr.com/tinyg
+  * [Serial Port JSON Server](http://chilipeppr.com/tinyg#com-chilipeppr-widget-serialport-download)
+
+## Setup
+
+TODO add settings / how to build firmware
 
 
 ## Future Goals

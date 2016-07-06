@@ -33,13 +33,13 @@ DEFAULT_PAGINATION = 10
 #THEME = "themes/pelican-bootstrap3-lovers"
 #BOOTSTRAP_THEME = "lovers"
 
-THEME = "themes/pelican-bootstrap3.v1"
+THEME = "themes/pelican-bootstrap3.modv2"
 #BOOTSTRAP_THEME = "cerulean"
 #BOOTSTRAP_THEME = "cosmo"
-#BOOTSTRAP_THEME = "cyborg"
+BOOTSTRAP_THEME = "cyborg"
 #BOOTSTRAP_THEME = "flatly"
 #BOOTSTRAP_THEME = "slate"
-BOOTSTRAP_THEME = "darkly"
+#BOOTSTRAP_THEME = "darkly"
 #BOOTSTRAP_FLUID = "True"
 
 # Personal Info
