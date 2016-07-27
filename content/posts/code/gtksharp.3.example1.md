@@ -1,44 +1,44 @@
-Title: GTKSharp - Part 3 - Basic Example with VS and Glade
-Summary: Using GTKSharp version 3 within Visual Studio under windows
+Title: GtkSharp - Part 3 - Basic Example with VS and Glade
+Summary: Using GtkSharp version 3 within Visual Studio under windows
 Date: 2016-06-25 19:36
-Tags: code, dotnet, gtksharp
+Tags: code, dotnet, GtkSharp
 
 ## Overview
 
 It's been a while since I posted my last blog entry so I decided to get a crack on with this one
 
 In this post I'm going to show how to get a basic GtkSharp application working using a glade xml file and some C#. <br>
-For the below examples the code is downloadable via a github link: <https://github.com/grbd/GBD.Blog.Examples>
+For the below examples the code is downloadable via a GitHub link: <https://github.com/grbd/GBD.Blog.Examples>
 
 
 ## GtkSharp BasicForm1 Example
 
 ### Setting up the Project
 
-First lets create a new C# Solution
+First let's create a new C# Solution
 
 ![NewSolution1]({filename}/static/code/gtksharp.3.example1/NewSolution1.png)
 
-Next lets create a new C# Windows Forms Project
+Next let's create a new C# Windows Forms Project
 
 ![NewProject1]({filename}/static/code/gtksharp.3.example1/NewProject1.png)
 
-We don't need Form1.cs since we're repurposing this project for GtkSharp, so lets remove Form1.cs
+We don't need Form1.cs since we're repurposing this project for GtkSharp, so let's remove Form1.cs
 
 ![RemoveFrom1cs]({filename}/static/code/gtksharp.3.example1/RemoveFrom1cs.png)
 
-Next right click on the project and select *Manage Nuget Packages*
+Next right click on the project and select *Manage NuGet Packages*
 
-Lets add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
-Within NuGet the gtksharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
-If your using linux and already have gtk installed then the additional binaries shouldn't be needed.
+Let's add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
+Within NuGet the GtkSharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
+If your using Linux and already have gtk installed, then the additional binaries shouldn't be needed.
 
 ![NuGet1]({filename}/static/code/gtksharp.3.example1/NuGet1.png)
 
 Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment
 
   * Right click on the project
-  * Select **Properies** from the drop down menu
+  * Select **Properties** from the drop down menu
   * Select the **Build** tab on the left hand side
   * Make sure the **Platform Target** is set to **X86**
 
@@ -49,7 +49,7 @@ The dotnet version will default to **4.5.1**, you can leave it at that or increa
 
 ### Setting up the Program Class
 
-Next we need to alter the code that runs at startup. <br>
+Next we need to alter the code that runs at start-up. <br>
 
 With Visual Basic you'll need to create a Program.vb file <br>
 With C# There should already be a Program.cs file we can use instead
@@ -108,7 +108,7 @@ End Namespace
 
 ### TestForm1.glade
 
-Next lets create a glade form to use in our project <br>
+Next let's create a glade form to use in our project <br>
 This is one created from the glade application we've used before.
 
   * Drag and drop the file saved from glade into the project
@@ -172,12 +172,12 @@ It's also possible to associate the .glade file with the glade.exe by right clic
 
 ### TestForm1.cs
 
-The original GTK2 based version of GTKSharp used to include a library called Glade-Sharp which handled the loading in of
+The original GTK2 based version of GtkSharp used to include a library called Glade-Sharp which handled the loading in of
 forms via Glade.XML, with the newer GTK3 version this is handled via the GTK.Builder class instead.
 
 With the below example we're going to use the **Builder.Object** attribute.
 This attribute automatically links the named property to the control on the form once it's shown.
-Once the property is linked to the form we can then attach to it's events or change it's properties such as a textbox text value
+Once the property is linked to the form we can then attach to its events or change its properties such as a textbox text value
 
 **TestForm1.cs**
 

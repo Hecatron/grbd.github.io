@@ -1,12 +1,12 @@
-Title: GTKSharp - Part 5 - Themes and ClearText
+Title: GtkSharp - Part 5 - Themes and ClearText
 Summary: Using themes within GtkSharp and enabling cleartype font text
 Date: 2016-06-25 23:30
-Tags: code, dotnet, gtksharp
+Tags: code, dotnet, GtkSharp
 
 ## Overview
 
-One of the interesting features of GtkSharp and GTK3 is it's theming ability.
-Although there doesn't seem to be a lot of documenation on handling this easily within .Net and GtkSharp
+One of the interesting features of GtkSharp and GTK3 is its theming ability.
+Although there doesn't seem to be a lot of documentation on handling this easily within .Net and GtkSharp
 
 After a bit of digging around I've recently managed to get themes working with GtkSharp.
 Also I've discovered a fix for cleartext to make the fonts look nicer under windows and to alter the dpi settings. <br>
@@ -19,7 +19,7 @@ As with prior code, I've placed examples within a gitrepo of <https://github.com
 The first thing to be aware of is the version of gtk in use, within the NuGet package *GtkSharp.Win32*
 
 When theming it's important to use a theme compatible with the version of gtk used by GtkSharp, currently that's **gtk-3.14** as of writing with the NuGet package <br>
-With **gtk-3.14** and upwards the theme engine (which used to be a separate dll in older versions) is now bundled within the gtk libs <br>
+With **gtk-3.14** and upwards the theme engine (which used to be a separate Dll in older versions) is now bundled within the gtk libs <br>
 If you pick a theme that complains about "adwaita not found" when loading, it's probably designed for an older version of gtk and is trying to load the engine which is already in memory
 
 For a list of themes:
@@ -29,7 +29,7 @@ For a list of themes:
 
 ### Selecting a theme
 
-In order to load in a theme with gtksharp / gtk3 we can use something similar to the below
+In order to load in a theme with GtkSharp / gtk3 we can use something similar to the below
 
 **For C#**
 
@@ -56,14 +56,14 @@ In order for the above to work, the themes directory needs to be relative to the
 
 ### The old theme selection method
 
-One older method of loading themes within gtksharp was the use of Settings.Default.ThemeName
+One older method of loading themes within GtkSharp was the use of Settings.Default.ThemeName
 
 ``` vbnet
 Settings.Default.ThemeName = "delorean-dark-theme-3.9"
 ```
 
-With the more recent version of gtksharp / gtk3 this doesn't appear to work. <br>
-However it still might be useful if your using an older version of gtksharp with gtk2
+With the more recent version of GtkSharp / gtk3 this doesn't appear to work. <br>
+However it still might be useful if your using an older version of GtkSharp with gtk2
 
   * <https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name>
 
@@ -156,4 +156,4 @@ This final example has both theming and cleartext enabled
 
 <br>
 <br>
-[GTKSharp - Part 4 - Handles and WithEvents Example]({filename}./gtksharp.4.example2.md)
+[GtkSharp - Part 4 - Handles and WithEvents Example]({filename}./gtksharp.4.example2.md)

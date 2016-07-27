@@ -1,7 +1,7 @@
-Title: GTKSharp - Part 1 - Cross Platform Toolkits
+Title: GtkSharp - Part 1 - Cross Platform Toolkits
 Summary: Exploring the different GUI toolkits available for .Net across different platforms
 Date: 2016-01-28 19:00
-Tags: code, dotnet, gtksharp, toolkits
+Tags: code, dotnet, GtkSharp, toolkits
 
 ## Overview
 
@@ -40,7 +40,7 @@ QtSharp uses the CppSharp library as a way of generating the bindings from the c
 At this stage it's still very new and in alpha state, after testing it myself it does appear to actually be able to create and show windows, however there are a couple of gotcha's still.
 
   * The code is still in Alpha state, which means it may be a while before it's ready for production
-  * Currently CppSharp doesn't support templated functions (c++ generics) so certain function calls and properties are currently unavailable (such as interating over the child controls within a form or container)
+  * Currently CppSharp doesn't support templated functions (c++ generics) so certain function calls and properties are currently unavailable (such as iterating over the child controls within a form or container)
   * QML based apps are going to require some special coding before they can be used from .Net
 
 I'm still hopeful this will be useful in the future since I'm quite keen on Qt. Looking at some of the c++ projects online there seems to have been a lot of talk of projects moving from Gtk to Qt due to issues with the newer versions of Gtk and it being largely Gnome focused.
@@ -77,7 +77,7 @@ There are a couple of downsides though
 
 The final toolkit I tried looking into was GtkSharp. This seems to be a lot more mature than the other toolkits in relation to .Net with bug fixes and patches.
 There does seem to be a bit of confusion over which version to use and how to set it up.
-After a fair bit of digging around online I finally managed to figure out how to get a basic GTK3 based GTKSharp Application up and running
+After a fair bit of digging around online I finally managed to figure out how to get a basic GTK3 based GtkSharp Application up and running
 under .Net. Given that some of the documentation is still a bit sparse when it comes to the GTK3 version I figured I'd put some information
 up on how to get it going with Visual Studio.
 
@@ -86,7 +86,7 @@ One advantage to GtkSharp which I'm also interested in is the use of cairo for v
   * [GTK-Sharp](http://www.mono-project.com/docs/gui/gtksharp/) - The Main .Net library for creating GTK based GUI Applications
   * [GLIB-Sharp](https://developer.gnome.org/glib/2.46/) - Glib Sharp is a library used by GTK for Core Functionality such as memory management
   * [GDK-Sharp](https://en.wikipedia.org/wiki/GDK) - Gimp Drawing Kit, this is a low level drawing library used by GTK for graphics rendering
-  * [GIO-Sharp](https://developer.gnome.org/gio/2.47/) - The Gio library deals with low level Gnome IO for Filesystem / Network / Process Handling / DBUS / Application Settings
+  * [GIO-Sharp](https://developer.gnome.org/gio/2.47/) - The Gio library deals with low level Gnome IO for File system / Network / Process Handling / DBUS / Application Settings
 
   * [Cairo-Sharp](http://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cairo/) - Cairo can be used for 2D Vector graphics
   * [Pango-Sharp](http://www.mono-project.com/archived/pangobeginners/) - pango handles all of the font and text related functions for GTK
@@ -100,14 +100,14 @@ One for GTK2 and one for GTK3
 
 ### GTK2
 
-The one for GTK2 is probably more stable and widley used, but the one I'm interested in here is the GTK3 version.
+The one for GTK2 is probably more stable and widely used, but the one I'm interested in here is the GTK3 version.
 If you look for the default windows .msi installer on the mono site
 
   * [MSI Instaler](http://www.mono-project.com/docs/gui/gtksharp/installer-for-net-framework/)
   * [Main Download URL](http://www.mono-project.com/download/#download-win)
 
 This is actually the older GTK2 version which installs under "C:\Program Files (x86)\GtkSharp\2.12\" on Windows.
-The official github account for GtkSharp seems to mirror this (latest version 2.12.30)
+The official GitHub account for GtkSharp seems to mirror this (latest version 2.12.30)
 
   * <https://github.com/mono/gtk-sharp/>
 
@@ -118,7 +118,7 @@ As far as I can tell I think these versions are unofficial (although quite usefu
 
   * GtkSharp (3.1.3) - GTK3 .Net libraries
   * GtkSharp.Win32 - GTK3 C libraries for Windows
-  * GTKSharp.Linux - GTK3 C libraries for Linux
+  * GtkSharp.Linux - GTK3 C libraries for Linux
 
 This is the version I'll be using in the following articles.
 I suspect although I'm not entirely sure that the source code for this version is based on the below GitHub Link.

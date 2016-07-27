@@ -1,7 +1,7 @@
-Title: GTKSharp - Part 4 - Handles and WithEvents Example
-Summary: A second example using GTKSharp and Visual Studio with Handles and WithEvents
+Title: GtkSharp - Part 4 - Handles and WithEvents Example
+Summary: A second example using GtkSharp and Visual Studio with Handles and WithEvents
 Date: 2016-06-25 21:55
-Tags: code, dotnet, gtksharp
+Tags: code, dotnet, GtkSharp
 
 ## Overview
 
@@ -18,7 +18,7 @@ I've included example code within <https://github.com/grbd/GBD.Blog.Examples> al
 ## GtkSharp Handles and WithEvents Example
 
 For this next example we're going to use a similar project to the one used in the last part. <br>
-But this time around we're going to split the code into 2 seperate files.
+But this time around we're going to split the code into 2 separate files.
 
   * **TestForm1.glade.vb** - This acts as a sort of wrapper and makes all the properties of the Form available
   * **TestForm1.vb** - This is where our application logic sits similar to what you would use with windows forms
@@ -144,5 +144,5 @@ The main difference now is that the setup is very familiar to those used to winf
 also we have the option of using the drop downs within the code window to select different items and associated events
 
 <br>
-[GTKSharp - Part 3 - Basic Example with VS and Glade]({filename}./gtksharp.3.example1.md)<br>
-[GTKSharp - Part 5 - Themes and ClearText]({filename}./gtksharp.5.theming.md)
+[GtkSharp - Part 3 - Basic Example with VS and Glade]({filename}./gtksharp.3.example1.md)<br>
+[GtkSharp - Part 5 - Themes and ClearText]({filename}./gtksharp.5.theming.md)

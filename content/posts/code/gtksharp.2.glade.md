@@ -1,11 +1,11 @@
-Title: GTKSharp - Part 2 - Setting up Glade
-Summary: Getting glade up and running under windows using Msys2 for designing gui's with drag and drop
+Title: GtkSharp - Part 2 - Setting up Glade
+Summary: Getting glade up and running under windows using Msys2 for designing GUI's with drag and drop
 Date: 2016-01-29 21:00
-Tags: code, dotnet, gtksharp, glade
+Tags: code, dotnet, GtkSharp, glade
 
 ## Overview
 
-The first step in getting GTKSharp to work is to get glade up and running.
+The first step in getting GtkSharp to work is to get glade up and running.
 Glade is an application written to design and create GTK forms via drag and drop.
 This means we can drag and drop controls onto a form then finally export / save an xml file to be used later by Visual Studio.
 
@@ -28,7 +28,7 @@ The MSYS2 versions of glade however seem to be fairly up to date, and it's a lot
 ## Installing MSYS2
 
 The first step is to make sure we have MSYS2 installed. MSYS2 is a newer replacement for Mingw under windows.
-It's just something that makes running linux applications natively under windows a lot easier.
+It's just something that makes running Linux applications natively under windows a lot easier.
 So install this first
 
   * <http://sourceforge.net/projects/msys2/>
@@ -79,21 +79,21 @@ We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe
   * Drag and drop a fixed control inside the Window Control
   * Drag and drop a button and TextEntry control into the fixed area
 
-One important thing to note for the current version of GTKSharp pulled from Nuget (3.1.3)
+One important thing to note for the current version of GtkSharp pulled from NuGet (3.1.3)
 This requires the GTK+ version of the glade file to be set to 3.14
 
   * Select File -> Properties
   * Under Toolkit version required: change this from 3.16 to 3.14
 
 At this point you can save your new glade file to anywhere you want.
-Later on we'll be using this with GTKSharp and Visual Studio
+Later on we'll be using this with GtkSharp and Visual Studio
 
 ## Copying Across MSYS Files
 
 One of the things I noticed when running glade files from .Net is that the application can have problems finding schema and icon files
 normally associated with GLib when using for example a FileChooserButton
 
-There's some more information over at this github link: <https://github.com/openmedicus/gtk-sharp/issues/6>
+There's some more information over at this GitHub link: <https://github.com/openmedicus/gtk-sharp/issues/6>
 
 The quick fix to this is just to copy and paste some directories from MSYS into ProgamData under windows
 
@@ -104,5 +104,5 @@ The quick fix to this is just to copy and paste some directories from MSYS into 
 | C:\msys64\mingw64\share\themes | C:\ProgramData\themes |
 
 <br>
-[GTKSharp - Part 1 - Cross Platform Toolkits]({filename}./gtksharp.1.toolkits.md) <br>
-[GTKSharp - Part 3 - Basic Example with VS and Glade]({filename}./gtksharp.3.example1.md)
+[GtkSharp - Part 1 - Cross Platform Toolkits]({filename}./gtksharp.1.toolkits.md) <br>
+[GtkSharp - Part 3 - Basic Example with VS and Glade]({filename}./gtksharp.3.example1.md)
