@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>GTKSharp - Part 5 - Themes and ClearText - Garlicbreads Blog</title>
+    <title>GtkSharp - Part 5 - Themes and ClearText - The Grbd Blog</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -12,18 +12,19 @@
 <link rel="canonical" href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/">
 
         <meta name="author" content="Grbd" />
-        <meta name="keywords" content="dotnet,gtksharp" />
+        <meta name="keywords" content="code,dotnet,GtkSharp" />
         <meta name="description" content="Using themes within GtkSharp and enabling cleartype font text" />
 
-        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:site_name" content="The Grbd Blog" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="GTKSharp - Part 5 - Themes and ClearText"/>
+        <meta property="og:title" content="GtkSharp - Part 5 - Themes and ClearText"/>
         <meta property="og:url" content="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"/>
         <meta property="og:description" content="Using themes within GtkSharp and enabling cleartype font text"/>
         <meta property="article:published_time" content="2016-06-25" />
-            <meta property="article:section" content="dotnet" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
             <meta property="article:tag" content="dotnet" />
-            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:tag" content="GtkSharp" />
             <meta property="article:author" content="Grbd" />
 
 
@@ -35,12 +36,12 @@
     <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
 
         <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
-              title="Garlicbreads Blog ATOM Feed"/>
+              title="The Grbd Blog ATOM Feed"/>
 
 
 
-        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
-              title="Garlicbreads Blog dotnet ATOM Feed"/>
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
 
     <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
 
@@ -57,12 +58,12 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="http://grbd.github.io/" class="navbar-brand">
-Garlicbreads Blog            </a>
+The Grbd Blog            </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
                         <li class="active">
-                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
                         </li>
                         <li >
                             <a href="http://grbd.github.io/category/personal.html">Personal</a>
@@ -84,7 +85,7 @@ Garlicbreads Blog            </a>
 <div id="banner">
 	<div class="container">
 		<div class="copy">
-			<h1>Garlicbreads Blog</h1>
+			<h1>The Grbd Blog</h1>
 		</div>
 	</div>
 </div><!-- End Banner -->
@@ -97,8 +98,8 @@ Garlicbreads Blog            </a>
                 <h1>
                     <a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"
                        rel="bookmark"
-                       title="Permalink to GTKSharp - Part 5 - Themes and ClearText">
-                        GTKSharp - Part 5 - Themes and ClearText
+                       title="Permalink to GtkSharp - Part 5 - Themes and ClearText">
+                        GtkSharp - Part 5 - Themes and ClearText
                     </a>
                 </h1>
             </header>
@@ -116,15 +117,17 @@ Garlicbreads Blog            </a>
 
 
 <span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
 	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
         /
-	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+	<a href="http://grbd.github.io/tag/gtksharp.html">GtkSharp</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <h2>Overview</h2>
-<p>One of the interesting features of GtkSharp and GTK3 is it's theming ability.
-Although there doesn't seem to be a lot of documenation on handling this easily within .Net and GtkSharp</p>
+<p>One of the interesting features of GtkSharp and GTK3 is its theming ability.
+Although there doesn't seem to be a lot of documentation on handling this easily within .Net and GtkSharp</p>
 <p>After a bit of digging around I've recently managed to get themes working with GtkSharp.
 Also I've discovered a fix for cleartext to make the fonts look nicer under windows and to alter the dpi settings. <br>
 As with prior code, I've placed examples within a gitrepo of <a href="https://github.com/grbd/GBD.Blog.Examples">https://github.com/grbd/GBD.Blog.Examples</a>.</p>
@@ -132,14 +135,14 @@ As with prior code, I've placed examples within a gitrepo of <a href="https://gi
 <h3>Theme Versions</h3>
 <p>The first thing to be aware of is the version of gtk in use, within the NuGet package <em>GtkSharp.Win32</em></p>
 <p>When theming it's important to use a theme compatible with the version of gtk used by GtkSharp, currently that's <strong>gtk-3.14</strong> as of writing with the NuGet package <br>
-With <strong>gtk-3.14</strong> and upwards the theme engine (which used to be a separate dll in older versions) is now bundled within the gtk libs <br>
+With <strong>gtk-3.14</strong> and upwards the theme engine (which used to be a separate Dll in older versions) is now bundled within the gtk libs <br>
 If you pick a theme that complains about "adwaita not found" when loading, it's probably designed for an older version of gtk and is trying to load the engine which is already in memory</p>
 <p>For a list of themes:</p>
 <ul>
 <li><a href="https://www.gnome-look.org/">https://www.gnome-look.org/</a></li>
 </ul>
 <h3>Selecting a theme</h3>
-<p>In order to load in a theme with gtksharp / gtk3 we can use something similar to the below</p>
+<p>In order to load in a theme with GtkSharp / gtk3 we can use something similar to the below</p>
 <p><strong>For C#</strong></p>
 <div class="highlight"><pre><span></span><span class="c1">// Load the Theme</span>
 <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span> <span class="n">css_provider</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Gtk</span><span class="p">.</span><span class="n">CssProvider</span><span class="p">();</span>
@@ -160,13 +163,13 @@ If you pick a theme that complains about "adwaita not found" when loading, it's 
 From that point onwards everything else should be loaded in automatically. <br>
 In order for the above to work, the themes directory needs to be relative to the exe, although an absolute path can be specified.</p>
 <h3>The old theme selection method</h3>
-<p>One older method of loading themes within gtksharp was the use of Settings.Default.ThemeName</p>
+<p>One older method of loading themes within GtkSharp was the use of Settings.Default.ThemeName</p>
 <div class="highlight"><pre><span></span><span class="n">Settings</span><span class="p">.</span><span class="n">Default</span><span class="p">.</span><span class="n">ThemeName</span> <span class="o">=</span> <span class="s">&quot;delorean-dark-theme-3.9&quot;</span>
 </pre></div>
 
 
-<p>With the more recent version of gtksharp / gtk3 this doesn't appear to work. <br>
-However it still might be useful if your using an older version of gtksharp with gtk2</p>
+<p>With the more recent version of GtkSharp / gtk3 this doesn't appear to work. <br>
+However it still might be useful if your using an older version of GtkSharp with gtk2</p>
 <ul>
 <li><a href="https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name">https://developer.gnome.org/gtk3/stable/GtkSettings.html#GtkSettings--gtk-theme-name</a></li>
 </ul>
@@ -233,16 +236,16 @@ But for now one way around this is to use some code similar to the below</p>
 <p>The end result should be a form which looks a lot clearer and can use a custom theme at the same time</p>
 <h3>No Themes or ClearText</h3>
 <p>The first example is no theming or cleartext under Windows 10</p>
-<p><img alt="Example1" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example1.png" /></p>
+<p><img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example1.png" /></p>
 <h3>Themes but no ClearText</h3>
 <p>This next example has theming but with no cleartext</p>
-<p><img alt="Example2" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example2.png" /></p>
+<p><img alt="Example2" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example2.png" /></p>
 <h3>Themes and ClearText</h3>
 <p>This final example has both theming and cleartext enabled</p>
-<p><img alt="Example3" src="http://grbd.github.io/static/dotnet/gtksharp.5.theming/Example3.png" /></p>
+<p><img alt="Example3" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example3.png" /></p>
 <p><br>
 <br>
-<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/">GTKSharp - Part 4 - Handles and WithEvents Example</a></p>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/">GtkSharp - Part 4 - Handles and WithEvents Example</a></p>
             </div>
             <!-- /.entry-content -->
         </article>

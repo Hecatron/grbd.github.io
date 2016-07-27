@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
 <head>
-    <title>GTKSharp - Part 2 - Setting up Glade - Garlicbreads Blog</title>
+    <title>GtkSharp - Part 2 - Setting up Glade - The Grbd Blog</title>
     <!-- Using the latest rendering mode for IE -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
@@ -12,18 +12,19 @@
 <link rel="canonical" href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/">
 
         <meta name="author" content="Grbd" />
-        <meta name="keywords" content="dotnet,gtksharp,glade" />
-        <meta name="description" content="Getting glade up and running under windows using Msys2 for designing gui&#39;s with drag and drop" />
+        <meta name="keywords" content="code,dotnet,GtkSharp,glade" />
+        <meta name="description" content="Getting glade up and running under windows using Msys2 for designing GUI&#39;s with drag and drop" />
 
-        <meta property="og:site_name" content="Garlicbreads Blog" />
+        <meta property="og:site_name" content="The Grbd Blog" />
         <meta property="og:type" content="article"/>
-        <meta property="og:title" content="GTKSharp - Part 2 - Setting up Glade"/>
+        <meta property="og:title" content="GtkSharp - Part 2 - Setting up Glade"/>
         <meta property="og:url" content="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"/>
-        <meta property="og:description" content="Getting glade up and running under windows using Msys2 for designing gui&#39;s with drag and drop"/>
+        <meta property="og:description" content="Getting glade up and running under windows using Msys2 for designing GUI&#39;s with drag and drop"/>
         <meta property="article:published_time" content="2016-01-29" />
-            <meta property="article:section" content="dotnet" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
             <meta property="article:tag" content="dotnet" />
-            <meta property="article:tag" content="gtksharp" />
+            <meta property="article:tag" content="GtkSharp" />
             <meta property="article:tag" content="glade" />
             <meta property="article:author" content="Grbd" />
 
@@ -36,12 +37,12 @@
     <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
 
         <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
-              title="Garlicbreads Blog ATOM Feed"/>
+              title="The Grbd Blog ATOM Feed"/>
 
 
 
-        <link href="http://grbd.github.io/feeds/dotnet.atom.xml" type="application/atom+xml" rel="alternate"
-              title="Garlicbreads Blog dotnet ATOM Feed"/>
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
 
     <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
 
@@ -58,12 +59,12 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="http://grbd.github.io/" class="navbar-brand">
-Garlicbreads Blog            </a>
+The Grbd Blog            </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
                         <li class="active">
-                            <a href="http://grbd.github.io/category/dotnet.html">Dotnet</a>
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
                         </li>
                         <li >
                             <a href="http://grbd.github.io/category/personal.html">Personal</a>
@@ -85,7 +86,7 @@ Garlicbreads Blog            </a>
 <div id="banner">
 	<div class="container">
 		<div class="copy">
-			<h1>Garlicbreads Blog</h1>
+			<h1>The Grbd Blog</h1>
 		</div>
 	</div>
 </div><!-- End Banner -->
@@ -98,8 +99,8 @@ Garlicbreads Blog            </a>
                 <h1>
                     <a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"
                        rel="bookmark"
-                       title="Permalink to GTKSharp - Part 2 - Setting up Glade">
-                        GTKSharp - Part 2 - Setting up Glade
+                       title="Permalink to GtkSharp - Part 2 - Setting up Glade">
+                        GtkSharp - Part 2 - Setting up Glade
                     </a>
                 </h1>
             </header>
@@ -117,16 +118,18 @@ Garlicbreads Blog            </a>
 
 
 <span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
 	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
         /
-	<a href="http://grbd.github.io/tag/gtksharp.html">gtksharp</a>
+	<a href="http://grbd.github.io/tag/gtksharp.html">GtkSharp</a>
         /
 	<a href="http://grbd.github.io/tag/glade.html">glade</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
                 <h2>Overview</h2>
-<p>The first step in getting GTKSharp to work is to get glade up and running.
+<p>The first step in getting GtkSharp to work is to get glade up and running.
 Glade is an application written to design and create GTK forms via drag and drop.
 This means we can drag and drop controls onto a form then finally export / save an xml file to be used later by Visual Studio.</p>
 <p>From what I've seen there are two different GUI's available for designing GTK Forms with drag and drop controls
@@ -146,14 +149,14 @@ However, the versions for windows don't appear to be maintained on a regular bas
 The MSYS2 versions of glade however seem to be fairly up to date, and it's a lot easier than building from source.</p>
 <h2>Installing MSYS2</h2>
 <p>The first step is to make sure we have MSYS2 installed. MSYS2 is a newer replacement for Mingw under windows.
-It's just something that makes running linux applications natively under windows a lot easier.
+It's just something that makes running Linux applications natively under windows a lot easier.
 So install this first</p>
 <ul>
 <li><a href="http://sourceforge.net/projects/msys2/">http://sourceforge.net/projects/msys2/</a></li>
 <li><a href="http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/">http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/</a></li>
 </ul>
 <p>After the initial install open up a MSYS2 console window.</p>
-<p><img alt="msys1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/Msys1.png" /></p>
+<p><img alt="msys1img" src="http://grbd.github.io/static/code/gtksharp.2.glade/Msys1.png" /></p>
 <p>The first thing we want to do is update the core packages for MSYS</p>
 <div class="highlight"><pre><span></span>update-core
 </pre></div>
@@ -183,25 +186,25 @@ So install this first</p>
 
 <h2>Running Glade</h2>
 <p>We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe</p>
-<p><img alt="gladeform1img" src="http://grbd.github.io/static/dotnet/gtksharp.2.glade/GladeForm1.png" /></p>
+<p><img alt="gladeform1img" src="http://grbd.github.io/static/code/gtksharp.2.glade/GladeForm1.png" /></p>
 <ul>
 <li>Select File -&gt; New</li>
 <li>Drag and drop a Window from the TopLevels section into the viewing area</li>
 <li>Drag and drop a fixed control inside the Window Control</li>
 <li>Drag and drop a button and TextEntry control into the fixed area</li>
 </ul>
-<p>One important thing to note for the current version of GTKSharp pulled from Nuget (3.1.3)
+<p>One important thing to note for the current version of GtkSharp pulled from NuGet (3.1.3)
 This requires the GTK+ version of the glade file to be set to 3.14</p>
 <ul>
 <li>Select File -&gt; Properties</li>
 <li>Under Toolkit version required: change this from 3.16 to 3.14</li>
 </ul>
 <p>At this point you can save your new glade file to anywhere you want.
-Later on we'll be using this with GTKSharp and Visual Studio</p>
+Later on we'll be using this with GtkSharp and Visual Studio</p>
 <h2>Copying Across MSYS Files</h2>
 <p>One of the things I noticed when running glade files from .Net is that the application can have problems finding schema and icon files
 normally associated with GLib when using for example a FileChooserButton</p>
-<p>There's some more information over at this github link: <a href="https://github.com/openmedicus/gtk-sharp/issues/6">https://github.com/openmedicus/gtk-sharp/issues/6</a></p>
+<p>There's some more information over at this GitHub link: <a href="https://github.com/openmedicus/gtk-sharp/issues/6">https://github.com/openmedicus/gtk-sharp/issues/6</a></p>
 <p>The quick fix to this is just to copy and paste some directories from MSYS into ProgamData under windows</p>
 <table>
 <thead>
@@ -226,8 +229,8 @@ normally associated with GLib when using for example a FileChooserButton</p>
 </tbody>
 </table>
 <p><br>
-<a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/">GTKSharp - Part 1 - Cross Platform Toolkits</a> <br>
-<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/">GTKSharp - Part 3 - Basic Example with VS and Glade</a></p>
+<a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/">GtkSharp - Part 1 - Cross Platform Toolkits</a> <br>
+<a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/">GtkSharp - Part 3 - Basic Example with VS and Glade</a></p>
             </div>
             <!-- /.entry-content -->
         </article>
