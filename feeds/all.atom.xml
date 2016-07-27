@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/all.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-07-27T18:53:00+01:00</updated><entry><title>SCons builds with Visual Studio</title><link href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-07-27:posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog</title><link href="http://localhost/MainBlog/" rel="alternate"></link><link href="http://localhost/MainBlog/feeds/all.atom.xml" rel="self"></link><id>http://localhost/MainBlog/</id><updated>2016-07-27T18:53:00+01:00</updated><entry><title>SCons builds with Visual Studio</title><link href="http://localhost/MainBlog/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-07-27:MainBlog/posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;For a while now I've been looking for a decent build system with a language I can easily write and debug.&lt;/p&gt;
 &lt;p&gt;During the very old days of Linux the main go to for a build system typically was &lt;em&gt;make&lt;/em&gt; and &lt;em&gt;configure&lt;/em&gt;.
 Configure would check the system to see if a library was present and its location,
@@ -129,7 +129,7 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 &lt;li&gt;Make sure to set the python interpreter to Python2, such as &lt;strong&gt;Python 64-bit 2.7&lt;/strong&gt; &lt;br&gt;
     SCons does not yet support python3&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img alt="GeneralProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/GeneralProps1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GeneralProps1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/GeneralProps1.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Debug Tab&lt;/h3&gt;
 &lt;p&gt;Next looking at the &lt;strong&gt;Debug Tab&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -139,11 +139,11 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 Also it needs to include the directory for the SCons installation, I found this is needed to get Intellisense working with the script.
 It looks as if SCons has deliberately put the library files within a SCons subdirectory in the site-packages install directory for python.
 I suspect this has been done to avoid users from calling the SCons library directly without first going via the main scons.py script.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="DebugProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/DebugProps1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="DebugProps1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/DebugProps1.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Build file link&lt;/h3&gt;
 &lt;p&gt;Finally, we just need to add in the &lt;strong&gt;SConsBuild.py&lt;/strong&gt; file as a Link to the project.
 By adding it as a link we avoid creating a 2nd copy under the VS Project directory, and when we edit the file we'll be editing the one in the original location.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="AddLink1" src="http://grbd.github.io/static/code/scons.1.vsdebug/AddLink1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="AddLink1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/AddLink1.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Note about Intellisense&lt;/h3&gt;
 &lt;p&gt;Just a quick note, sometimes after creating a new project, you need to right click unload, then re-load the project within Visual Studio to get the Intellisense working correctly&lt;/p&gt;
 &lt;h2&gt;Setting up the Visual Studio files for the hello code&lt;/h2&gt;
@@ -151,7 +151,7 @@ By adding it as a link we avoid creating a 2nd copy under the VS Project directo
 This allowed me to edit the code from within Visual Studio and trigger the build process from there as well.&lt;/p&gt;
 &lt;p&gt;In order to do this, you're going to want to use a &lt;em&gt;Makefile&lt;/em&gt; style Visual Studio Project. These types of projects allow for custom build tools to be specified instead of using the inbuilt MS build tools. In this case we're going to set it to use the SCons tool to handle the building and cleaning of the project.&lt;/p&gt;
 &lt;p&gt;After creating one of these types of Project, if you open up the project properties you'll notice the Configuration Type is listed as &lt;em&gt;Makefile&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Hello1_General" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_General.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Hello1_General" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/Hello1_General.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The import part that we need to alter is located under the NMake tab.
 The debug=1 is just an option we can pass to the SCons script to indicate if it's a Release or Debug Build&lt;/p&gt;
 &lt;ul&gt;
@@ -160,7 +160,7 @@ The debug=1 is just an option we can pass to the SCons script to indicate if it'
 &lt;li&gt;&lt;strong&gt;Clean: scons -C ..\.. -c&lt;/strong&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Destination exe: ..\..\src\hello1.exe&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img alt="Hello1_NMake" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_NMake.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Hello1_NMake" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/Hello1_NMake.png" /&gt;&lt;/p&gt;
 &lt;h2&gt;Debugging the build script&lt;/h2&gt;
 &lt;p&gt;I've not really covered any of the details on using the SCons API at this stage simply because I'm still learning it myself.
 But if everything has been setup correctly we should now be able to run / debug the SCons build script within Visual Studio.
@@ -168,7 +168,7 @@ For a script as simple as this one it's probably not worth the time and effort t
 finding problems and issues with the build scripts can be a made a lot easier when you can single step the code within the build script itself.&lt;/p&gt;
 &lt;p&gt;This is really more of a convenience than anything else, you can still edit the build scripts independently of Visual Studio,
 and it's likely you could setup something very similar using pycharm (the free open source equivalent to VS Python Tools).
-But for me at least this should make life a lot easier for cross platform or even cross compiling complex builds.&lt;/p&gt;</summary><category term="code"></category><category term="SCons"></category><category term="build"></category></entry><entry><title>Building GTK3 / GtkSharp under Windows - Manual Build</title><link href="http://grbd.github.io/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/" rel="alternate"></link><published>2016-06-30T12:00:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-30:posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+But for me at least this should make life a lot easier for cross platform or even cross compiling complex builds.&lt;/p&gt;</summary><category term="code"></category><category term="SCons"></category><category term="build"></category></entry><entry><title>Building GTK3 / GtkSharp under Windows - Manual Build</title><link href="http://localhost/MainBlog/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/" rel="alternate"></link><published>2016-06-30T12:00:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-06-30:MainBlog/posts/2016/06/30/building-gtk3-gtksharp-under-windows-manual-build/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;Looking at the current NuGet packages for GtkSharp and the gtk3 binaries within GtkSharp.Win32.
 These are not for the most recent version of Gtk3.
 I decided to look into the process for building GTK3 and the latest version of GtkSharp under windows.
@@ -336,7 +336,7 @@ In order to test this out manually&lt;/p&gt;
 &lt;p&gt;For the next step I'll probably look into a way of building this more automatically perhaps via a python script.
 With any luck I might be able to get some of my own custom NuGet packages uploaded.&lt;/p&gt;
 &lt;p&gt;Many thanks to those that are maintaining a GtkSharp for gtk3,
-This seems to be currently one of the few libraries that is production ready for use as a cross platform Desktop GUI at the moment.&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="gtk"></category></entry><entry><title>GtkSharp - Part 5 - Themes and ClearText</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/" rel="alternate"></link><published>2016-06-25T23:30:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+This seems to be currently one of the few libraries that is production ready for use as a cross platform Desktop GUI at the moment.&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="gtk"></category></entry><entry><title>GtkSharp - Part 5 - Themes and ClearText</title><link href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/" rel="alternate"></link><published>2016-06-25T23:30:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-06-25:MainBlog/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;One of the interesting features of GtkSharp and GTK3 is its theming ability.
 Although there doesn't seem to be a lot of documentation on handling this easily within .Net and GtkSharp&lt;/p&gt;
 &lt;p&gt;After a bit of digging around I've recently managed to get themes working with GtkSharp.
@@ -447,21 +447,21 @@ But for now one way around this is to use some code similar to the below&lt;/p&g
 &lt;p&gt;The end result should be a form which looks a lot clearer and can use a custom theme at the same time&lt;/p&gt;
 &lt;h3&gt;No Themes or ClearText&lt;/h3&gt;
 &lt;p&gt;The first example is no theming or cleartext under Windows 10&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://localhost/MainBlog/static/code/gtksharp.5.theming/Example1.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Themes but no ClearText&lt;/h3&gt;
 &lt;p&gt;This next example has theming but with no cleartext&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Example2" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example2" src="http://localhost/MainBlog/static/code/gtksharp.5.theming/Example2.png" /&gt;&lt;/p&gt;
 &lt;h3&gt;Themes and ClearText&lt;/h3&gt;
 &lt;p&gt;This final example has both theming and cleartext enabled&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Example3" src="http://grbd.github.io/static/code/gtksharp.5.theming/Example3.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example3" src="http://localhost/MainBlog/static/code/gtksharp.5.theming/Example3.png" /&gt;&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;GtkSharp - Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 4 - Handles and WithEvents Example</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/" rel="alternate"></link><published>2016-06-25T21:55:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;GtkSharp - Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 4 - Handles and WithEvents Example</title><link href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/" rel="alternate"></link><published>2016-06-25T21:55:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-06-25:MainBlog/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;This is a second example of using GtkSharp within Visual Studio. &lt;br&gt;
 One of the interesting things we can setup is the use of Handles and WithEvents.
 This means that within the code window for the form, we can use the drop down fields in the same way we would with windows forms.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="VSImage" src="http://grbd.github.io/static/code/gtksharp.4.example2/VSImage1.png" /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img alt="VSImage" src="http://grbd.github.io/static/code/gtksharp.4.example2/VSImage2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="VSImage" src="http://localhost/MainBlog/static/code/gtksharp.4.example2/VSImage1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="VSImage" src="http://localhost/MainBlog/static/code/gtksharp.4.example2/VSImage2.png" /&gt;&lt;/p&gt;
 &lt;p&gt;I've included example code within &lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt; although for now this is VB only&lt;/p&gt;
 &lt;h2&gt;GtkSharp Handles and WithEvents Example&lt;/h2&gt;
 &lt;p&gt;For this next example we're going to use a similar project to the one used in the last part. &lt;br&gt;
@@ -574,28 +574,28 @@ With windows forms this type of file is usually auto generated and hidden, but i
 
 &lt;h3&gt;Running the Application&lt;/h3&gt;
 &lt;p&gt;When we run the application we should end up with a result similar to that as before.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.4.example2/Example1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://localhost/MainBlog/static/code/gtksharp.4.example2/Example1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The main difference now is that the setup is very familiar to those used to winforms,
 also we have the option of using the drop downs within the code window to select different items and associated events&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GtkSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"&gt;GtkSharp - Part 5 - Themes and ClearText&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 3 - Basic Example with VS and Glade</title><link href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/" rel="alternate"></link><published>2016-06-25T19:36:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-06-25:posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GtkSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-5-themes-and-cleartext/"&gt;GtkSharp - Part 5 - Themes and ClearText&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 3 - Basic Example with VS and Glade</title><link href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/" rel="alternate"></link><published>2016-06-25T19:36:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-06-25:MainBlog/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;It's been a while since I posted my last blog entry so I decided to get a crack on with this one&lt;/p&gt;
 &lt;p&gt;In this post I'm going to show how to get a basic GtkSharp application working using a glade xml file and some C#. &lt;br&gt;
 For the below examples the code is downloadable via a GitHub link: &lt;a href="https://github.com/grbd/GBD.Blog.Examples"&gt;https://github.com/grbd/GBD.Blog.Examples&lt;/a&gt;&lt;/p&gt;
 &lt;h2&gt;GtkSharp BasicForm1 Example&lt;/h2&gt;
 &lt;h3&gt;Setting up the Project&lt;/h3&gt;
 &lt;p&gt;First let's create a new C# Solution&lt;/p&gt;
-&lt;p&gt;&lt;img alt="NewSolution1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewSolution1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NewSolution1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/NewSolution1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Next let's create a new C# Windows Forms Project&lt;/p&gt;
-&lt;p&gt;&lt;img alt="NewProject1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewProject1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NewProject1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/NewProject1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;We don't need Form1.cs since we're repurposing this project for GtkSharp, so let's remove Form1.cs&lt;/p&gt;
-&lt;p&gt;&lt;img alt="RemoveFrom1cs" src="http://grbd.github.io/static/code/gtksharp.3.example1/RemoveFrom1cs.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="RemoveFrom1cs" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/RemoveFrom1cs.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Next right click on the project and select &lt;em&gt;Manage NuGet Packages&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Let's add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
 Within NuGet the GtkSharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
 If your using Linux and already have gtk installed, then the additional binaries shouldn't be needed.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="NuGet1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NuGet1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="NuGet1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/NuGet1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Right click on the project&lt;/li&gt;
@@ -603,7 +603,7 @@ If your using Linux and already have gtk installed, then the additional binaries
 &lt;li&gt;Select the &lt;strong&gt;Build&lt;/strong&gt; tab on the left hand side&lt;/li&gt;
 &lt;li&gt;Make sure the &lt;strong&gt;Platform Target&lt;/strong&gt; is set to &lt;strong&gt;X86&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img alt="ProjectProperties1" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ProjectProperties1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/ProjectProperties1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The dotnet version will default to &lt;strong&gt;4.5.1&lt;/strong&gt;, you can leave it at that or increase it to a higher version such as 4.5.2, 4.6 or 4.6.1&lt;/p&gt;
 &lt;h3&gt;Setting up the Program Class&lt;/h3&gt;
 &lt;p&gt;Next we need to alter the code that runs at start-up. &lt;br&gt;&lt;/p&gt;
@@ -613,7 +613,7 @@ With C# There should already be a Program.cs file we can use instead&lt;/p&gt;
 &lt;li&gt;Within the project properties make sure that the Program class is selected&lt;/li&gt;
 &lt;li&gt;If you are using Visual Basic, then you will need to untick the option for &lt;strong&gt;Enable Application Framework&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img alt="ProjectProperties2" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="ProjectProperties2" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/ProjectProperties2.png" /&gt;&lt;/p&gt;
 &lt;p&gt;These are some examples of what the main Program class should look like&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;For C#&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
@@ -664,7 +664,7 @@ This is one created from the glade application we've used before.&lt;/p&gt;
 &lt;li&gt;Drag and drop the file saved from glade into the project&lt;/li&gt;
 &lt;li&gt;Make sure to set the &lt;strong&gt;Build Action&lt;/strong&gt; to &lt;strong&gt;Embedded Resource&lt;/strong&gt; for the glade file&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img alt="GladeFile1" src="http://grbd.github.io/static/code/gtksharp.3.example1/GladeFile1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GladeFile1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/GladeFile1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The next thing to be aware of is that the resource path changes somewhat based on if your using a C# or VB based project&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;With VB The resource path is &lt;em&gt;&amp;lt;AssemblyName&amp;gt;.&amp;lt;FileName&amp;gt;&lt;/em&gt;&lt;/li&gt;
@@ -873,11 +873,11 @@ Once the property is linked to the form we can then attach to its events or chan
 
 &lt;h3&gt;Running the Application&lt;/h3&gt;
 &lt;p&gt;If we now build and run the project, this should result in a window like this.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.3.example1/Example1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Example1" src="http://localhost/MainBlog/static/code/gtksharp.3.example1/Example1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The button just puts &lt;em&gt;Hello World&lt;/em&gt; into the text box&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 2 - Setting up Glade</title><link href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/" rel="alternate"></link><published>2016-01-29T21:00:00+00:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-01-29:posts/2016/01/29/gtksharp-part-2-setting-up-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;br&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-4-handles-and-withevents-example/"&gt;Part 4 - Handles and WithEvents Example&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category></entry><entry><title>GtkSharp - Part 2 - Setting up Glade</title><link href="http://localhost/MainBlog/posts/2016/01/29/gtksharp-part-2-setting-up-glade/" rel="alternate"></link><published>2016-01-29T21:00:00+00:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-01-29:MainBlog/posts/2016/01/29/gtksharp-part-2-setting-up-glade/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;The first step in getting GtkSharp to work is to get glade up and running.
 Glade is an application written to design and create GTK forms via drag and drop.
 This means we can drag and drop controls onto a form then finally export / save an xml file to be used later by Visual Studio.&lt;/p&gt;
@@ -905,7 +905,7 @@ So install this first&lt;/p&gt;
 &lt;li&gt;&lt;a href="http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/"&gt;http://sourceforge.net/p/msys2/wiki/MSYS2%20installation/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;After the initial install open up a MSYS2 console window.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="msys1img" src="http://grbd.github.io/static/code/gtksharp.2.glade/Msys1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="msys1img" src="http://localhost/MainBlog/static/code/gtksharp.2.glade/Msys1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The first thing we want to do is update the core packages for MSYS&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;update-core
 &lt;/pre&gt;&lt;/div&gt;
@@ -935,7 +935,7 @@ So install this first&lt;/p&gt;
 
 &lt;h2&gt;Running Glade&lt;/h2&gt;
 &lt;p&gt;We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe&lt;/p&gt;
-&lt;p&gt;&lt;img alt="gladeform1img" src="http://grbd.github.io/static/code/gtksharp.2.glade/GladeForm1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="gladeform1img" src="http://localhost/MainBlog/static/code/gtksharp.2.glade/GladeForm1.png" /&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Select File -&amp;gt; New&lt;/li&gt;
 &lt;li&gt;Drag and drop a Window from the TopLevels section into the viewing area&lt;/li&gt;
@@ -978,8 +978,8 @@ normally associated with GLib when using for example a FileChooserButton&lt;/p&g
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/"&gt;GtkSharp - Part 1 - Cross Platform Toolkits&lt;/a&gt; &lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GtkSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="glade"></category></entry><entry><title>GtkSharp - Part 1 - Cross Platform Toolkits</title><link href="http://grbd.github.io/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/" rel="alternate"></link><published>2016-01-28T19:00:00+00:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-01-28:posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/"&gt;GtkSharp - Part 1 - Cross Platform Toolkits&lt;/a&gt; &lt;br&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/06/25/gtksharp-part-3-basic-example-with-vs-and-glade/"&gt;GtkSharp - Part 3 - Basic Example with VS and Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="glade"></category></entry><entry><title>GtkSharp - Part 1 - Cross Platform Toolkits</title><link href="http://localhost/MainBlog/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/" rel="alternate"></link><published>2016-01-28T19:00:00+00:00</published><author><name>Grbd</name></author><id>tag:localhost,2016-01-28:MainBlog/posts/2016/01/28/gtksharp-part-1-cross-platform-toolkits/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;I decided to have a look into the different toolkit's available for writing .Net code with a GUI that can be used across
 multiple platforms. Some of these platforms would include Microsoft Windows 10, Linux and embedded devices such as the Raspberry Pi&lt;/p&gt;
 &lt;p&gt;I've posted some example code here for GtkSharp&lt;/p&gt;
@@ -994,13 +994,13 @@ multiple platforms. Some of these platforms would include Microsoft Windows 10, 
 &lt;li&gt;GtkSharp&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;WinForms&lt;/h2&gt;
-&lt;p&gt;&lt;img alt="winformsimg" src="http://grbd.github.io/static/code/gtksharp.1.toolkits/WinForms1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="winformsimg" src="http://localhost/MainBlog/static/code/gtksharp.1.toolkits/WinForms1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Winforms is traditionally the toolkit used by Microsoft for .Net / with Visual Studio, it dates back to the good old VB6 days.
 The Xamarin and mono team have put a lot of work into making sure that that this toolkit can run on both windows and Linux via mono.
 However, when you google Winforms and cross compatibility it looks as if the main focus is now on GTK instead as the main alternative.
 The one main advantage to Winforms is that it's designable via Visual Studio's inbuilt GUI. Upon googling most of the opinions online, the code base has been largely untouched for a long while on the mono side.&lt;/p&gt;
 &lt;h2&gt;QtSharp&lt;/h2&gt;
-&lt;p&gt;&lt;img alt="QtFormImage" src="http://grbd.github.io/static/code/gtksharp.1.toolkits/QtForm1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="QtFormImage" src="http://localhost/MainBlog/static/code/gtksharp.1.toolkits/QtForm1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Qt for me has the best looking toolkit, also it has QML which is a form of descriptive language for describing the layout of forms similar in some respects to Xaml.
 There's been a few different attempts at a .Net binding for Qt, first there was a very old project called QtSharp, then another project
 to replace that one called Qyoto which seems to have now been abandoned, and finally the latest incarnation which has re-used the name of QtSharp.&lt;/p&gt;
@@ -1025,7 +1025,7 @@ For now, it still needs a lot of work however.&lt;/p&gt;
 &lt;li&gt;&lt;a href="https://github.com/ddobrev/QtSharp"&gt;https://github.com/ddobrev/QtSharp&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Eto.Forms&lt;/h2&gt;
-&lt;p&gt;&lt;img alt="EtoFormsImg" src="http://grbd.github.io/static/code/gtksharp.1.toolkits/EtoForm1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="EtoFormsImg" src="http://localhost/MainBlog/static/code/gtksharp.1.toolkits/EtoForm1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Eto.Forms was the next toolkit I looked into.
 It's basically a wrapper that sits on top of other toolkits such as windows forms, GtkSharp, WPF, etc.
 It's one advantage is that it has the ability to create forms based on Xaml similar to WPF Forms&lt;/p&gt;
@@ -1035,7 +1035,7 @@ It's one advantage is that it has the ability to create forms based on Xaml simi
 &lt;li&gt;Currently there's no GUI / drag and drop designer, but there is a window to preview the rendered Xaml&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;GtkSharp&lt;/h2&gt;
-&lt;p&gt;&lt;img alt="GtkSharpImg" src="http://grbd.github.io/static/code/gtksharp.1.toolkits/GtkSharp1.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GtkSharpImg" src="http://localhost/MainBlog/static/code/gtksharp.1.toolkits/GtkSharp1.png" /&gt;&lt;/p&gt;
 &lt;p&gt;The final toolkit I tried looking into was GtkSharp. This seems to be a lot more mature than the other toolkits in relation to .Net with bug fixes and patches.
 There does seem to be a bit of confusion over which version to use and how to set it up.
 After a fair bit of digging around online I finally managed to figure out how to get a basic GTK3 based GtkSharp Application up and running
@@ -1085,7 +1085,7 @@ I suspect although I'm not entirely sure that the source code for this version i
 &lt;li&gt;&lt;a href="https://github.com/openmedicus/gtk-sharp"&gt;https://github.com/openmedicus/gtk-sharp&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;br&gt;
-&lt;a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="toolkits"></category></entry><entry><title>First Commit</title><link href="http://grbd.github.io/posts/2015/09/28/first-commit/" rel="alternate"></link><published>2015-09-28T13:00:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2015-09-28:posts/2015/09/28/first-commit/</id><summary type="html">&lt;blockquote&gt;
+&lt;a href="http://localhost/MainBlog/posts/2016/01/29/gtksharp-part-2-setting-up-glade/"&gt;Part 2 - Setting up Glade&lt;/a&gt;&lt;/p&gt;</summary><category term="code"></category><category term="dotnet"></category><category term="GtkSharp"></category><category term="toolkits"></category></entry><entry><title>First Commit</title><link href="http://localhost/MainBlog/posts/2015/09/28/first-commit/" rel="alternate"></link><published>2015-09-28T13:00:00+01:00</published><author><name>Grbd</name></author><id>tag:localhost,2015-09-28:MainBlog/posts/2015/09/28/first-commit/</id><summary type="html">&lt;blockquote&gt;
 &lt;p&gt;&amp;quot;The beginning is the most important part of the work.&amp;quot;
 &lt;small&gt;&lt;cite title="Plato"&gt;Plato&lt;/cite&gt;&lt;/small&gt;&lt;/p&gt;
 &lt;/blockquote&gt;

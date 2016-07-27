@@ -9,7 +9,7 @@
 
 
 
-<link rel="canonical" href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/">
+<link rel="canonical" href="http://localhost/MainBlog/posts/2016/07/27/scons-builds-with-visual-studio/">
 
         <meta name="author" content="Grbd" />
         <meta name="keywords" content="code,SCons,build" />
@@ -18,7 +18,7 @@
         <meta property="og:site_name" content="The Grbd Blog" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="SCons builds with Visual Studio"/>
-        <meta property="og:url" content="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/"/>
+        <meta property="og:url" content="http://localhost/MainBlog/posts/2016/07/27/scons-builds-with-visual-studio/"/>
         <meta property="og:description" content="SCons builds with Visual Studio"/>
         <meta property="article:published_time" content="2016-07-27" />
             <meta property="article:section" content="code" />
@@ -29,21 +29,21 @@
 
 
     <!-- Bootstrap -->
-        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
-    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://localhost/MainBlog/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://localhost/MainBlog/theme/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+    <link href="http://localhost/MainBlog/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://localhost/MainBlog/theme/css/style.css" type="text/css"/>
 
-        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+        <link href="http://localhost/MainBlog/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
               title="The Grbd Blog ATOM Feed"/>
 
 
 
-        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+        <link href="http://localhost/MainBlog/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
               title="The Grbd Blog code ATOM Feed"/>
 
-    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="http://localhost/MainBlog/theme/css/bootstrap-custom.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -57,16 +57,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="http://grbd.github.io/" class="navbar-brand">
+            <a href="http://localhost/MainBlog/" class="navbar-brand">
 The Grbd Blog            </a>
         </div>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav">
                         <li class="active">
-                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                            <a href="http://localhost/MainBlog/category/code.html">Code</a>
                         </li>
                         <li >
-                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                            <a href="http://localhost/MainBlog/category/personal.html">Personal</a>
                         </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -78,7 +78,7 @@ The Grbd Blog            </a>
 <!-- Banner -->
 <style>
 	#banner{
-	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	    background-image:url("http://localhost/MainBlog/images/backdrops/backdrop1.jpg");
 	}
 </style>
 
@@ -96,7 +96,7 @@ The Grbd Blog            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/"
+                    <a href="http://localhost/MainBlog/posts/2016/07/27/scons-builds-with-visual-studio/"
                        rel="bookmark"
                        title="Permalink to SCons builds with Visual Studio">
                         SCons builds with Visual Studio
@@ -117,11 +117,11 @@ The Grbd Blog            </a>
 
 
 <span class="label label-default">Tags</span>
-	<a href="http://grbd.github.io/tag/code.html">code</a>
+	<a href="http://localhost/MainBlog/tag/code.html">code</a>
         /
-	<a href="http://grbd.github.io/tag/scons.html">SCons</a>
+	<a href="http://localhost/MainBlog/tag/scons.html">SCons</a>
         /
-	<a href="http://grbd.github.io/tag/build.html">build</a>
+	<a href="http://localhost/MainBlog/tag/build.html">build</a>
     
 </footer><!-- /.post-info -->                    </div>
                 </div>
@@ -255,7 +255,7 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 <li>Make sure to set the python interpreter to Python2, such as <strong>Python 64-bit 2.7</strong> <br>
     SCons does not yet support python3</li>
 </ul>
-<p><img alt="GeneralProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/GeneralProps1.png" /></p>
+<p><img alt="GeneralProps1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/GeneralProps1.png" /></p>
 <h3>Debug Tab</h3>
 <p>Next looking at the <strong>Debug Tab</strong></p>
 <ul>
@@ -265,11 +265,11 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 Also it needs to include the directory for the SCons installation, I found this is needed to get Intellisense working with the script.
 It looks as if SCons has deliberately put the library files within a SCons subdirectory in the site-packages install directory for python.
 I suspect this has been done to avoid users from calling the SCons library directly without first going via the main scons.py script.</p>
-<p><img alt="DebugProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/DebugProps1.png" /></p>
+<p><img alt="DebugProps1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/DebugProps1.png" /></p>
 <h3>Build file link</h3>
 <p>Finally, we just need to add in the <strong>SConsBuild.py</strong> file as a Link to the project.
 By adding it as a link we avoid creating a 2nd copy under the VS Project directory, and when we edit the file we'll be editing the one in the original location.</p>
-<p><img alt="AddLink1" src="http://grbd.github.io/static/code/scons.1.vsdebug/AddLink1.png" /></p>
+<p><img alt="AddLink1" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/AddLink1.png" /></p>
 <h3>Note about Intellisense</h3>
 <p>Just a quick note, sometimes after creating a new project, you need to right click unload, then re-load the project within Visual Studio to get the Intellisense working correctly</p>
 <h2>Setting up the Visual Studio files for the hello code</h2>
@@ -277,7 +277,7 @@ By adding it as a link we avoid creating a 2nd copy under the VS Project directo
 This allowed me to edit the code from within Visual Studio and trigger the build process from there as well.</p>
 <p>In order to do this, you're going to want to use a <em>Makefile</em> style Visual Studio Project. These types of projects allow for custom build tools to be specified instead of using the inbuilt MS build tools. In this case we're going to set it to use the SCons tool to handle the building and cleaning of the project.</p>
 <p>After creating one of these types of Project, if you open up the project properties you'll notice the Configuration Type is listed as <em>Makefile</em></p>
-<p><img alt="Hello1_General" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_General.png" /></p>
+<p><img alt="Hello1_General" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/Hello1_General.png" /></p>
 <p>The import part that we need to alter is located under the NMake tab.
 The debug=1 is just an option we can pass to the SCons script to indicate if it's a Release or Debug Build</p>
 <ul>
@@ -286,7 +286,7 @@ The debug=1 is just an option we can pass to the SCons script to indicate if it'
 <li><strong>Clean: scons -C ..\.. -c</strong></li>
 <li><strong>Destination exe: ..\..\src\hello1.exe</strong></li>
 </ul>
-<p><img alt="Hello1_NMake" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_NMake.png" /></p>
+<p><img alt="Hello1_NMake" src="http://localhost/MainBlog/static/code/scons.1.vsdebug/Hello1_NMake.png" /></p>
 <h2>Debugging the build script</h2>
 <p>I've not really covered any of the details on using the SCons API at this stage simply because I'm still learning it myself.
 But if everything has been setup correctly we should now be able to run / debug the SCons build script within Visual Studio.
@@ -345,15 +345,15 @@ But for me at least this should make life a lot easier for cross platform or eve
       </div>
    </div>
 </footer>
-<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+<script src="http://localhost/MainBlog/theme/js/jquery.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+<script src="http://localhost/MainBlog/theme/js/bootstrap.min.js"></script>
 
 <!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
-<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+<script src="http://localhost/MainBlog/theme/js/respond.min.js"></script>
 
-    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+    <script src="http://localhost/MainBlog/theme/js/bodypadding.js"></script>
 
 </body>
 </html>
