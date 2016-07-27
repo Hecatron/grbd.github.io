@@ -6,7 +6,10 @@ from pelican.utils import path_to_url, get_relative_path
 
 AUTHOR = 'Grbd'
 SITENAME = 'The Grbd Blog'
-SITEURL = 'http://localhost/MainBlog'
+
+try: SITEURL
+except NameError: SITEURL = 'http://localhost/MainBlog'
+
 RELATIVE_URLS = True
 USE_FOLDER_AS_CATEGORY = True
 DISPLAY_CATEGORIES_ON_MENU = True
