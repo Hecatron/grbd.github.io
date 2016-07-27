@@ -1,7 +1,7 @@
 Title: Building GTKSharp 3 under Windows - Python Script
 Summary: Building GTKSharp 3 under Windows
 Date: 2016-01-27 9:00
-Tags: dotnet, gtksharp, gtk
+Tags: code, dotnet, gtksharp, gtk
 Status: draft
 
 

@@ -1,7 +1,7 @@
 Title: GTKSharp - Part 1 - Cross Platform Toolkits
 Summary: Exploring the different GUI toolkits available for .Net across different platforms
 Date: 2016-01-28 19:00
-Tags: dotnet, gtksharp, toolkits
+Tags: code, dotnet, gtksharp, toolkits
 
 ## Overview
 
@@ -21,7 +21,7 @@ There were four main options I looked into
 
 ## WinForms
 
-![winformsimg]({filename}/static/dotnet/gtksharp.1.toolkits/WinForms1.png)
+![winformsimg]({filename}/static/code/gtksharp.1.toolkits/WinForms1.png)
 
 Winforms is traditionally the toolkit used by Microsoft for .Net / with Visual Studio, it dates back to the good old VB6 days.
 The Xamarin and mono team have put a lot of work into making sure that that this toolkit can run on both windows and Linux via mono.
@@ -30,7 +30,7 @@ The one main advantage to Winforms is that it's designable via Visual Studio's i
 
 ## QtSharp
 
-![QtFormImage]({filename}/static/dotnet/gtksharp.1.toolkits/QtForm1.png)
+![QtFormImage]({filename}/static/code/gtksharp.1.toolkits/QtForm1.png)
 
 Qt for me has the best looking toolkit, also it has QML which is a form of descriptive language for describing the layout of forms similar in some respects to Xaml.
 There's been a few different attempts at a .Net binding for Qt, first there was a very old project called QtSharp, then another project
@@ -59,7 +59,7 @@ You may also want to check out the official repositories
 
 ## Eto.Forms
 
-![EtoFormsImg]({filename}/static/dotnet/gtksharp.1.toolkits/EtoForm1.png)
+![EtoFormsImg]({filename}/static/code/gtksharp.1.toolkits/EtoForm1.png)
 
 Eto.Forms was the next toolkit I looked into.
 It's basically a wrapper that sits on top of other toolkits such as windows forms, GtkSharp, WPF, etc.
@@ -73,7 +73,7 @@ There are a couple of downsides though
 
 ## GtkSharp
 
-![GtkSharpImg]({filename}/static/dotnet/gtksharp.1.toolkits/GtkSharp1.png)
+![GtkSharpImg]({filename}/static/code/gtksharp.1.toolkits/GtkSharp1.png)
 
 The final toolkit I tried looking into was GtkSharp. This seems to be a lot more mature than the other toolkits in relation to .Net with bug fixes and patches.
 There does seem to be a bit of confusion over which version to use and how to set it up.

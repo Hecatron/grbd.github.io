@@ -2,6 +2,7 @@ Title: Scanning in of the spindle in 3D - Part 1
 Summary: Scanning in of the spindle in 3D - Part 1
 Date: 2016-07-05 9:00
 Tags: cnc, spindle, 3dscan
+Status: draft
 
 ## Overview
 
@@ -13,6 +14,14 @@ so I decided to try something called Photogrammetry instead
 
 The following is based on the following [Youtube clip](https://www.youtube.com/watch?v=D6eqW6yk50k) from Phil Nolan,
 many thanks to Phil for putting the time in to detail how perform scans with this software.
+
+TOOD
+
+  * https://hackaday.io/project/9792/instructions
+
+Next step is to build a frame using a couple of Nema 17's and a frame out of mdf, with bearings / wheels and some threaded rod / nuts
+
+
 
 ## Software
 
@@ -47,16 +56,28 @@ Next I needed to install the following bits of software
 
 First I needed to take pictures, lots and lots of pictures from every angle around the device
 
+  * Try to use the highest resolution you can
+  * Try to avoid reflective surfaces
+  * Placing a grid underneath the object might help (such as a teatowel for example)
+  * Make sure the object doesn't move while taking pictures
+  * Try to avoid using flash
+
+TODO  try taking picture from further away
+
 ![TPicture1]({filename}/static/cnc/cnc.2.aldispindle.2/TPicture1.jpg)
 
 ## Using Visual SFM
+
+
+TODO select match using cuda in the menu
 
 Next I needed to import the images into Visual SFM. <br>
 Click the folder with the plus button next to it, then select the directory, and select all images with Ctrl-A.
 
 ![VSFM1]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM1.png)
 
-Next we click the X shaped button with an arrow *Compute Missing Matches*
+Next we click the X shaped button with an arrow *Compute Missing Matches* <br>
+This will attempt to match each image with every other in terms of common points
 
 ![VSFM2]({filename}/static/cnc/cnc.2.aldispindle.2/VSFM2.png)
 
@@ -74,6 +95,8 @@ Once the last step is complete, we can hit the *TAB* key to get a view of the mo
 At this stage we can now just close Visual SFM and switch to Meshlab
 
 TODO image of model
+
+TODO try using images the right way up
 
 ## Meshlab
 

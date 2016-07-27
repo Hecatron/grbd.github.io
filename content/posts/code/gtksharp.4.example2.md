@@ -1,7 +1,7 @@
 Title: GTKSharp - Part 4 - Handles and WithEvents Example
 Summary: A second example using GTKSharp and Visual Studio with Handles and WithEvents
 Date: 2016-06-25 21:55
-Tags: dotnet, gtksharp
+Tags: code, dotnet, gtksharp
 
 ## Overview
 
@@ -9,9 +9,9 @@ This is a second example of using GtkSharp within Visual Studio. <br>
 One of the interesting things we can setup is the use of Handles and WithEvents.
 This means that within the code window for the form, we can use the drop down fields in the same way we would with windows forms.
 
-![VSImage]({filename}/static/dotnet/gtksharp.4.example2/VSImage1.png)
+![VSImage]({filename}/static/code/gtksharp.4.example2/VSImage1.png)
 
-![VSImage]({filename}/static/dotnet/gtksharp.4.example2/VSImage2.png)
+![VSImage]({filename}/static/code/gtksharp.4.example2/VSImage2.png)
 
 I've included example code within <https://github.com/grbd/GBD.Blog.Examples> although for now this is VB only
 
@@ -138,7 +138,7 @@ End Class
 
 When we run the application we should end up with a result similar to that as before.
 
-![Example1]({filename}/static/dotnet/gtksharp.4.example2/Example1.png)
+![Example1]({filename}/static/code/gtksharp.4.example2/Example1.png)
 
 The main difference now is that the setup is very familiar to those used to winforms,
 also we have the option of using the drop downs within the code window to select different items and associated events

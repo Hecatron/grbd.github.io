@@ -1,7 +1,7 @@
 Title: Building GTK3 / GtkSharp under Windows - Manual Build
 Summary: Building GTK3 under Windows
 Date: 2016-06-30 12:00
-Tags: dotnet, gtksharp, gtk
+Tags: code, dotnet, gtksharp, gtk
 
 ## Overview
 

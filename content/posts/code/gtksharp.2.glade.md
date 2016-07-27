@@ -1,7 +1,7 @@
 Title: GTKSharp - Part 2 - Setting up Glade
 Summary: Getting glade up and running under windows using Msys2 for designing gui's with drag and drop
 Date: 2016-01-29 21:00
-Tags: dotnet, gtksharp, glade
+Tags: code, dotnet, gtksharp, glade
 
 ## Overview
 
@@ -36,7 +36,7 @@ So install this first
 
 After the initial install open up a MSYS2 console window.
 
-![msys1img]({filename}/static/dotnet/gtksharp.2.glade/Msys1.png)
+![msys1img]({filename}/static/code/gtksharp.2.glade/Msys1.png)
 
 The first thing we want to do is update the core packages for MSYS
 
@@ -72,7 +72,7 @@ pacman -S mingw32/mingw-w64-i686-glade
 
 We can now run glade via the exe C:\msys64\mingw64\bin\glade.exe
 
-![gladeform1img]({filename}/static/dotnet/gtksharp.2.glade/GladeForm1.png)
+![gladeform1img]({filename}/static/code/gtksharp.2.glade/GladeForm1.png)
 
   * Select File -> New
   * Drag and drop a Window from the TopLevels section into the viewing area

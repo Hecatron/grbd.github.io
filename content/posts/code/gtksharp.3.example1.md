@@ -1,7 +1,7 @@
 Title: GTKSharp - Part 3 - Basic Example with VS and Glade
 Summary: Using GTKSharp version 3 within Visual Studio under windows
 Date: 2016-06-25 19:36
-Tags: dotnet, gtksharp
+Tags: code, dotnet, gtksharp
 
 ## Overview
 
@@ -17,15 +17,15 @@ For the below examples the code is downloadable via a github link: <https://gith
 
 First lets create a new C# Solution
 
-![NewSolution1]({filename}/static/dotnet/gtksharp.3.example1/NewSolution1.png)
+![NewSolution1]({filename}/static/code/gtksharp.3.example1/NewSolution1.png)
 
 Next lets create a new C# Windows Forms Project
 
-![NewProject1]({filename}/static/dotnet/gtksharp.3.example1/NewProject1.png)
+![NewProject1]({filename}/static/code/gtksharp.3.example1/NewProject1.png)
 
 We don't need Form1.cs since we're repurposing this project for GtkSharp, so lets remove Form1.cs
 
-![RemoveFrom1cs]({filename}/static/dotnet/gtksharp.3.example1/RemoveFrom1cs.png)
+![RemoveFrom1cs]({filename}/static/code/gtksharp.3.example1/RemoveFrom1cs.png)
 
 Next right click on the project and select *Manage Nuget Packages*
 
@@ -33,7 +33,7 @@ Lets add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
 Within NuGet the gtksharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
 If your using linux and already have gtk installed then the additional binaries shouldn't be needed.
 
-![NuGet1]({filename}/static/dotnet/gtksharp.3.example1/NuGet1.png)
+![NuGet1]({filename}/static/code/gtksharp.3.example1/NuGet1.png)
 
 Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment
 
@@ -42,7 +42,7 @@ Next we want to make sure the project is running as 32bit, the package GtkSharp.
   * Select the **Build** tab on the left hand side
   * Make sure the **Platform Target** is set to **X86**
 
-![ProjectProperties1]({filename}/static/dotnet/gtksharp.3.example1/ProjectProperties1.png)
+![ProjectProperties1]({filename}/static/code/gtksharp.3.example1/ProjectProperties1.png)
 
 The dotnet version will default to **4.5.1**, you can leave it at that or increase it to a higher version such as 4.5.2, 4.6 or 4.6.1
 
@@ -57,7 +57,7 @@ With C# There should already be a Program.cs file we can use instead
   * Within the project properties make sure that the Program class is selected
   * If you are using Visual Basic, then you will need to untick the option for **Enable Application Framework**
 
-![ProjectProperties2]({filename}/static/dotnet/gtksharp.3.example1/ProjectProperties2.png)
+![ProjectProperties2]({filename}/static/code/gtksharp.3.example1/ProjectProperties2.png)
 
 These are some examples of what the main Program class should look like
 
@@ -114,7 +114,7 @@ This is one created from the glade application we've used before.
   * Drag and drop the file saved from glade into the project
   * Make sure to set the **Build Action** to **Embedded Resource** for the glade file
 
-![GladeFile1]({filename}/static/dotnet/gtksharp.3.example1/GladeFile1.png)
+![GladeFile1]({filename}/static/code/gtksharp.3.example1/GladeFile1.png)
 
 The next thing to be aware of is that the resource path changes somewhat based on if your using a C# or VB based project
 
@@ -334,7 +334,7 @@ End Class
 
 If we now build and run the project, this should result in a window like this.
 
-![Example1]({filename}/static/dotnet/gtksharp.3.example1/Example1.png)
+![Example1]({filename}/static/code/gtksharp.3.example1/Example1.png)
 
 The button just puts *Hello World* into the text box
 

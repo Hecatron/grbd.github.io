@@ -1,7 +1,7 @@
 Title: GTKSharp - Part 5 - Themes and ClearText
 Summary: Using themes within GtkSharp and enabling cleartype font text
 Date: 2016-06-25 23:30
-Tags: dotnet, gtksharp
+Tags: code, dotnet, gtksharp
 
 ## Overview
 
@@ -140,19 +140,19 @@ The end result should be a form which looks a lot clearer and can use a custom t
 
 The first example is no theming or cleartext under Windows 10
 
-![Example1]({filename}/static/dotnet/gtksharp.5.theming/Example1.png)
+![Example1]({filename}/static/code/gtksharp.5.theming/Example1.png)
 
 ### Themes but no ClearText
 
 This next example has theming but with no cleartext
 
-![Example2]({filename}/static/dotnet/gtksharp.5.theming/Example2.png)
+![Example2]({filename}/static/code/gtksharp.5.theming/Example2.png)
 
 ### Themes and ClearText
 
 This final example has both theming and cleartext enabled
 
-![Example3]({filename}/static/dotnet/gtksharp.5.theming/Example3.png)
+![Example3]({filename}/static/code/gtksharp.5.theming/Example3.png)
 
 <br>
 <br>
