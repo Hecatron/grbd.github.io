@@ -142,8 +142,8 @@ make config-msys2
 
 Next we need to patch the Makefile
 ```sh
-wget TODO Link
-patch -p1 < ../patch1.patch
+wget http://grbd.github.io/static/code/fpga.icestorm.1/yosys-winpatch1.patch
+patch -p1 < yosys-winpatch1.patch
 ```
 
 Next we can start the build
