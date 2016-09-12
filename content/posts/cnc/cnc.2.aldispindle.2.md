@@ -177,3 +177,36 @@ The final step is just to export the mesh
 
 In the next part I'll try and import this into solidworks and parse it into an actual part. <br>
 At which point I can then use it to base a bracket around.
+
+
+
+TODO I think OpenMVG is better
+VisualSFM is taking frinken agaes at the moment
+
+Archeos links
+http://www.archeos.eu/
+https://github.com/archeos?page=2
+http://arc-team-open-research.blogspot.co.uk/2016/05/archeos-hypatia-new-tool-for-3d.html
+https://groups.google.com/forum/#!topic/vsfm/VcXGvP1HuMo
+
+There is also a GUI being developed for Archeos
+https://github.com/openMVG/openMVG/issues/411
+https://github.com/mad-de/openMVG_gui
+https://github.com/open-anatomy/SfM_gui_for_openMVG/
+https://www.youtube.com/watch?v=Q2_cVN902-M
+
+This GUI seems a bit out of date but is worth investigating
+https://github.com/rhiestan/Regard3D
+
+OpenMVG seems to be a lot faster than the PPT 
+https://github.com/openMVG/openMVG
+http://openmvg.readthedocs.io/en/latest/software/SfM/SfM/
+http://openmvg.readthedocs.io/en/latest/software/SfM/SfM/#openmvg-sfm-pipelines-demo
+http://arc-team-open-research.blogspot.co.uk/2015/06/openmvg-vs-ppt.html
+
+
+TODO
+
+for now try CMPMVS for the dense reconstruction instead of VisualSFM
+https://www.youtube.com/watch?v=ZRTEMKS3Sw0
+http://ptak.felk.cvut.cz/sfmservice/websfm.pl?menu=cmpmvs

@@ -7,20 +7,21 @@ Status: draft
 ## Overview
 
 Something I picked up a while back was a Ox CNC from [Ooznest](http://ooznest.co.uk/)
-My plan at the moment is to set this up initially as a CNC, but then add other parts to it later on for 3D printing etc.
+My plan at the moment is to set this up initially as a CNC, but then add other parts to it later on for additional functionality.
+This includes 3D printing, EDM, having a 4th or 5th axis etc.
 
 ## 3D Printers vs CNC's
 
-Typically with 3D printers they use additive manufacturing where a layer of plastic (usually abs or pla) is placed on top in layers.
+Typically, with 3D printers they use additive manufacturing where a layer of plastic (usually abs or pla) is placed on top in layers.
 With a CNC instead this uses subtractive manufacturing where you remove material from a block of wood or metal to make the part you want.
 
-The different approaches tend to have an influence on the overal design of the machine.
+The different approaches tend to have an influence on the overall design of the machine.
 With a 3D printer typically speed is what you're aiming for as well as cheapness in some cases.
 With a CNC instead the main focus in on rigidity and strength, instead of placing plastic down in layers you are forcing a milling bit
 into a block of material to remove wood, plastic or metal.
 
 So in other words with a CNC you want something which is very strong and beefy where the frame isn't going to flex or bend under tension.
-Usually you'll see Nema 17 stepper motor's with a 3D printer, and Nema 23 stepper motors or higher with a CNC, this provides additional force
+Usually you'll see Nema 17 stepper motors with a 3D printer, and Nema 23 stepper motors or higher with a CNC, this provides additional force
 to push against the part being milled.
 
 Ultimately there are different trade off's with different approaches.
