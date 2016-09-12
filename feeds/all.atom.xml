@@ -113,8 +113,8 @@ However, building under the MSYS2 Console does work, with a little tweaking of t
 
 
 &lt;p&gt;Next we need to patch the Makefile&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget TODO Link
-patch -p1 &amp;lt; ../patch1.patch
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget http://grbd.github.io/static/code/fpga.icestorm.1/yosys-winpatch1.patch
+patch -p1 &amp;lt; yosys-winpatch1.patch
 &lt;/pre&gt;&lt;/div&gt;
 
 
