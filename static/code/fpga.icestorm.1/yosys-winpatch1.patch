@@ -1,0 +1,27 @@
+--- yosys/Makefile	2016-09-12 19:52:11.801560700 +0100
++++ yosys.orig/Makefile	2016-09-12 19:47:23.501827700 +0100
+@@ -175,8 +175,8 @@
+ EXE = .exe
+ 
+ else ifeq ($(CONFIG),msys2)
+-CXX = i686-w64-mingw32-gcc
+-LD = i686-w64-mingw32-gcc
++CXX = gcc
++LD = gcc
+ CXXFLAGS += -std=c++11 -Os -D_POSIX_SOURCE -DYOSYS_WIN32_UNIX_DIR
+ CXXFLAGS := $(filter-out -fPIC,$(CXXFLAGS))
+ LDFLAGS := $(filter-out -rdynamic,$(LDFLAGS)) -s
+@@ -391,11 +391,12 @@
+ 		test $(ABCPULL) -ne 0 || { echo 'REEBE: NOP abg hc gb qngr naq NOPCHYY frg gb 0 va Znxrsvyr!' | tr 'A-Za-z' 'N-ZA-Mn-za-m'; exit 1; }; \
+ 		echo "Pulling ABC from $(ABCURL):"; set -x; \
+ 		test -d abc || hg clone $(ABCURL) abc; \
+-		cd abc && $(MAKE) DEP= clean && hg pull && hg update -r $(ABCREV); \
++		cd abc && $(MAKE) DEP= clean && hg pull && hg update -r $(ABCREV) && cmake ./ ; \
+ 	fi
+ endif
+ 	$(Q) rm -f abc/abc-[0-9a-f]*
+ 	$(Q) cd abc && $(MAKE) $(S) $(ABCMKARGS) PROG="abc-$(ABCREV)$(EXE)" MSG_PREFIX="$(eval P_OFFSET = 5)$(call P_SHOW)$(eval P_OFFSET = 10) ABC: "
++	${Q} cp abc/abc$(EXE) abc/abc-$(ABCREV)$(EXE)
+ 
+ ifeq ($(ABCREV),default)
+ .PHONY: abc/abc-$(ABCREV)$(EXE)

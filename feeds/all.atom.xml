@@ -1,5 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/all.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-07-27T18:53:00+01:00</updated><entry><title>SCons builds with Visual Studio</title><link href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-07-27:posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/all.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-09-12T21:30:00+01:00</updated><entry><title>Setting up the IceStorm FPGA tools for Windows</title><link href="http://grbd.github.io/posts/2016/09/12/setting-up-the-icestorm-fpga-tools-for-windows/" rel="alternate"></link><published>2016-09-12T21:30:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-09-12:posts/2016/09/12/setting-up-the-icestorm-fpga-tools-for-windows/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;There was recently a presentation by the team running the icestorm project over at the Manchester Hackspace. &lt;br&gt;
+Icestorm is a project that provides a fpga board for under $30 (about 25 Pounds in British money) &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://hackaday.com/2016/08/03/the-perfect-storm-open-arm-fpga-board/"&gt;https://hackaday.com/2016/08/03/the-perfect-storm-open-arm-fpga-board/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/icestorm/"&gt;http://www.clifford.at/icestorm/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/yosys/"&gt;http://www.clifford.at/yosys/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Typically, the two largest vendors of fpga's tend to be Altera and Zynq.
+However, both of these vendors require closed source tools which tend to be very large to compile down from Verilog or VHDL
+into code that can be used on the FPGA.&lt;/p&gt;
+&lt;p&gt;With this board a &lt;strong&gt;&lt;a href="http://www.farnell.com/datasheets/1673535.pdf"&gt;iCE40HX4K&lt;/a&gt;&lt;/strong&gt; from Lattice Semiconductor is used instead. &lt;br&gt;
+The team behind this project have built up a full open source toolchain for it.&lt;/p&gt;
+&lt;p&gt;I don't have a board yet (I'm thinking of building a modified one)
+But I decided to see if I could build out the initial tools needed to compile Verilog.
+With the eventual plan to use &lt;a href="http://www.myhdl.org/"&gt;Myhdl&lt;/a&gt; which would compile down to ether Verilog / VHDL for use on the board&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;h3&gt;MSYS2&lt;/h3&gt;
+&lt;p&gt;First for windows you'll need a copy of MSYS2 installed if you haven't already got it&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://msys2.github.io/"&gt;https://msys2.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once it's installed you can update the package database / packages via&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Syuu
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are 3 shells available in total&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MSYS2&lt;/li&gt;
+&lt;li&gt;MinGW 32Bit&lt;/li&gt;
+&lt;li&gt;MinGW 64bit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For building some of the below sources I use MSYS2 and for others I use MinGW.
+Strictly speaking the only real difference is the C library that they link against.
+Based on this Link &lt;a href="https://sourceforge.net/p/msys2/discussion/general/thread/dcf8f4d3/"&gt;https://sourceforge.net/p/msys2/discussion/general/thread/dcf8f4d3/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;MSYS2 Better understands POSIX conventions like paths, it does have a performance penalty compared to MinGW
+since it funnels everything via msys-2.0.dll. But it can work sometimes better than MinGW when trying to compile Linux apps under Windows.&lt;/p&gt;
+&lt;p&gt;MinGW does not depend on msys-2.0.dll and instead uses the MSVC runtime. &lt;br&gt;
+For the below I'm only really interested it getting things to work, so I've just used whichever one works best for each source package.&lt;/p&gt;
+&lt;h3&gt;MSYS2 - Depends&lt;/h3&gt;
+&lt;p&gt;Next we need to install some dependencies, open up a MSYS2 shell and install the following&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw64/mingw-w64-x86_64-clang
+pacman -S msys/bison
+pacman -S msys/flex
+pacman -S msys/libreadline-devel
+pacman -S msys/gawk
+pacman -S msys/tcl
+pacman -S msys/libffi-devel
+pacman -S git
+pacman -S cmake
+pacman -S mercurial
+pacman -S msys/pkg-config
+pacman -S python
+pacman -S python3
+pacman -S mingw64/mingw-w64-x86_64-libftdi
+pacman -S mingw64/mingw-w64-x86_64-python3-pip
+pacman -S mingw64/mingw-w64-x86_64-python2-pip
+pacman -S mingw64/mingw-w64-x86_64-dlfcn
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Xdot - Python&lt;/h3&gt;
+&lt;p&gt;Let's install xdot next, there currently isn't a pacman package for it, so I've used python / pip since it's a python based library &lt;br&gt;
+Within a &lt;strong&gt;MinGW x64&lt;/strong&gt; window&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip2 install xdot
+pip3 install xdot
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Icestorm Tools&lt;/h3&gt;
+&lt;p&gt;Next let's build and install icestorm
+I've found this doesn't work under MSYS2, but does work under &lt;strong&gt;MinGW x64&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cliffordwolf/icestorm.git icestorm
+cd icestorm
+make PREFIX=/usr -j$(nproc)
+make PREFIX=/usr install
+cd ..
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should install the icebox tools to /usr/bin/&lt;/p&gt;
+&lt;h3&gt;Arachne-pnr (The place and route tool)&lt;/h3&gt;
+&lt;p&gt;Next let's build and install Arachne-pnr for the place and route tools &lt;br&gt;
+I'm running this build within a MinGW x64 window as above&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cseed/arachne-pnr.git arachne-pnr
+cd arachne-pnr
+make DESTDIR=/usr ICEBOX=/usr/share/icebox -j$(nproc)
+make DESTDIR=/usr ICEBOX=/usr/share/icebox install
+cd ..
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should install arachne-pnr to /usr/bin/&lt;/p&gt;
+&lt;h3&gt;Yosys (Verilog synthesis)&lt;/h3&gt;
+&lt;p&gt;For Yosys there is the pre-compiled version 0.6 available here&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/yosys/download.html"&gt;http://www.clifford.at/yosys/download.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Although I think ideally we need the latest version from git for the iCE FPGA's &lt;br&gt;
+From what I've discovered trying to build this under the MinGW console will not work. &lt;br&gt;
+However, building under the MSYS2 Console does work, with a little tweaking of the Makefile.&lt;/p&gt;
+&lt;p&gt;First let's download a copy of yosys&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cliffordwolf/yosys.git yosys
+&lt;span class="nb"&gt;cd&lt;/span&gt; yosys
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we're going to configure make for MSYS2&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make config-msys2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we need to patch the Makefile&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget TODO Link
+patch -p1 &amp;lt; ../patch1.patch
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we can start the build&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make &lt;span class="nv"&gt;PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, we can install the files into /usr/&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make &lt;span class="nv"&gt;PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr install
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="code"></category><category term="fpga"></category><category term="icestorm"></category></entry><entry><title>SCons builds with Visual Studio</title><link href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-07-27:posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;For a while now I've been looking for a decent build system with a language I can easily write and debug.&lt;/p&gt;
 &lt;p&gt;During the very old days of Linux the main go to for a build system typically was &lt;em&gt;make&lt;/em&gt; and &lt;em&gt;configure&lt;/em&gt;.
 Configure would check the system to see if a library was present and its location,
