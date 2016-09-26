@@ -1,7 +1,7 @@
 Title: About Me
 Summary: About Me
 Date: 2016-07-04 12:00
-Tags: Me, CV
+Tags: Me
 Category: personal
 url: pages/profile/aboutme.html
 save_as: pages/profile/aboutme.html

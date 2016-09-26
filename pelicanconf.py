@@ -60,6 +60,7 @@ AUTHOR_FEED_RSS = None
 # Social Section
 SOCIAL = []
 SOCIAL.append(('About Me', SITEURL + '/pages/profile/aboutme.html'))
+SOCIAL.append(('CV', SITEURL + '/pages/profile/cv.html'))
 SOCIAL.append(('Github Personal', GITHUB_URL))
 SOCIAL.append(('Github Company', GITHUB_URL2))
 #SOCIAL.append(('Linked In', "#TODO"))
