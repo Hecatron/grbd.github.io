@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Using the Mbed CLI - The Grbd Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2016/11/06/using-the-mbed-cli/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="code,mbed,mbed-cli" />
+        <meta name="description" content="Building mbed projects" />
+
+        <meta property="og:site_name" content="The Grbd Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Using the Mbed CLI"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2016/11/06/using-the-mbed-cli/"/>
+        <meta property="og:description" content="Building mbed projects"/>
+        <meta property="article:published_time" content="2016-11-06" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
+            <meta property="article:tag" content="mbed" />
+            <meta property="article:tag" content="mbed-cli" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+The Grbd Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>The Grbd Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2016/11/06/using-the-mbed-cli/"
+                       rel="bookmark"
+                       title="Permalink to Using the Mbed CLI">
+                        Using the Mbed CLI
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-11-06T18:00:00+00:00"> Sun 06 November 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
+	<a href="http://grbd.github.io/tag/mbed.html">mbed</a>
+        /
+	<a href="http://grbd.github.io/tag/mbed-cli.html">mbed-cli</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>I've recently been looking into the use of mbed for building embedded related projects.
+It turns out they've made building code against they're library very easy with a small tool called the mbed-cli.
+Mbed-cli is a python script that can be used to handle compiling / library dependency resolution / settings etc. for building projects.</p>
+<p>I'm hoping that I might be able to get this working with Visual Micro at some stage so that I can single step / debug a board using GDB and a J-Link Segger or OpenOCD.
+For now, I've attempted to summarise most of the important bits when setting up and using the mbed-cli tool.</p>
+<h2>Installation</h2>
+<p>To get everything needed installed, we need to install the following.</p>
+<ul>
+<li>Install the latest python 2.x version and make sure python is in your path - <a href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></li>
+<li>Install the latest git and make sure git is in your path - <a href="https://git-scm.com/download/win">https://git-scm.com/download/win</a></li>
+<li>Install the latest mercurial and make sure the hg command is in your path - <a href="https://www.mercurial-scm.org/downloads">https://www.mercurial-scm.org/downloads</a> <br>
+    (some mbed libs use Mercurial)</li>
+<li>Install gcc for arm, towards the end of the install make sure to select to add the tools to the path via the tick box - <a href="https://launchpad.net/gcc-arm-embedded">https://launchpad.net/gcc-arm-embedded</a></li>
+<li>Finally install the python script mbed-cli via "pip install mbed-cli"</li>
+</ul>
+<p>They recommend using a gcc version of around 4.9 or so (although I've been trying stuff out with the latest one)</p>
+<p>These are some of the links that relate to the install</p>
+<ul>
+<li><a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/)">https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/)</a></li>
+<li><a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/">https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/</a></li>
+<li><a href="https://www.youtube.com/watch?v=cM0dFoTuU14">https://www.youtube.com/watch?v=cM0dFoTuU14</a></li>
+</ul>
+<h2>Project system</h2>
+<p>Mbed has a concept of it's own project system that it uses via the mbed-cli tool</p>
+<p>To create a new directory and set it up as an mbed project</p>
+<div class="highlight"><pre><span></span>mbed new mbed-os-program
+</pre></div>
+
+
+<p>To turn the existing current directory into an mbed project</p>
+<div class="highlight"><pre><span></span>mbed new .
+</pre></div>
+
+
+<p>Under the hood I think "mbed new" changes the directory into a git repository with "git init", then uses "mbed add" to add the mbed-os as the base library
+and I think a couple of other things.</p>
+<p>To download and setup the example project blinky</p>
+<div class="highlight"><pre><span></span><span class="n">mbed</span> <span class="kn">import</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ARMmbed</span><span class="o">/</span><span class="n">mbed</span><span class="o">-</span><span class="n">os</span><span class="o">-</span><span class="n">example</span><span class="o">-</span><span class="n">blinky</span>
+</pre></div>
+
+
+<p>This is the same as a "git clone", followed by a "mbed deploy", followed by a "mbed new ."</p>
+<h2>Libraries</h2>
+<p>When using libraries within mbed there's two parts</p>
+<ul>
+<li>A <strong>.lib</strong> file that registers that a library has been used within the project</li>
+<li>A <strong>directory</strong> that contains the library files / code etc.</li>
+</ul>
+<p>When checking code into git / source control the library directory is not checked in (just the .lib file).
+This way for a new user that downloads the source code they can run "mbed deploy" which is similar to Nuget restore.
+This reads in the .lib files downloads the library content and also resolves any dependencies for other libs that also have to be downloaded.
+This avoids having the actual library content sitting in your git repository, and allows you to use custom versions of the library</p>
+<ul>
+<li><strong>mbed add</strong> checks for library dependencies and downloads any other libs required.</li>
+<li><strong>mbed remove</strong> cleans up any .lib files left over when a library is removed</li>
+</ul>
+<p>Example</p>
+<div class="highlight"><pre><span></span>mbed add https://developer.mbed.org/users/wim/code/TextLCD/
+mbed remove TextLCD
+</pre></div>
+
+
+<p>Listing libraries installed</p>
+<div class="highlight"><pre><span></span>mbed ls -a
+</pre></div>
+
+
+<h2>Configuration</h2>
+<p>Mbed has several different ways of storing it's configuration which are just key value pairs</p>
+<ul>
+<li><strong>Global Settings</strong> (mbed config --global)</li>
+<li><strong>Local Settings</strong> (mbed config) - stored in the .lib files</li>
+<li><strong>mbed_settings.py</strong> file</li>
+<li>options passed to <strong>mbed compile</strong></li>
+</ul>
+<p>There's also a mbed_app.json application configuration file which gets expanded into a set of Macros for the compiled application</p>
+<p>The three important ones to be aware of are</p>
+<ul>
+<li><strong>Target</strong> - this defines a mbed board such as "LPC1768"</li>
+<li><strong>Toolchain</strong> - this can be GCC_ARM, ARM, IAR and is just which compiler to use (set to GCC_ARM typically)</li>
+<li><strong>Toolchain Path</strong> - this is just the path to the compiler tools</li>
+<li><a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/#mbed-cli-configuration">https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/#mbed-cli-configuration</a></li>
+</ul>
+<p>For example</p>
+<div class="highlight"><pre><span></span>mbed config target LPC1768
+mbed toolchain GCC_ARM
+mbed config GCC_ARM_PATH &quot;C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\bin&quot;
+</pre></div>
+
+
+<p>To list all settings</p>
+<div class="highlight"><pre><span></span>mbed config --list
+</pre></div>
+
+
+<p>To set a value</p>
+<div class="highlight"><pre><span></span>mbed config ARM_PATH &quot;C:\Program Files\ARM&quot;
+</pre></div>
+
+
+<p>To unset a value</p>
+<div class="highlight"><pre><span></span>mbed config --unset ARM_PATH
+</pre></div>
+
+
+<h2>Compiling</h2>
+<p>When compiling most of the options can be set via the configuration values above <br></p>
+<p>it's also possible to override some of those settings such as</p>
+<div class="highlight"><pre><span></span>mbed compile -t LPC1768 -t GCC_ARM
+</pre></div>
+
+
+<p>Which triggers the compile but also overrides the target and compiler to use</p>
+<ul>
+<li>Macros can be set with the -D option such as "-DUVISOR_PRESENT"</li>
+<li>A build profile can be set with the --profile option such as "--profile mbed-os/tools/profiles/debug.json"</li>
+</ul>
+<p>There are currently 3 build profiles Default, Debug and Small</p>
+<ul>
+<li><a href="https://github.com/ARMmbed/mbed-os/blob/master/docs/build_profiles.md">https://github.com/ARMmbed/mbed-os/blob/master/docs/build_profiles.md</a></li>
+<li><a href="https://github.com/ARMmbed/mbed-os/blob/master/docs/Toolchain_Profiles.md">https://github.com/ARMmbed/mbed-os/blob/master/docs/Toolchain_Profiles.md</a></li>
+</ul>
+<h3>Compile Options</h3>
+<ul>
+<li><strong>-m</strong>  Override the target board to use, such as LPC1768</li>
+<li><strong>-t</strong>  Override which toolchain target to use, this can be GCC_ARM, ARM, IAR</li>
+<li><strong>--source</strong>    Specify the source directory, the default is the current directory.</li>
+<li><strong>--build</strong>     Specify the build directory, the default is <strong>BUILD/</strong></li>
+<li><strong>--profile</strong>   This selects the build profile / options to use for the compiler.</li>
+<li><strong>--library</strong>   Compile as a static library, .a or .ar</li>
+<li><strong>-c</strong>      Do a clean build / rebuild to build from scratch</li>
+<li><strong>-j</strong>      Control the number of threads for compiling, default is 0 which uses the number of cores on the machine</li>
+<li><strong>--app-config</strong>    Override the path to the application configuration file</li>
+<li><strong>--config</strong>    Show the compile time configurations</li>
+<li><strong>--prefix</strong>    Filters the output from --config</li>
+<li><strong>--supported</strong> Show list of supported platforms, toolchains</li>
+<li><strong>-v -vv</strong>      Verbose Output</li>
+</ul>
+<h2>Example Build</h2>
+<div class="highlight"><pre><span></span><span class="n">mbed</span> <span class="kn">import</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ARMmbed</span><span class="o">/</span><span class="n">mbed</span><span class="o">-</span><span class="n">os</span><span class="o">-</span><span class="n">example</span><span class="o">-</span><span class="n">blinky</span>
+<span class="n">cd</span> <span class="n">mbed</span><span class="o">-</span><span class="n">os</span><span class="o">-</span><span class="n">example</span><span class="o">-</span><span class="n">blinky</span>
+
+<span class="n">mbed</span> <span class="n">config</span> <span class="n">target</span> <span class="n">LPC1768</span>
+<span class="n">mbed</span> <span class="n">toolchain</span> <span class="n">GCC_ARM</span>
+<span class="n">mbed</span> <span class="n">config</span> <span class="n">GCC_ARM_PATH</span> <span class="s2">&quot;C:\Program Files (x86)\GNU Tools ARM Embedded</span><span class="se">\5</span><span class="s2">.4 2016q3</span><span class="se">\b</span><span class="s2">in&quot;</span>
+
+<span class="c1"># Example of setting for debugging and overriding the target</span>
+<span class="n">mbed</span> <span class="nb">compile</span> <span class="o">-</span><span class="n">c</span> <span class="o">-</span><span class="n">m</span> <span class="n">LPC1768</span> <span class="o">--</span><span class="n">profile</span> <span class="n">mbed</span><span class="o">-</span><span class="n">os</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">profiles</span><span class="o">/</span><span class="n">debug</span><span class="o">.</span><span class="n">json</span>
+
+<span class="c1"># End result will be in .\BUILD\LPC1768\GCC_ARM\mbed-os-example-blinky.bin</span>
+</pre></div>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/projects.html"><i class="fa fa-projects-square fa-lg"></i> Projects</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2016 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>
