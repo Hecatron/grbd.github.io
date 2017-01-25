@@ -66,6 +66,9 @@ The Grbd Blog            </a>
                             <a href="http://grbd.github.io/category/code.html">Code</a>
                         </li>
                         <li >
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
                             <a href="http://grbd.github.io/category/personal.html">Personal</a>
                         </li>
             </ul>
@@ -132,16 +135,16 @@ For the below examples the code is downloadable via a GitHub link: <a href="http
 <h2>GtkSharp BasicForm1 Example</h2>
 <h3>Setting up the Project</h3>
 <p>First let's create a new C# Solution</p>
-<p><img alt="NewSolution1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewSolution1.png" /></p>
+<p><img alt="NewSolution1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewSolution1.png"></p>
 <p>Next let's create a new C# Windows Forms Project</p>
-<p><img alt="NewProject1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewProject1.png" /></p>
+<p><img alt="NewProject1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NewProject1.png"></p>
 <p>We don't need Form1.cs since we're repurposing this project for GtkSharp, so let's remove Form1.cs</p>
-<p><img alt="RemoveFrom1cs" src="http://grbd.github.io/static/code/gtksharp.3.example1/RemoveFrom1cs.png" /></p>
+<p><img alt="RemoveFrom1cs" src="http://grbd.github.io/static/code/gtksharp.3.example1/RemoveFrom1cs.png"></p>
 <p>Next right click on the project and select <em>Manage NuGet Packages</em></p>
 <p>Let's add the NuGet packages for GtkSharp and GtkSharp.Win32 (if using windows).
 Within NuGet the GtkSharp package uses the gtk3 version of gtk. The GtkSharp.Win32 represents the non .net windows binaries we also need.
 If your using Linux and already have gtk installed, then the additional binaries shouldn't be needed.</p>
-<p><img alt="NuGet1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NuGet1.png" /></p>
+<p><img alt="NuGet1" src="http://grbd.github.io/static/code/gtksharp.3.example1/NuGet1.png"></p>
 <p>Next we want to make sure the project is running as 32bit, the package GtkSharp.Win32 only contains 32bit binaries at the moment</p>
 <ul>
 <li>Right click on the project</li>
@@ -149,7 +152,7 @@ If your using Linux and already have gtk installed, then the additional binaries
 <li>Select the <strong>Build</strong> tab on the left hand side</li>
 <li>Make sure the <strong>Platform Target</strong> is set to <strong>X86</strong></li>
 </ul>
-<p><img alt="ProjectProperties1" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties1.png" /></p>
+<p><img alt="ProjectProperties1" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties1.png"></p>
 <p>The dotnet version will default to <strong>4.5.1</strong>, you can leave it at that or increase it to a higher version such as 4.5.2, 4.6 or 4.6.1</p>
 <h3>Setting up the Program Class</h3>
 <p>Next we need to alter the code that runs at start-up. <br></p>
@@ -159,7 +162,7 @@ With C# There should already be a Program.cs file we can use instead</p>
 <li>Within the project properties make sure that the Program class is selected</li>
 <li>If you are using Visual Basic, then you will need to untick the option for <strong>Enable Application Framework</strong></li>
 </ul>
-<p><img alt="ProjectProperties2" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties2.png" /></p>
+<p><img alt="ProjectProperties2" src="http://grbd.github.io/static/code/gtksharp.3.example1/ProjectProperties2.png"></p>
 <p>These are some examples of what the main Program class should look like</p>
 <p><strong>For C#</strong></p>
 <div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
@@ -210,7 +213,7 @@ This is one created from the glade application we've used before.</p>
 <li>Drag and drop the file saved from glade into the project</li>
 <li>Make sure to set the <strong>Build Action</strong> to <strong>Embedded Resource</strong> for the glade file</li>
 </ul>
-<p><img alt="GladeFile1" src="http://grbd.github.io/static/code/gtksharp.3.example1/GladeFile1.png" /></p>
+<p><img alt="GladeFile1" src="http://grbd.github.io/static/code/gtksharp.3.example1/GladeFile1.png"></p>
 <p>The next thing to be aware of is that the resource path changes somewhat based on if your using a C# or VB based project</p>
 <ul>
 <li>With VB The resource path is <em>&lt;AssemblyName&gt;.&lt;FileName&gt;</em></li>
@@ -419,7 +422,7 @@ Once the property is linked to the form we can then attach to its events or chan
 
 <h3>Running the Application</h3>
 <p>If we now build and run the project, this should result in a window like this.</p>
-<p><img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.3.example1/Example1.png" /></p>
+<p><img alt="Example1" src="http://grbd.github.io/static/code/gtksharp.3.example1/Example1.png"></p>
 <p>The button just puts <em>Hello World</em> into the text box</p>
 <p><br>
 <a href="http://grbd.github.io/posts/2016/01/29/gtksharp-part-2-setting-up-glade/">Part 2 - Setting up Glade</a><br>

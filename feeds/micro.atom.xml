@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - micro</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/micro.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-11-06T18:00:00+00:00</updated><entry><title>Using the Mbed CLI</title><link href="http://grbd.github.io/posts/2016/11/06/using-the-mbed-cli/" rel="alternate"></link><published>2016-11-06T18:00:00+00:00</published><updated>2016-11-06T18:00:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-11-06:/posts/2016/11/06/using-the-mbed-cli/</id><summary type="html">&lt;p&gt;Building mbed projects&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;I've recently been looking into the use of mbed for building embedded related projects.
+It turns out they've made building code against they're library very easy with a small tool called the mbed-cli.
+Mbed-cli is a python script that can be used to handle compiling / library dependency resolution / settings etc. for building projects.&lt;/p&gt;
+&lt;p&gt;I'm hoping that I might be able to get this working with Visual Micro at some stage so that I can single step / debug a board using GDB and a J-Link Segger or OpenOCD.
+For now, I've attempted to summarise most of the important bits when setting up and using the mbed-cli tool.&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;To get everything needed installed, we need to install the following.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Install the latest python 2.x version and make sure python is in your path - &lt;a href="https://www.python.org/downloads/"&gt;https://www.python.org/downloads/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Install the latest git and make sure git is in your path - &lt;a href="https://git-scm.com/download/win"&gt;https://git-scm.com/download/win&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Install the latest mercurial and make sure the hg command is in your path - &lt;a href="https://www.mercurial-scm.org/downloads"&gt;https://www.mercurial-scm.org/downloads&lt;/a&gt; &lt;br&gt;
+    (some mbed libs use Mercurial)&lt;/li&gt;
+&lt;li&gt;Install gcc for arm, towards the end of the install make sure to select to add the tools to the path via the tick box - &lt;a href="https://launchpad.net/gcc-arm-embedded"&gt;https://launchpad.net/gcc-arm-embedded&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Finally install the python script mbed-cli via "pip install mbed-cli"&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;They recommend using a gcc version of around 4.9 or so (although I've been trying stuff out with the latest one)&lt;/p&gt;
+&lt;p&gt;These are some of the links that relate to the install&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/)"&gt;https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/"&gt;https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.youtube.com/watch?v=cM0dFoTuU14"&gt;https://www.youtube.com/watch?v=cM0dFoTuU14&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Project system&lt;/h2&gt;
+&lt;p&gt;Mbed has a concept of it's own project system that it uses via the mbed-cli tool&lt;/p&gt;
+&lt;p&gt;To create a new directory and set it up as an mbed project&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed new mbed-os-program
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To turn the existing current directory into an mbed project&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed new .
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Under the hood I think "mbed new" changes the directory into a git repository with "git init", then uses "mbed add" to add the mbed-os as the base library
+and I think a couple of other things.&lt;/p&gt;
+&lt;p&gt;To download and setup the example project blinky&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;github&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ARMmbed&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;mbed&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;example&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;blinky&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is the same as a "git clone", followed by a "mbed deploy", followed by a "mbed new ."&lt;/p&gt;
+&lt;h2&gt;Libraries&lt;/h2&gt;
+&lt;p&gt;When using libraries within mbed there's two parts&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;.lib&lt;/strong&gt; file that registers that a library has been used within the project&lt;/li&gt;
+&lt;li&gt;A &lt;strong&gt;directory&lt;/strong&gt; that contains the library files / code etc.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When checking code into git / source control the library directory is not checked in (just the .lib file).
+This way for a new user that downloads the source code they can run "mbed deploy" which is similar to Nuget restore.
+This reads in the .lib files downloads the library content and also resolves any dependencies for other libs that also have to be downloaded.
+This avoids having the actual library content sitting in your git repository, and allows you to use custom versions of the library&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;mbed add&lt;/strong&gt; checks for library dependencies and downloads any other libs required.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mbed remove&lt;/strong&gt; cleans up any .lib files left over when a library is removed&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Example&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed add https://developer.mbed.org/users/wim/code/TextLCD/
+mbed remove TextLCD
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Listing libraries installed&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed ls -a
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Configuration&lt;/h2&gt;
+&lt;p&gt;Mbed has several different ways of storing it's configuration which are just key value pairs&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Global Settings&lt;/strong&gt; (mbed config --global)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Local Settings&lt;/strong&gt; (mbed config) - stored in the .lib files&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;mbed_settings.py&lt;/strong&gt; file&lt;/li&gt;
+&lt;li&gt;options passed to &lt;strong&gt;mbed compile&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There's also a mbed_app.json application configuration file which gets expanded into a set of Macros for the compiled application&lt;/p&gt;
+&lt;p&gt;The three important ones to be aware of are&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Target&lt;/strong&gt; - this defines a mbed board such as "LPC1768"&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Toolchain&lt;/strong&gt; - this can be GCC_ARM, ARM, IAR and is just which compiler to use (set to GCC_ARM typically)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Toolchain Path&lt;/strong&gt; - this is just the path to the compiler tools&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/#mbed-cli-configuration"&gt;https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/dev_tools/cli/#mbed-cli-configuration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For example&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed config target LPC1768
+mbed toolchain GCC_ARM
+mbed config GCC_ARM_PATH &amp;quot;C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\bin&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To list all settings&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed config --list
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To set a value&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed config ARM_PATH &amp;quot;C:\Program Files\ARM&amp;quot;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To unset a value&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed config --unset ARM_PATH
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Compiling&lt;/h2&gt;
+&lt;p&gt;When compiling most of the options can be set via the configuration values above &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;it's also possible to override some of those settings such as&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mbed compile -t LPC1768 -t GCC_ARM
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Which triggers the compile but also overrides the target and compiler to use&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Macros can be set with the -D option such as "-DUVISOR_PRESENT"&lt;/li&gt;
+&lt;li&gt;A build profile can be set with the --profile option such as "--profile mbed-os/tools/profiles/debug.json"&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There are currently 3 build profiles Default, Debug and Small&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/ARMmbed/mbed-os/blob/master/docs/build_profiles.md"&gt;https://github.com/ARMmbed/mbed-os/blob/master/docs/build_profiles.md&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/ARMmbed/mbed-os/blob/master/docs/Toolchain_Profiles.md"&gt;https://github.com/ARMmbed/mbed-os/blob/master/docs/Toolchain_Profiles.md&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Compile Options&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;-m&lt;/strong&gt;  Override the target board to use, such as LPC1768&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-t&lt;/strong&gt;  Override which toolchain target to use, this can be GCC_ARM, ARM, IAR&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--source&lt;/strong&gt;    Specify the source directory, the default is the current directory.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--build&lt;/strong&gt;     Specify the build directory, the default is &lt;strong&gt;BUILD/&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--profile&lt;/strong&gt;   This selects the build profile / options to use for the compiler.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--library&lt;/strong&gt;   Compile as a static library, .a or .ar&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-c&lt;/strong&gt;      Do a clean build / rebuild to build from scratch&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-j&lt;/strong&gt;      Control the number of threads for compiling, default is 0 which uses the number of cores on the machine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--app-config&lt;/strong&gt;    Override the path to the application configuration file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--config&lt;/strong&gt;    Show the compile time configurations&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--prefix&lt;/strong&gt;    Filters the output from --config&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;--supported&lt;/strong&gt; Show list of supported platforms, toolchains&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-v -vv&lt;/strong&gt;      Verbose Output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Example Build&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;github&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;ARMmbed&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;mbed&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;example&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;blinky&lt;/span&gt;
+&lt;span class="n"&gt;cd&lt;/span&gt; &lt;span class="n"&gt;mbed&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;example&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;blinky&lt;/span&gt;
+
+&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="n"&gt;target&lt;/span&gt; &lt;span class="n"&gt;LPC1768&lt;/span&gt;
+&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="n"&gt;toolchain&lt;/span&gt; &lt;span class="n"&gt;GCC_ARM&lt;/span&gt;
+&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="n"&gt;config&lt;/span&gt; &lt;span class="n"&gt;GCC_ARM_PATH&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;C:\Program Files (x86)\GNU Tools ARM Embedded&lt;/span&gt;&lt;span class="se"&gt;\5&lt;/span&gt;&lt;span class="s2"&gt;.4 2016q3&lt;/span&gt;&lt;span class="se"&gt;\b&lt;/span&gt;&lt;span class="s2"&gt;in&amp;quot;&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Example of setting for debugging and overriding the target&lt;/span&gt;
+&lt;span class="n"&gt;mbed&lt;/span&gt; &lt;span class="nb"&gt;compile&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;m&lt;/span&gt; &lt;span class="n"&gt;LPC1768&lt;/span&gt; &lt;span class="o"&gt;--&lt;/span&gt;&lt;span class="n"&gt;profile&lt;/span&gt; &lt;span class="n"&gt;mbed&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;os&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tools&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;profiles&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;
+
+&lt;span class="c1"&gt;# End result will be in .\BUILD\LPC1768\GCC_ARM\mbed-os-example-blinky.bin&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;</content><category term="micro"></category><category term="mbed"></category><category term="mbed-cli"></category></entry><entry><title>Setting up the IceStorm FPGA tools for Windows</title><link href="http://grbd.github.io/posts/2016/09/12/setting-up-the-icestorm-fpga-tools-for-windows/" rel="alternate"></link><published>2016-09-12T21:30:00+01:00</published><updated>2016-09-12T21:30:00+01:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-09-12:/posts/2016/09/12/setting-up-the-icestorm-fpga-tools-for-windows/</id><summary type="html">&lt;p&gt;Setting up the IceStorm FPGA tools for Windows&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;There was recently a presentation by the team running the icestorm project over at the Manchester Hackspace. &lt;br&gt;
+Icestorm is a project that provides a fpga board for under $30 (about 25 Pounds in British money) &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://hackaday.com/2016/08/03/the-perfect-storm-open-arm-fpga-board/"&gt;https://hackaday.com/2016/08/03/the-perfect-storm-open-arm-fpga-board/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/icestorm/"&gt;http://www.clifford.at/icestorm/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/yosys/"&gt;http://www.clifford.at/yosys/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Typically, the two largest vendors of fpga's tend to be Altera and Zynq.
+However, both of these vendors require closed source tools which tend to be very large to compile down from Verilog or VHDL
+into code that can be used on the FPGA.&lt;/p&gt;
+&lt;p&gt;With this board a &lt;strong&gt;&lt;a href="http://www.farnell.com/datasheets/1673535.pdf"&gt;iCE40HX4K&lt;/a&gt;&lt;/strong&gt; from Lattice Semiconductor is used instead. &lt;br&gt;
+The team behind this project have built up a full open source toolchain for it.&lt;/p&gt;
+&lt;p&gt;I don't have a board yet (I'm thinking of building a modified one)
+But I decided to see if I could build out the initial tools needed to compile Verilog.
+With the eventual plan to use &lt;a href="http://www.myhdl.org/"&gt;Myhdl&lt;/a&gt; which would compile down to ether Verilog / VHDL for use on the board&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;h3&gt;MSYS2&lt;/h3&gt;
+&lt;p&gt;First for windows you'll need a copy of MSYS2 installed if you haven't already got it&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://msys2.github.io/"&gt;https://msys2.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Once it's installed you can update the package database / packages via&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -Syuu
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are 3 shells available in total&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;MSYS2&lt;/li&gt;
+&lt;li&gt;MinGW 32Bit&lt;/li&gt;
+&lt;li&gt;MinGW 64bit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For building some of the below sources I use MSYS2 and for others I use MinGW.
+Strictly speaking the only real difference is the C library that they link against.
+Based on this Link &lt;a href="https://sourceforge.net/p/msys2/discussion/general/thread/dcf8f4d3/"&gt;https://sourceforge.net/p/msys2/discussion/general/thread/dcf8f4d3/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;MSYS2 Better understands POSIX conventions like paths, it does have a performance penalty compared to MinGW
+since it funnels everything via msys-2.0.dll. But it can work sometimes better than MinGW when trying to compile Linux apps under Windows.&lt;/p&gt;
+&lt;p&gt;MinGW does not depend on msys-2.0.dll and instead uses the MSVC runtime. &lt;br&gt;
+For the below I'm only really interested it getting things to work, so I've just used whichever one works best for each source package.&lt;/p&gt;
+&lt;h3&gt;MSYS2 - Depends&lt;/h3&gt;
+&lt;p&gt;Next we need to install some dependencies, open up a MSYS2 shell and install the following&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pacman -S mingw64/mingw-w64-x86_64-clang
+pacman -S msys/bison
+pacman -S msys/flex
+pacman -S msys/libreadline-devel
+pacman -S msys/gawk
+pacman -S msys/tcl
+pacman -S msys/libffi-devel
+pacman -S git
+pacman -S cmake
+pacman -S mercurial
+pacman -S msys/pkg-config
+pacman -S python
+pacman -S python3
+pacman -S mingw64/mingw-w64-x86_64-libftdi
+pacman -S mingw64/mingw-w64-x86_64-python3-pip
+pacman -S mingw64/mingw-w64-x86_64-python2-pip
+pacman -S mingw64/mingw-w64-x86_64-dlfcn
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Xdot - Python&lt;/h3&gt;
+&lt;p&gt;Let's install xdot next, there currently isn't a pacman package for it, so I've used python / pip since it's a python based library &lt;br&gt;
+Within a &lt;strong&gt;MinGW x64&lt;/strong&gt; window&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip2 install xdot
+pip3 install xdot
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Icestorm Tools&lt;/h3&gt;
+&lt;p&gt;Next let's build and install icestorm
+I've found this doesn't work under MSYS2, but does work under &lt;strong&gt;MinGW x64&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cliffordwolf/icestorm.git icestorm
+cd icestorm
+make PREFIX=/usr -j$(nproc)
+make PREFIX=/usr install
+cd ..
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should install the icebox tools to /usr/bin/&lt;/p&gt;
+&lt;h3&gt;Arachne-pnr (The place and route tool)&lt;/h3&gt;
+&lt;p&gt;Next let's build and install Arachne-pnr for the place and route tools &lt;br&gt;
+I'm running this build within a MinGW x64 window as above&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cseed/arachne-pnr.git arachne-pnr
+cd arachne-pnr
+make DESTDIR=/usr ICEBOX=/usr/share/icebox -j$(nproc)
+make DESTDIR=/usr ICEBOX=/usr/share/icebox install
+cd ..
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This should install arachne-pnr to /usr/bin/&lt;/p&gt;
+&lt;h3&gt;Yosys (Verilog synthesis)&lt;/h3&gt;
+&lt;p&gt;For Yosys there is the pre-compiled version 0.6 available here&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www.clifford.at/yosys/download.html"&gt;http://www.clifford.at/yosys/download.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Although I think ideally we need the latest version from git for the iCE FPGA's &lt;br&gt;
+From what I've discovered trying to build this under the MinGW console will not work. &lt;br&gt;
+However, building under the MSYS2 Console does work, with a little tweaking of the Makefile.&lt;/p&gt;
+&lt;p&gt;First let's download a copy of yosys&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;git clone https://github.com/cliffordwolf/yosys.git yosys
+&lt;span class="nb"&gt;cd&lt;/span&gt; yosys
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we're going to configure make for MSYS2&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make config-msys2
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we need to patch the Makefile&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;wget http://grbd.github.io/static/micro/fpga.icestorm.1/yosys-winpatch1.patch
+patch -p1 &amp;lt; yosys-winpatch1.patch
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next we can start the build&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make &lt;span class="nv"&gt;PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, we can install the files into /usr/&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;make &lt;span class="nv"&gt;PREFIX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr install
+&lt;/pre&gt;&lt;/div&gt;</content><category term="micro"></category><category term="fpga"></category><category term="icestorm"></category></entry></feed>

@@ -66,6 +66,9 @@ The Grbd Blog            </a>
                             <a href="http://grbd.github.io/category/code.html">Code</a>
                         </li>
                         <li >
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
                             <a href="http://grbd.github.io/category/personal.html">Personal</a>
                         </li>
             </ul>
@@ -255,7 +258,7 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 <li>Make sure to set the python interpreter to Python2, such as <strong>Python 64-bit 2.7</strong> <br>
     SCons does not yet support python3</li>
 </ul>
-<p><img alt="GeneralProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/GeneralProps1.png" /></p>
+<p><img alt="GeneralProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/GeneralProps1.png"></p>
 <h3>Debug Tab</h3>
 <p>Next looking at the <strong>Debug Tab</strong></p>
 <ul>
@@ -265,11 +268,11 @@ The SConstruct.py file is where all of our build logic is stored, this is the fi
 Also it needs to include the directory for the SCons installation, I found this is needed to get Intellisense working with the script.
 It looks as if SCons has deliberately put the library files within a SCons subdirectory in the site-packages install directory for python.
 I suspect this has been done to avoid users from calling the SCons library directly without first going via the main scons.py script.</p>
-<p><img alt="DebugProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/DebugProps1.png" /></p>
+<p><img alt="DebugProps1" src="http://grbd.github.io/static/code/scons.1.vsdebug/DebugProps1.png"></p>
 <h3>Build file link</h3>
 <p>Finally, we just need to add in the <strong>SConsBuild.py</strong> file as a Link to the project.
 By adding it as a link we avoid creating a 2nd copy under the VS Project directory, and when we edit the file we'll be editing the one in the original location.</p>
-<p><img alt="AddLink1" src="http://grbd.github.io/static/code/scons.1.vsdebug/AddLink1.png" /></p>
+<p><img alt="AddLink1" src="http://grbd.github.io/static/code/scons.1.vsdebug/AddLink1.png"></p>
 <h3>Note about Intellisense</h3>
 <p>Just a quick note, sometimes after creating a new project, you need to right click unload, then re-load the project within Visual Studio to get the Intellisense working correctly</p>
 <h2>Setting up the Visual Studio files for the hello code</h2>
@@ -277,7 +280,7 @@ By adding it as a link we avoid creating a 2nd copy under the VS Project directo
 This allowed me to edit the code from within Visual Studio and trigger the build process from there as well.</p>
 <p>In order to do this, you're going to want to use a <em>Makefile</em> style Visual Studio Project. These types of projects allow for custom build tools to be specified instead of using the inbuilt MS build tools. In this case we're going to set it to use the SCons tool to handle the building and cleaning of the project.</p>
 <p>After creating one of these types of Project, if you open up the project properties you'll notice the Configuration Type is listed as <em>Makefile</em></p>
-<p><img alt="Hello1_General" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_General.png" /></p>
+<p><img alt="Hello1_General" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_General.png"></p>
 <p>The import part that we need to alter is located under the NMake tab.
 The debug=1 is just an option we can pass to the SCons script to indicate if it's a Release or Debug Build</p>
 <ul>
@@ -286,7 +289,7 @@ The debug=1 is just an option we can pass to the SCons script to indicate if it'
 <li><strong>Clean: scons -C ..\.. -c</strong></li>
 <li><strong>Destination exe: ..\..\src\hello1.exe</strong></li>
 </ul>
-<p><img alt="Hello1_NMake" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_NMake.png" /></p>
+<p><img alt="Hello1_NMake" src="http://grbd.github.io/static/code/scons.1.vsdebug/Hello1_NMake.png"></p>
 <h2>Debugging the build script</h2>
 <p>I've not really covered any of the details on using the SCons API at this stage simply because I'm still learning it myself.
 But if everything has been setup correctly we should now be able to run / debug the SCons build script within Visual Studio.
