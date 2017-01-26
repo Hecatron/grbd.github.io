@@ -1,5 +1,287 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2017-01-25T23:00:00+00:00</updated><entry><title>Logging with LibLog and SeriLog</title><link href="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/" rel="alternate"></link><published>2017-01-25T23:00:00+00:00</published><updated>2017-01-25T23:00:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/logging-with-liblog-and-serilog/</id><summary type="html">&lt;p&gt;Logging with LibLog and SeriLog&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2017-01-25T23:30:00+00:00</updated><entry><title>XUnit Unit Tests and Logging - CSProj</title><link href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/" rel="alternate"></link><published>2017-01-25T23:30:00+00:00</published><updated>2017-01-25T23:30:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/</id><summary type="html">&lt;p&gt;XUnit Unit Tests and Logging - CSProj&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;Sometimes for libraries, it's important to be able to test the different parts to see if we get the output we expect. &lt;br&gt;
+This might involve running a select on a database via a database library, or just checking that the type of an object returned isn't null. &lt;br&gt;
+Unit tests can come in handy when a very important library has had changes made to it and you want to make sure the output is predictable.&lt;/p&gt;
+&lt;p&gt;The way this works&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;You create a class library to house the tests &lt;br&gt;
+    By convention, it's usually named the same as the library being tested but with the word .Tests added to the end of it&lt;/li&gt;
+&lt;li&gt;You add a reference to the library / thing you want to actually test&lt;/li&gt;
+&lt;li&gt;You add a reference to a test framework / such as XUnit to run the tests&lt;/li&gt;
+&lt;li&gt;Within the test library, you can create a bunch of functions grouped by class to do the tests you want to do&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;There's several different testing frameworks, Microsoft even has their own one built into the framework. &lt;br&gt;
+NUnit was a favourite of mine, but this seems to have been replaced by XUnit as one of the more popular ones&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://xunit.github.io/"&gt;http://xunit.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I've put some examples in the below link on github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit"&gt;https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;ITestOutputHelper&lt;/h2&gt;
+&lt;p&gt;One of the ways in which xunit can output logging information for a given test is the use of ITestOutputHelper. 
+Within the constructor of a class within the test library, we specify a parameter of ITestOutputHelper.&lt;/p&gt;
+&lt;p&gt;XUnit will notice this and use some magic called Dependency injection, this will automatically fill in the class needed for Logging output.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test1.Log&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TestLog1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;TestLog1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="na"&gt;        [Fact]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;SomeTest1&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WriteLine&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;ITestOutputHelper is the main pipeline for outputting text to the Visual Studio Test Explorer window (in the Output pane) for XUnit. 
+One problem I have spotted with .Net Core xproj libraries setup for testing is that this currently does not seem to work. This is actually a problem with the current Visual Studio tooling for .Net Core instead of XUnit&lt;/p&gt;
+&lt;h2&gt;Setup of Project&lt;/h2&gt;
+&lt;p&gt;With tests there is no actual single point of entry, this is because the XUnit runner actually handles the running of the tests.
+All we need to do is create a bunch of functions with the right attributes and the XUnit runner will auto run all of these functions in parallel in a multi-threaded way (for increased speed).&lt;/p&gt;
+&lt;p&gt;CSProj is the traditional style of projects normally used with Visual Studio for targeting the original .Net framework. &lt;br&gt;
+The first step, is to just create a new C# or VB.Net class library project within a solution&lt;/p&gt;
+&lt;h3&gt;Add References&lt;/h3&gt;
+&lt;p&gt;Next, we add some references to the project&lt;/p&gt;
+&lt;p&gt;For testing&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;xunit&lt;/strong&gt; - Testing framework&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;xunit.runner.visualstudio&lt;/strong&gt; - This allows the tests to be picked up by Visual Studio Test Explorer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For Logging&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;LibLog&lt;/strong&gt; - Logging abstraction&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog&lt;/strong&gt; - Logging Framework&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Observable&lt;/strong&gt; - Needed to wire Serilog into XUnit's output&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;System.Reactive&lt;/strong&gt; - Needed by the observable class's within Serilog&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Project Properties&lt;/h3&gt;
+&lt;p&gt;Next, we are going to make a slight change to the project properties&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Right Click on the Project and select &lt;strong&gt;Properties&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Select the &lt;strong&gt;Build&lt;/strong&gt; Tab on the left hand side&lt;/li&gt;
+&lt;li&gt;Under Conditional Compilation, symbols add &lt;strong&gt;LIBLOG_PUBLIC&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Logging Helper&lt;/h3&gt;
+&lt;p&gt;Now we are going to create a class to act as a bridge from Serilog to ITestOutputHelper.
+We could if we wanted to also output to other sinks / destinations such as a text file or database table.&lt;/p&gt;
+&lt;p&gt;Originally sourced from &lt;a href="https://github.com/damianh/CapturingLogOutputWithXunit2AndParallelTests"&gt;https://github.com/damianh/CapturingLogOutputWithXunit2AndParallelTests&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Base/LoggingHelper.cs&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System.IO&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System.Reactive.Linq&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System.Reactive.Subjects&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog.Context&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog.Events&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog.Formatting.Display&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test1.Base&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;internal&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LoggingHelper&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;Subject&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;LogEvent&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;s_logEventSubject&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Subject&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;LogEvent&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;();&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;const&lt;/span&gt; &lt;span class="kt"&gt;string&lt;/span&gt; &lt;span class="n"&gt;CaptureCorrelationIdKey&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;CaptureCorrelationId&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;MessageTemplateTextFormatter&lt;/span&gt; &lt;span class="n"&gt;s_formatter&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;MessageTemplateTextFormatter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+            &lt;span class="s"&gt;&amp;quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="k"&gt;null&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+        &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="nf"&gt;LoggingHelper&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;LoggerConfiguration&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WriteTo&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Observers&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;observable&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;observable&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Subscribe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logEvent&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;s_logEventSubject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;OnNext&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logEvent&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Enrich&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;FromLogContext&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CreateLogger&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="n"&gt;IDisposable&lt;/span&gt; &lt;span class="nf"&gt;Capture&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;testOutputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;captureId&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Guid&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;NewGuid&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+            &lt;span class="n"&gt;Func&lt;/span&gt;&lt;span class="p"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;LogEvent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;filter&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;logEvent&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt;
+                &lt;span class="n"&gt;logEvent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Properties&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ContainsKey&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CaptureCorrelationIdKey&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+                &lt;span class="n"&gt;logEvent&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Properties&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;CaptureCorrelationIdKey&lt;/span&gt;&lt;span class="p"&gt;].&lt;/span&gt;&lt;span class="n"&gt;ToString&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="n"&gt;captureId&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ToString&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+            &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;subscription&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;s_logEventSubject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Where&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="n"&gt;Subscribe&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logEvent&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;writer&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;StringWriter&lt;/span&gt;&lt;span class="p"&gt;())&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                    &lt;span class="n"&gt;s_formatter&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;logEvent&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;writer&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+                    &lt;span class="n"&gt;testOutputHelper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WriteLine&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;writer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ToString&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+                &lt;span class="p"&gt;}&lt;/span&gt;
+            &lt;span class="p"&gt;});&lt;/span&gt;
+            &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;pushProperty&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LogContext&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;PushProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;CaptureCorrelationIdKey&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;captureId&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nf"&gt;DisposableAction&lt;/span&gt;&lt;span class="p"&gt;(()&lt;/span&gt; &lt;span class="p"&gt;=&amp;gt;&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;subscription&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+                &lt;span class="n"&gt;pushProperty&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="p"&gt;});&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;DisposableAction&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;IDisposable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;Action&lt;/span&gt; &lt;span class="n"&gt;_action&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+            &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;DisposableAction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Action&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;_action&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+
+            &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="n"&gt;_action&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Test Base Class&lt;/h3&gt;
+&lt;p&gt;Next, let's create a base class for our tests&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Base/BaseTest.cs&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test1.Logging&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test1.Base&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Used as a Base class for testing. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BaseTest&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;IDisposable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ILog&lt;/span&gt; &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;IDisposable&lt;/span&gt; &lt;span class="n"&gt;_logCapture&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;outputHelper&amp;quot;&amp;gt; The output helper from XUnit. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;BaseTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// Get a hold of the XUnit output&lt;/span&gt;
+            &lt;span class="n"&gt;output&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="c1"&gt;// Connects Serilog to the XUnit Output&lt;/span&gt;
+            &lt;span class="n"&gt;_logCapture&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LoggingHelper&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Capture&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="c1"&gt;// Store a reference for LibLog&lt;/span&gt;
+            &lt;span class="c1"&gt;// Because this is a base class avoid GetCurrentClassLogger and use GetType().ToString()&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LogProvider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;GetType&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;ToString&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Cleanup the LoggingHelper. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;_logCapture&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Test Example&lt;/h3&gt;
+&lt;p&gt;Using the Base class, we can now create an example test&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;LibLog is first used to pass in what we want to log&lt;/li&gt;
+&lt;li&gt;This then gets piped to Serilog&lt;/li&gt;
+&lt;li&gt;Serilog then pipes this caross to the XUnit output ITestOutputHelper&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test1.Base&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test1.Logging&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test1.Tests&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Example of a test Class. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TestClass1&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;BaseTest&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;outputHelper&amp;quot;&amp;gt; The output helper used by XUnit. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;TestClass1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;base&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// We Capture the Output injected by XUnit for Outputting to Visual Studio&lt;/span&gt;
+            &lt;span class="c1"&gt;// and pass it to the Base Class to setup the Logger property for use with LibLog&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Example Test. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;        [Fact]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;TestLog1&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// Example of throwing out some log entries for Visual Studio to pick up on in the output&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// This uses LibLog which is independent of the Logging framework&lt;/span&gt;
+            &lt;span class="c1"&gt;// Typically this would be used in the library we&amp;#39;re testing but we can also use it here as well&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Warn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;LibLog Warning Test&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// Example of checking to see if something is true for a given test&lt;/span&gt;
+            &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;True&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This might come across as a bit convoluted but at the same time&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A library does not need to care about anything associated with different logging frameworks by using Liblog&lt;/li&gt;
+&lt;li&gt;Serilog can be used to pipe the results to multiple outputs&lt;/li&gt;
+&lt;li&gt;ITestOutputHelper is just used to pipe the result to the Visual Studio Test output result window.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Writing Tests&lt;/h2&gt;
+&lt;h3&gt;Fact Testing&lt;/h3&gt;
+&lt;p&gt;The first way of testing is to stick the &lt;strong&gt;Fact&lt;/strong&gt; attribute at the top of the test function. &lt;br&gt;
+This is used where we don't need to test against a range of parameters typically.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Assert&lt;/strong&gt; Functions are a way of checking and registering if a test should pass or fail based on if the result of something is False or True&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;MyFirstUnitTests&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Class1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+&lt;span class="na"&gt;        [Fact]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;PassingTest&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="na"&gt;        [Fact]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;FailingTest&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Equal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="nf"&gt;Add&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="p"&gt;+&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Theory Testing&lt;/h3&gt;
+&lt;p&gt;The second way of testing is the use of the &lt;strong&gt;Theory&lt;/strong&gt; attribute at the top of the test function. 
+This can be used with &lt;strong&gt;InlineData&lt;/strong&gt; to run the test function multiple times with different data inputted.&lt;/p&gt;
+&lt;p&gt;The &lt;strong&gt;Assert&lt;/strong&gt; Functions are a way of checking and registering if a test should pass or fail based on if the result of something is False or True&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;MyFirstUnitTests&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Class1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+&lt;span class="na"&gt;        [Theory]&lt;/span&gt;
+&lt;span class="na"&gt;        [InlineData(3)]&lt;/span&gt;
+&lt;span class="na"&gt;        [InlineData(5)]&lt;/span&gt;
+&lt;span class="na"&gt;        [InlineData(6)]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;MyFirstTheory&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="k"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;True&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;IsOdd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;value&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="kt"&gt;bool&lt;/span&gt; &lt;span class="nf"&gt;IsOdd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt; &lt;span class="k"&gt;value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="k"&gt;value&lt;/span&gt; &lt;span class="p"&gt;%&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Running Tests&lt;/h2&gt;
+&lt;p&gt;To run the tests, just run within Visual Studio&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Test -&amp;gt; Windows -&amp;gt; Test Explorer &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You'll probably need to build the test project at least once before the tests will show up.&lt;/p&gt;</content><category term="code"></category><category term="dotnet"></category><category term="liblog"></category><category term="xunit"></category><category term="serilog"></category></entry><entry><title>Logging with LibLog and SeriLog</title><link href="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/" rel="alternate"></link><published>2017-01-25T23:00:00+00:00</published><updated>2017-01-25T23:00:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/logging-with-liblog-and-serilog/</id><summary type="html">&lt;p&gt;Logging with LibLog and SeriLog&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;For a while now I have been looking into the best way to implement logging within C# Projects.
 A while back, I used to be a big fan of NLog, but more recently, I've moved to using LibLog and Serilog&lt;/p&gt;
 &lt;ul&gt;

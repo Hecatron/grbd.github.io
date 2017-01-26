@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>XUnit Unit Tests and Logging - CSProj - The Grbd Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="code,dotnet,liblog,xunit,serilog" />
+        <meta name="description" content="XUnit Unit Tests and Logging - CSProj" />
+
+        <meta property="og:site_name" content="The Grbd Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="XUnit Unit Tests and Logging - CSProj"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/"/>
+        <meta property="og:description" content="XUnit Unit Tests and Logging - CSProj"/>
+        <meta property="article:published_time" content="2017-01-25" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="liblog" />
+            <meta property="article:tag" content="xunit" />
+            <meta property="article:tag" content="serilog" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+The Grbd Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>The Grbd Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/"
+                       rel="bookmark"
+                       title="Permalink to XUnit Unit Tests and Logging - CSProj">
+                        XUnit Unit Tests and Logging - CSProj
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2017-01-25T23:30:00+00:00"> Wed 25 January 2017</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/liblog.html">liblog</a>
+        /
+	<a href="http://grbd.github.io/tag/xunit.html">xunit</a>
+        /
+	<a href="http://grbd.github.io/tag/serilog.html">serilog</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>Sometimes for libraries, it's important to be able to test the different parts to see if we get the output we expect. <br>
+This might involve running a select on a database via a database library, or just checking that the type of an object returned isn't null. <br>
+Unit tests can come in handy when a very important library has had changes made to it and you want to make sure the output is predictable.</p>
+<p>The way this works</p>
+<ul>
+<li>You create a class library to house the tests <br>
+    By convention, it's usually named the same as the library being tested but with the word .Tests added to the end of it</li>
+<li>You add a reference to the library / thing you want to actually test</li>
+<li>You add a reference to a test framework / such as XUnit to run the tests</li>
+<li>Within the test library, you can create a bunch of functions grouped by class to do the tests you want to do</li>
+</ul>
+<p>There's several different testing frameworks, Microsoft even has their own one built into the framework. <br>
+NUnit was a favourite of mine, but this seems to have been replaced by XUnit as one of the more popular ones</p>
+<ul>
+<li><a href="http://xunit.github.io/">http://xunit.github.io/</a></li>
+</ul>
+<p>I've put some examples in the below link on github</p>
+<ul>
+<li><a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit">https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit</a></li>
+</ul>
+<h2>ITestOutputHelper</h2>
+<p>One of the ways in which xunit can output logging information for a given test is the use of ITestOutputHelper. 
+Within the constructor of a class within the test library, we specify a parameter of ITestOutputHelper.</p>
+<p>XUnit will notice this and use some magic called Dependency injection, this will automatically fill in the class needed for Logging output.</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test1.Log</span> <span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">TestLog1</span> <span class="p">{</span>
+        <span class="k">private</span> <span class="k">readonly</span> <span class="n">ITestOutputHelper</span> <span class="n">output</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="nf">TestLog1</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">outputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">output</span> <span class="p">=</span> <span class="n">outputHelper</span><span class="p">;</span>
+        <span class="p">}</span>
+
+<span class="na">        [Fact]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">SomeTest1</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">output</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Hello World&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>ITestOutputHelper is the main pipeline for outputting text to the Visual Studio Test Explorer window (in the Output pane) for XUnit. 
+One problem I have spotted with .Net Core xproj libraries setup for testing is that this currently does not seem to work. This is actually a problem with the current Visual Studio tooling for .Net Core instead of XUnit</p>
+<h2>Setup of Project</h2>
+<p>With tests there is no actual single point of entry, this is because the XUnit runner actually handles the running of the tests.
+All we need to do is create a bunch of functions with the right attributes and the XUnit runner will auto run all of these functions in parallel in a multi-threaded way (for increased speed).</p>
+<p>CSProj is the traditional style of projects normally used with Visual Studio for targeting the original .Net framework. <br>
+The first step, is to just create a new C# or VB.Net class library project within a solution</p>
+<h3>Add References</h3>
+<p>Next, we add some references to the project</p>
+<p>For testing</p>
+<ul>
+<li><strong>xunit</strong> - Testing framework</li>
+<li><strong>xunit.runner.visualstudio</strong> - This allows the tests to be picked up by Visual Studio Test Explorer</li>
+</ul>
+<p>For Logging</p>
+<ul>
+<li><strong>LibLog</strong> - Logging abstraction</li>
+<li><strong>Serilog</strong> - Logging Framework</li>
+<li><strong>Serilog.Sinks.Observable</strong> - Needed to wire Serilog into XUnit's output</li>
+<li><strong>System.Reactive</strong> - Needed by the observable class's within Serilog</li>
+</ul>
+<h3>Project Properties</h3>
+<p>Next, we are going to make a slight change to the project properties</p>
+<ul>
+<li>Right Click on the Project and select <strong>Properties</strong></li>
+<li>Select the <strong>Build</strong> Tab on the left hand side</li>
+<li>Under Conditional Compilation, symbols add <strong>LIBLOG_PUBLIC</strong></li>
+</ul>
+<h3>Logging Helper</h3>
+<p>Now we are going to create a class to act as a bridge from Serilog to ITestOutputHelper.
+We could if we wanted to also output to other sinks / destinations such as a text file or database table.</p>
+<p>Originally sourced from <a href="https://github.com/damianh/CapturingLogOutputWithXunit2AndParallelTests">https://github.com/damianh/CapturingLogOutputWithXunit2AndParallelTests</a></p>
+<p><strong>Base/LoggingHelper.cs</strong></p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Reactive.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Reactive.Subjects</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog.Context</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog.Events</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog.Formatting.Display</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test1.Base</span> <span class="p">{</span>
+    <span class="k">internal</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">LoggingHelper</span> <span class="p">{</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">Subject</span><span class="p">&lt;</span><span class="n">LogEvent</span><span class="p">&gt;</span> <span class="n">s_logEventSubject</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Subject</span><span class="p">&lt;</span><span class="n">LogEvent</span><span class="p">&gt;();</span>
+        <span class="k">private</span> <span class="k">const</span> <span class="kt">string</span> <span class="n">CaptureCorrelationIdKey</span> <span class="p">=</span> <span class="s">&quot;CaptureCorrelationId&quot;</span><span class="p">;</span>
+
+        <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">MessageTemplateTextFormatter</span> <span class="n">s_formatter</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MessageTemplateTextFormatter</span><span class="p">(</span>
+            <span class="s">&quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}&quot;</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+
+        <span class="k">static</span> <span class="nf">LoggingHelper</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LoggerConfiguration</span><span class="p">()</span>
+                <span class="p">.</span><span class="n">WriteTo</span>
+                <span class="p">.</span><span class="n">Observers</span><span class="p">(</span><span class="n">observable</span> <span class="p">=&gt;</span> <span class="n">observable</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">logEvent</span> <span class="p">=&gt;</span> <span class="n">s_logEventSubject</span><span class="p">.</span><span class="n">OnNext</span><span class="p">(</span><span class="n">logEvent</span><span class="p">)))</span>
+                <span class="p">.</span><span class="n">Enrich</span><span class="p">.</span><span class="n">FromLogContext</span><span class="p">()</span>
+                <span class="p">.</span><span class="n">CreateLogger</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="n">IDisposable</span> <span class="nf">Capture</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">testOutputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">captureId</span> <span class="p">=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">();</span>
+
+            <span class="n">Func</span><span class="p">&lt;</span><span class="n">LogEvent</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">logEvent</span> <span class="p">=&gt;</span>
+                <span class="n">logEvent</span><span class="p">.</span><span class="n">Properties</span><span class="p">.</span><span class="n">ContainsKey</span><span class="p">(</span><span class="n">CaptureCorrelationIdKey</span><span class="p">)</span> <span class="p">&amp;&amp;</span>
+                <span class="n">logEvent</span><span class="p">.</span><span class="n">Properties</span><span class="p">[</span><span class="n">CaptureCorrelationIdKey</span><span class="p">].</span><span class="n">ToString</span><span class="p">()</span> <span class="p">==</span> <span class="n">captureId</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+
+            <span class="kt">var</span> <span class="n">subscription</span> <span class="p">=</span> <span class="n">s_logEventSubject</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">filter</span><span class="p">).</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">logEvent</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringWriter</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">s_formatter</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="n">logEvent</span><span class="p">,</span> <span class="n">writer</span><span class="p">);</span>
+                    <span class="n">testOutputHelper</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">writer</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+            <span class="kt">var</span> <span class="n">pushProperty</span> <span class="p">=</span> <span class="n">LogContext</span><span class="p">.</span><span class="n">PushProperty</span><span class="p">(</span><span class="n">CaptureCorrelationIdKey</span><span class="p">,</span> <span class="n">captureId</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">DisposableAction</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+                <span class="n">subscription</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+                <span class="n">pushProperty</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">class</span> <span class="nc">DisposableAction</span> <span class="p">:</span> <span class="n">IDisposable</span> <span class="p">{</span>
+            <span class="k">private</span> <span class="k">readonly</span> <span class="n">Action</span> <span class="n">_action</span><span class="p">;</span>
+
+            <span class="k">public</span> <span class="nf">DisposableAction</span><span class="p">(</span><span class="n">Action</span> <span class="n">action</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">_action</span> <span class="p">=</span> <span class="n">action</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span> <span class="p">{</span>
+                <span class="n">_action</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Test Base Class</h3>
+<p>Next, let's create a base class for our tests</p>
+<p><strong>Base/BaseTest.cs</strong></p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Test1.Logging</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test1.Base</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt; Used as a Base class for testing. &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">BaseTest</span> <span class="p">:</span> <span class="n">IDisposable</span> <span class="p">{</span>
+
+        <span class="k">protected</span> <span class="k">readonly</span> <span class="n">ILog</span> <span class="n">Logger</span><span class="p">;</span>
+        <span class="k">protected</span> <span class="k">readonly</span> <span class="n">ITestOutputHelper</span> <span class="n">output</span><span class="p">;</span>
+        <span class="k">protected</span> <span class="k">readonly</span> <span class="n">IDisposable</span> <span class="n">_logCapture</span><span class="p">;</span>
+
+        <span class="c1">/// &lt;summary&gt; Constructor. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;outputHelper&quot;&gt; The output helper from XUnit. &lt;/param&gt;</span>
+        <span class="k">public</span> <span class="nf">BaseTest</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">outputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Get a hold of the XUnit output</span>
+            <span class="n">output</span> <span class="p">=</span> <span class="n">outputHelper</span><span class="p">;</span>
+            <span class="c1">// Connects Serilog to the XUnit Output</span>
+            <span class="n">_logCapture</span> <span class="p">=</span> <span class="n">LoggingHelper</span><span class="p">.</span><span class="n">Capture</span><span class="p">(</span><span class="n">outputHelper</span><span class="p">);</span>
+            <span class="c1">// Store a reference for LibLog</span>
+            <span class="c1">// Because this is a base class avoid GetCurrentClassLogger and use GetType().ToString()</span>
+            <span class="n">Logger</span> <span class="p">=</span> <span class="n">LogProvider</span><span class="p">.</span><span class="n">GetLogger</span><span class="p">(</span><span class="n">GetType</span><span class="p">().</span><span class="n">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Cleanup the LoggingHelper. &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">_logCapture</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Test Example</h3>
+<p>Using the Base class, we can now create an example test</p>
+<ul>
+<li>LibLog is first used to pass in what we want to log</li>
+<li>This then gets piped to Serilog</li>
+<li>Serilog then pipes this caross to the XUnit output ITestOutputHelper</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Test1.Base</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Test1.Logging</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test1.Tests</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt; Example of a test Class. &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">TestClass1</span> <span class="p">:</span> <span class="n">BaseTest</span> <span class="p">{</span>
+
+        <span class="c1">/// &lt;summary&gt; Constructor. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;outputHelper&quot;&gt; The output helper used by XUnit. &lt;/param&gt;</span>
+        <span class="k">public</span> <span class="nf">TestClass1</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">outputHelper</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">outputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// We Capture the Output injected by XUnit for Outputting to Visual Studio</span>
+            <span class="c1">// and pass it to the Base Class to setup the Logger property for use with LibLog</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Example Test. &lt;/summary&gt;</span>
+<span class="na">        [Fact]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">TestLog1</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c1">// Example of throwing out some log entries for Visual Studio to pick up on in the output</span>
+
+            <span class="c1">// This uses LibLog which is independent of the Logging framework</span>
+            <span class="c1">// Typically this would be used in the library we&#39;re testing but we can also use it here as well</span>
+            <span class="n">Logger</span><span class="p">.</span><span class="n">Warn</span><span class="p">(</span><span class="s">&quot;LibLog Warning Test&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Example of checking to see if something is true for a given test</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="n">True</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>This might come across as a bit convoluted but at the same time</p>
+<ul>
+<li>A library does not need to care about anything associated with different logging frameworks by using Liblog</li>
+<li>Serilog can be used to pipe the results to multiple outputs</li>
+<li>ITestOutputHelper is just used to pipe the result to the Visual Studio Test output result window.</li>
+</ul>
+<h2>Writing Tests</h2>
+<h3>Fact Testing</h3>
+<p>The first way of testing is to stick the <strong>Fact</strong> attribute at the top of the test function. <br>
+This is used where we don't need to test against a range of parameters typically.</p>
+<p>The <strong>Assert</strong> Functions are a way of checking and registering if a test should pass or fail based on if the result of something is False or True</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">MyFirstUnitTests</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Class1</span> <span class="p">{</span>
+<span class="na">        [Fact]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">PassingTest</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="n">Equal</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="n">Add</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">));</span>
+        <span class="p">}</span>
+
+<span class="na">        [Fact]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">FailingTest</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="n">Equal</span><span class="p">(</span><span class="m">5</span><span class="p">,</span> <span class="n">Add</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="m">2</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="p">+</span> <span class="n">y</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Theory Testing</h3>
+<p>The second way of testing is the use of the <strong>Theory</strong> attribute at the top of the test function. 
+This can be used with <strong>InlineData</strong> to run the test function multiple times with different data inputted.</p>
+<p>The <strong>Assert</strong> Functions are a way of checking and registering if a test should pass or fail based on if the result of something is False or True</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">MyFirstUnitTests</span> <span class="p">{</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Class1</span> <span class="p">{</span>
+
+<span class="na">        [Theory]</span>
+<span class="na">        [InlineData(3)]</span>
+<span class="na">        [InlineData(5)]</span>
+<span class="na">        [InlineData(6)]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">MyFirstTheory</span><span class="p">(</span><span class="kt">int</span> <span class="k">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="n">True</span><span class="p">(</span><span class="n">IsOdd</span><span class="p">(</span><span class="k">value</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="kt">bool</span> <span class="nf">IsOdd</span><span class="p">(</span><span class="kt">int</span> <span class="k">value</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">value</span> <span class="p">%</span> <span class="m">2</span> <span class="p">==</span> <span class="m">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>Running Tests</h2>
+<p>To run the tests, just run within Visual Studio</p>
+<ul>
+<li>Test -&gt; Windows -&gt; Test Explorer </li>
+</ul>
+<p>You'll probably need to build the test project at least once before the tests will show up.</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/projects.html"><i class="fa fa-projects-square fa-lg"></i> Projects</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2017 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>
