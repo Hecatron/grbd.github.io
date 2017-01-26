@@ -1,7 +1,7 @@
 Title: Using the Mbed CLI
 Summary: Building mbed projects
 Date: 2016-11-06 18:00
-Tags: code, mbed, mbed-cli
+Tags: micro, mbed, mbed-cli
 
 ## Overview
 

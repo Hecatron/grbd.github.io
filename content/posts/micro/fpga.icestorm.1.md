@@ -1,7 +1,7 @@
 Title: Setting up the IceStorm FPGA tools for Windows
 Summary: Setting up the IceStorm FPGA tools for Windows
 Date: 2016-09-12 21:30
-Tags: code, fpga, icestorm
+Tags: micro, fpga, icestorm
 
 ## Overview
 
@@ -142,7 +142,7 @@ make config-msys2
 
 Next we need to patch the Makefile
 ```sh
-wget http://grbd.github.io/static/code/fpga.icestorm.1/yosys-winpatch1.patch
+wget http://grbd.github.io/static/micro/fpga.icestorm.1/yosys-winpatch1.patch
 patch -p1 < yosys-winpatch1.patch
 ```
 

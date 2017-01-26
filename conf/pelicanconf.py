@@ -46,7 +46,7 @@ BOOTSTRAP_THEME = "cyborg"
 GITHUB_URL = "https://github.com/grbd"
 GITHUB_URL2 = "https://github.com/ASoftTech"
 
-PATH = 'content'
+PATH = '../content'
 TIMEZONE = 'Europe/London'
 DEFAULT_LANG = u'en'
 

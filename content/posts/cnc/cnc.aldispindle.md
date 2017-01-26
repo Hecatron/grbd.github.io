@@ -64,3 +64,9 @@ but probably because of the colour of the object I didn't get very far with that
 So Instead I came up with a box shaped design.
 
 TODO
+
+
+## Runout
+
+Measured runout is around 0.1mm or 0.003 inches which is fairly terrible, but considering how cheap this is, is fairly acceptable
+TODO picture of dial test indicator
