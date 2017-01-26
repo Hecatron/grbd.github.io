@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>XUnit Unit Tests and Logging - XProj - The Grbd Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-xproj/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="code,dotnet,liblog,xunit,serilog" />
+        <meta name="description" content="XUnit Unit Tests and Logging - XProj" />
+
+        <meta property="og:site_name" content="The Grbd Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="XUnit Unit Tests and Logging - XProj"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-xproj/"/>
+        <meta property="og:description" content="XUnit Unit Tests and Logging - XProj"/>
+        <meta property="article:published_time" content="2017-01-25" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="liblog" />
+            <meta property="article:tag" content="xunit" />
+            <meta property="article:tag" content="serilog" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+The Grbd Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>The Grbd Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-xproj/"
+                       rel="bookmark"
+                       title="Permalink to XUnit Unit Tests and Logging - XProj">
+                        XUnit Unit Tests and Logging - XProj
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2017-01-25T23:40:00+00:00"> Wed 25 January 2017</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/liblog.html">liblog</a>
+        /
+	<a href="http://grbd.github.io/tag/xunit.html">xunit</a>
+        /
+	<a href="http://grbd.github.io/tag/serilog.html">serilog</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>Continuing from the last blog entry, I have put here some steps on getting XUnit / .Net Core xproj project and Liblog / Serilog working for a Unit test project.</p>
+<p>Typically, these are used with .Net Core, although the next release of Visual Studio 2017 / tooling for Studio 2015 may make some of this obsolete as there are plans to move .Net Core to .csproj based projects</p>
+<ul>
+<li><a href="http://xunit.github.io/">http://xunit.github.io/</a></li>
+</ul>
+<p>I've put some examples in the below link on github</p>
+<ul>
+<li><a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit">https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit</a></li>
+</ul>
+<h2>Setup of Project</h2>
+<p>Within Visual Studio, Create a new C# Class Library (.Net Core) Project within a Solution</p>
+<h3>project.json</h3>
+<p>We can make most of the changes we need by directly altering the project.json file</p>
+<ul>
+<li>The <em>testRunner</em> entry tells .net core that we're using XUnit to run the tests</li>
+<li>The define sections for liblog are required for .Net Core compatibility</li>
+<li>The framework section specifies that we want to use the .Net Core framework for testing (not the net461 framework)</li>
+</ul>
+<p>For the dependencies</p>
+<p>For Testing</p>
+<ul>
+<li><strong>NETStandard.Library</strong> - Standard Application Library for Core</li>
+<li><strong>xunit</strong> - Testing framework</li>
+<li><strong>dotnet-test-xunit</strong> - This is the .Net Core equivilent of a runner for the project to run the tests</li>
+</ul>
+<p>For Logging</p>
+<ul>
+<li><strong>Serilog</strong> - Logging Framework</li>
+<li><strong>Serilog.Sinks.Observable</strong> - Needed to wire Serilog into XUnit's output</li>
+<li><strong>Serilog.Sinks.Literate</strong> - Coloured Console Output</li>
+<li><strong>Serilog.Sinks.ColoredConsole</strong> - Coloured Console Output</li>
+<li><strong>System.Reactive</strong> - Needed by the observable class's within Serilog</li>
+</ul>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0-*&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;testRunner&quot;</span><span class="p">:</span> <span class="s2">&quot;xunit&quot;</span><span class="p">,</span>
+
+  <span class="nt">&quot;buildOptions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;define&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;LIBLOG_PORTABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;LIBLOG_PUBLIC&quot;</span> <span class="p">]</span>
+  <span class="p">},</span>
+
+  <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;NETStandard.Library&quot;</span><span class="p">:</span> <span class="s2">&quot;1.6.1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;dotnet-test-xunit&quot;</span><span class="p">:</span> <span class="s2">&quot;2.2.0-preview2-build1029&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;xunit&quot;</span><span class="p">:</span> <span class="s2">&quot;2.2.0-beta5-build3474&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;Serilog&quot;</span><span class="p">:</span> <span class="s2">&quot;2.3.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;Serilog.Sinks.Literate&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;Serilog.Sinks.Observable&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;Serilog.Sinks.ColoredConsole&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;System.Reactive&quot;</span><span class="p">:</span> <span class="s2">&quot;3.1.1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;System.Reflection.TypeExtensions&quot;</span><span class="p">:</span> <span class="s2">&quot;4.3.0&quot;</span>
+  <span class="p">},</span>
+
+  <span class="nt">&quot;frameworks&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;netcoreapp1.1&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;dependencies&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;Microsoft.NETCore.App&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;platform&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.1.0&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Liblog</h3>
+<p>There isn't much point in creating a LoggingHelper class with .Net core since the XUnit output to visual studio isn't currently working yet. But we do need to manually add in LibLog since the NuGet package won't do this for us with project.json based projects.</p>
+<ul>
+<li><a href="https://github.com/xunit/xunit/issues/608">https://github.com/xunit/xunit/issues/608</a></li>
+</ul>
+<p>The latest version of the liblog source can be located here</p>
+<ul>
+<li><a href="https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs">https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs</a></li>
+</ul>
+<p>Copy this file into a location within the project, typically Nuget installs it into</p>
+<ul>
+<li><strong>App_Packages/LibLog.4.2/LibLog.cs</strong></li>
+</ul>
+<h3>Test Base Class</h3>
+<p>Next, let's create a Base class for our tests to save having to write code when setting up logging. 
+Remember to change the namespace and using statements to match up with the name of the class library namespace.</p>
+<p>Note this is different from the csproj setup; this is due to a bug with Visual Studio tooling with respect to the Test Explorer. 
+To get around this the below just logs to the console instead, but to see the log text output you have to run "dotnet test" at the command line.</p>
+<p><strong>Base/BaseTest.cs</strong></p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Test2.Logging</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test2.Base</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt; Used as a Base class for testing. &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">BaseTest</span> <span class="p">:</span> <span class="n">IDisposable</span> <span class="p">{</span>
+
+        <span class="k">protected</span> <span class="k">readonly</span> <span class="n">ILog</span> <span class="n">Logger</span><span class="p">;</span>
+        <span class="c1">//protected readonly ITestOutputHelper output;</span>
+        <span class="c1">//protected readonly IDisposable _logCapture;</span>
+        <span class="k">protected</span> <span class="kt">bool</span> <span class="n">SerilogSetup</span><span class="p">;</span>
+
+        <span class="c1">/// &lt;summary&gt; Constructor. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;outputHelper&quot;&gt; The output helper from XUnit. &lt;/param&gt;</span>
+        <span class="k">public</span> <span class="nf">BaseTest</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">outputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Get a hold of the XUnit output</span>
+            <span class="c1">//  output = outputHelper;</span>
+            <span class="c1">// Connects Serilog to the XUnit Output</span>
+            <span class="c1">//  _logCapture = LoggingHelper.Capture(outputHelper);</span>
+
+
+            <span class="c1">// Currently there&#39;s problem with preivew2 tooling for Visual Studio 2015 and .Net Core</span>
+            <span class="c1">// when it comes to capturing output for Tests in the Visual Studio Test Explorer</span>
+            <span class="c1">// The only way around this currently is to output text to the Console</span>
+            <span class="c1">// and see it via &quot;dotnet test&quot; at the command line</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">SerilogSetup</span> <span class="p">==</span> <span class="k">false</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// Add [{SourceContext}] to the output so we know which class it is</span>
+                <span class="kt">var</span> <span class="n">outtemplate</span> <span class="p">=</span>
+                <span class="s">&quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}&quot;</span><span class="p">;</span>
+                <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LoggerConfiguration</span><span class="p">()</span>
+                    <span class="p">.</span><span class="n">MinimumLevel</span><span class="p">.</span><span class="n">Verbose</span><span class="p">()</span>
+                    <span class="p">.</span><span class="n">WriteTo</span><span class="p">.</span><span class="n">LiterateConsole</span><span class="p">(</span><span class="n">outputTemplate</span><span class="p">:</span> <span class="n">outtemplate</span><span class="p">)</span>
+                    <span class="p">.</span><span class="n">CreateLogger</span><span class="p">();</span>
+                <span class="n">SerilogSetup</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Store a reference for LibLog</span>
+            <span class="c1">// Because this is a base class avoid GetCurrentClassLogger and use GetType().ToString()</span>
+            <span class="n">Logger</span> <span class="p">=</span> <span class="n">LogProvider</span><span class="p">.</span><span class="n">GetLogger</span><span class="p">(</span><span class="n">GetType</span><span class="p">().</span><span class="n">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Cleanup the LoggingHelper. &lt;/summary&gt;</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c1">//_logCapture.Dispose();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Test Example</h3>
+<p>Next lets create an example test to show off how to create a test and log some output</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">Test1.Base</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Test1.Logging</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Xunit.Abstractions</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">Test1.Tests</span> <span class="p">{</span>
+    <span class="c1">/// &lt;summary&gt; Example of a test Class. &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">TestClass1</span> <span class="p">:</span> <span class="n">BaseTest</span> <span class="p">{</span>
+
+        <span class="c1">/// &lt;summary&gt; Constructor. &lt;/summary&gt;</span>
+        <span class="c1">/// &lt;param name=&quot;outputHelper&quot;&gt; The output helper used by XUnit. &lt;/param&gt;</span>
+        <span class="k">public</span> <span class="nf">TestClass1</span><span class="p">(</span><span class="n">ITestOutputHelper</span> <span class="n">outputHelper</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">outputHelper</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// We Capture the Output injected by XUnit for Outputting to Visual Studio</span>
+            <span class="c1">// and pass it to the Base Class to setup the Logger property for use with LibLog</span>
+        <span class="p">}</span>
+
+        <span class="c1">/// &lt;summary&gt; Example Test. &lt;/summary&gt;</span>
+<span class="na">        [Fact]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">TestLog1</span><span class="p">()</span> <span class="p">{</span>
+            <span class="c1">// Example of throwing out some log entries for Visual Studio to pick up on in the output</span>
+
+            <span class="c1">// This uses LibLog which is independent of the Logging framework</span>
+            <span class="c1">// Typically this would be used in the library we&#39;re testing but we can also use it here as well</span>
+            <span class="n">Logger</span><span class="p">.</span><span class="n">Warn</span><span class="p">(</span><span class="s">&quot;LibLog Warning Test&quot;</span><span class="p">);</span>
+
+            <span class="c1">// Example of checking to see if something is true for a given test</span>
+            <span class="n">Assert</span><span class="p">.</span><span class="n">True</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>Running Tests</h2>
+<p>To run the tests, just run within Visual Studio</p>
+<ul>
+<li>Test -&gt; Windows -&gt; Test Explorer </li>
+</ul>
+<p>You'll probably need to build the test project at least once before the tests will show up.</p>
+<div class="highlight"><pre><span></span>Sometimes after adding all the code to the Visual Studio project, you need to close then re-open Visual Studio.
+This seems to be down to the fact that the tooling within Visual Studio for .Net Core projects isn&#39;t quite perfect yet
+</pre></div>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/projects.html"><i class="fa fa-projects-square fa-lg"></i> Projects</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2017 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

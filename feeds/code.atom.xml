@@ -1,5 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2017-01-25T23:30:00+00:00</updated><entry><title>XUnit Unit Tests and Logging - CSProj</title><link href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/" rel="alternate"></link><published>2017-01-25T23:30:00+00:00</published><updated>2017-01-25T23:30:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/</id><summary type="html">&lt;p&gt;XUnit Unit Tests and Logging - CSProj&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2017-01-25T23:40:00+00:00</updated><entry><title>XUnit Unit Tests and Logging - XProj</title><link href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-xproj/" rel="alternate"></link><published>2017-01-25T23:40:00+00:00</published><updated>2017-01-25T23:40:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/xunit-unit-tests-and-logging-xproj/</id><summary type="html">&lt;p&gt;XUnit Unit Tests and Logging - XProj&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;Continuing from the last blog entry, I have put here some steps on getting XUnit / .Net Core xproj project and Liblog / Serilog working for a Unit test project.&lt;/p&gt;
+&lt;p&gt;Typically, these are used with .Net Core, although the next release of Visual Studio 2017 / tooling for Studio 2015 may make some of this obsolete as there are plans to move .Net Core to .csproj based projects&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://xunit.github.io/"&gt;http://xunit.github.io/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I've put some examples in the below link on github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit"&gt;https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/XUnit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Setup of Project&lt;/h2&gt;
+&lt;p&gt;Within Visual Studio, Create a new C# Class Library (.Net Core) Project within a Solution&lt;/p&gt;
+&lt;h3&gt;project.json&lt;/h3&gt;
+&lt;p&gt;We can make most of the changes we need by directly altering the project.json file&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;em&gt;testRunner&lt;/em&gt; entry tells .net core that we're using XUnit to run the tests&lt;/li&gt;
+&lt;li&gt;The define sections for liblog are required for .Net Core compatibility&lt;/li&gt;
+&lt;li&gt;The framework section specifies that we want to use the .Net Core framework for testing (not the net461 framework)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For the dependencies&lt;/p&gt;
+&lt;p&gt;For Testing&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;NETStandard.Library&lt;/strong&gt; - Standard Application Library for Core&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;xunit&lt;/strong&gt; - Testing framework&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;dotnet-test-xunit&lt;/strong&gt; - This is the .Net Core equivilent of a runner for the project to run the tests&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For Logging&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Serilog&lt;/strong&gt; - Logging Framework&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Observable&lt;/strong&gt; - Needed to wire Serilog into XUnit's output&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Literate&lt;/strong&gt; - Coloured Console Output&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.ColoredConsole&lt;/strong&gt; - Coloured Console Output&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;System.Reactive&lt;/strong&gt; - Needed by the observable class's within Serilog&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.0.0-*&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+  &lt;span class="nt"&gt;&amp;quot;testRunner&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;xunit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+
+  &lt;span class="nt"&gt;&amp;quot;buildOptions&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;define&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;LIBLOG_PORTABLE&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;LIBLOG_PUBLIC&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+
+  &lt;span class="nt"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;NETStandard.Library&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.6.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;dotnet-test-xunit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.2.0-preview2-build1029&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;xunit&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.2.0-beta5-build3474&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Serilog&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.3.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Serilog.Sinks.Literate&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Serilog.Sinks.Observable&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.0.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Serilog.Sinks.ColoredConsole&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2.0.0&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;System.Reactive&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;3.1.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;System.Reflection.TypeExtensions&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;4.3.0&amp;quot;&lt;/span&gt;
+  &lt;span class="p"&gt;},&lt;/span&gt;
+
+  &lt;span class="nt"&gt;&amp;quot;frameworks&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;netcoreapp1.1&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+      &lt;span class="nt"&gt;&amp;quot;dependencies&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nt"&gt;&amp;quot;Microsoft.NETCore.App&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;quot;type&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;platform&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="nt"&gt;&amp;quot;version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;1.1.0&amp;quot;&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Liblog&lt;/h3&gt;
+&lt;p&gt;There isn't much point in creating a LoggingHelper class with .Net core since the XUnit output to visual studio isn't currently working yet. But we do need to manually add in LibLog since the NuGet package won't do this for us with project.json based projects.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/xunit/xunit/issues/608"&gt;https://github.com/xunit/xunit/issues/608&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The latest version of the liblog source can be located here&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs"&gt;https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Copy this file into a location within the project, typically Nuget installs it into&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;App_Packages/LibLog.4.2/LibLog.cs&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Test Base Class&lt;/h3&gt;
+&lt;p&gt;Next, let's create a Base class for our tests to save having to write code when setting up logging. 
+Remember to change the namespace and using statements to match up with the name of the class library namespace.&lt;/p&gt;
+&lt;p&gt;Note this is different from the csproj setup; this is due to a bug with Visual Studio tooling with respect to the Test Explorer. 
+To get around this the below just logs to the console instead, but to see the log text output you have to run "dotnet test" at the command line.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Base/BaseTest.cs&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test2.Logging&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test2.Base&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Used as a Base class for testing. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BaseTest&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;IDisposable&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ILog&lt;/span&gt; &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+        &lt;span class="c1"&gt;//protected readonly ITestOutputHelper output;&lt;/span&gt;
+        &lt;span class="c1"&gt;//protected readonly IDisposable _logCapture;&lt;/span&gt;
+        &lt;span class="k"&gt;protected&lt;/span&gt; &lt;span class="kt"&gt;bool&lt;/span&gt; &lt;span class="n"&gt;SerilogSetup&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;outputHelper&amp;quot;&amp;gt; The output helper from XUnit. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;BaseTest&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// Get a hold of the XUnit output&lt;/span&gt;
+            &lt;span class="c1"&gt;//  output = outputHelper;&lt;/span&gt;
+            &lt;span class="c1"&gt;// Connects Serilog to the XUnit Output&lt;/span&gt;
+            &lt;span class="c1"&gt;//  _logCapture = LoggingHelper.Capture(outputHelper);&lt;/span&gt;
+
+
+            &lt;span class="c1"&gt;// Currently there&amp;#39;s problem with preivew2 tooling for Visual Studio 2015 and .Net Core&lt;/span&gt;
+            &lt;span class="c1"&gt;// when it comes to capturing output for Tests in the Visual Studio Test Explorer&lt;/span&gt;
+            &lt;span class="c1"&gt;// The only way around this currently is to output text to the Console&lt;/span&gt;
+            &lt;span class="c1"&gt;// and see it via &amp;quot;dotnet test&amp;quot; at the command line&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SerilogSetup&lt;/span&gt; &lt;span class="p"&gt;==&lt;/span&gt; &lt;span class="k"&gt;false&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                &lt;span class="c1"&gt;// Add [{SourceContext}] to the output so we know which class it is&lt;/span&gt;
+                &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;outtemplate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt;
+                &lt;span class="s"&gt;&amp;quot;{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+                &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;LoggerConfiguration&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MinimumLevel&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Verbose&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WriteTo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LiterateConsole&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;outputTemplate&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;outtemplate&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                    &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CreateLogger&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+                &lt;span class="n"&gt;SerilogSetup&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="p"&gt;}&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// Store a reference for LibLog&lt;/span&gt;
+            &lt;span class="c1"&gt;// Because this is a base class avoid GetCurrentClassLogger and use GetType().ToString()&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LogProvider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetLogger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;GetType&lt;/span&gt;&lt;span class="p"&gt;().&lt;/span&gt;&lt;span class="n"&gt;ToString&lt;/span&gt;&lt;span class="p"&gt;());&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Cleanup the LoggingHelper. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;Dispose&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;//_logCapture.Dispose();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Test Example&lt;/h3&gt;
+&lt;p&gt;Next lets create an example test to show off how to create a test and log some output&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test1.Base&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Test1.Logging&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Xunit.Abstractions&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;Test1.Tests&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Example of a test Class. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;TestClass1&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;BaseTest&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Constructor. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+        &lt;span class="c1"&gt;/// &amp;lt;param name=&amp;quot;outputHelper&amp;quot;&amp;gt; The output helper used by XUnit. &amp;lt;/param&amp;gt;&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="nf"&gt;TestClass1&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ITestOutputHelper&lt;/span&gt; &lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;base&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;outputHelper&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// We Capture the Output injected by XUnit for Outputting to Visual Studio&lt;/span&gt;
+            &lt;span class="c1"&gt;// and pass it to the Base Class to setup the Logger property for use with LibLog&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="c1"&gt;/// &amp;lt;summary&amp;gt; Example Test. &amp;lt;/summary&amp;gt;&lt;/span&gt;
+&lt;span class="na"&gt;        [Fact]&lt;/span&gt;
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;TestLog1&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="c1"&gt;// Example of throwing out some log entries for Visual Studio to pick up on in the output&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// This uses LibLog which is independent of the Logging framework&lt;/span&gt;
+            &lt;span class="c1"&gt;// Typically this would be used in the library we&amp;#39;re testing but we can also use it here as well&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Warn&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;LibLog Warning Test&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// Example of checking to see if something is true for a given test&lt;/span&gt;
+            &lt;span class="n"&gt;Assert&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;True&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;true&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Running Tests&lt;/h2&gt;
+&lt;p&gt;To run the tests, just run within Visual Studio&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Test -&amp;gt; Windows -&amp;gt; Test Explorer &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;You'll probably need to build the test project at least once before the tests will show up.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;Sometimes after adding all the code to the Visual Studio project, you need to close then re-open Visual Studio.
+This seems to be down to the fact that the tooling within Visual Studio for .Net Core projects isn&amp;#39;t quite perfect yet
+&lt;/pre&gt;&lt;/div&gt;</content><category term="code"></category><category term="dotnet"></category><category term="liblog"></category><category term="xunit"></category><category term="serilog"></category></entry><entry><title>XUnit Unit Tests and Logging - CSProj</title><link href="http://grbd.github.io/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/" rel="alternate"></link><published>2017-01-25T23:30:00+00:00</published><updated>2017-01-25T23:30:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/xunit-unit-tests-and-logging-csproj/</id><summary type="html">&lt;p&gt;XUnit Unit Tests and Logging - CSProj&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;Sometimes for libraries, it's important to be able to test the different parts to see if we get the output we expect. &lt;br&gt;
 This might involve running a select on a database via a database library, or just checking that the type of an object returned isn't null. &lt;br&gt;
 Unit tests can come in handy when a very important library has had changes made to it and you want to make sure the output is predictable.&lt;/p&gt;
