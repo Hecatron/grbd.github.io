@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>Logging with LibLog and SeriLog - The Grbd Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="code,dotnet,liblog,serilog" />
+        <meta name="description" content="Logging with LibLog and SeriLog" />
+
+        <meta property="og:site_name" content="The Grbd Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="Logging with LibLog and SeriLog"/>
+        <meta property="og:url" content="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/"/>
+        <meta property="og:description" content="Logging with LibLog and SeriLog"/>
+        <meta property="article:published_time" content="2017-01-25" />
+            <meta property="article:section" content="code" />
+            <meta property="article:tag" content="code" />
+            <meta property="article:tag" content="dotnet" />
+            <meta property="article:tag" content="liblog" />
+            <meta property="article:tag" content="serilog" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/code.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog code ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+The Grbd Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>The Grbd Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/"
+                       rel="bookmark"
+                       title="Permalink to Logging with LibLog and SeriLog">
+                        Logging with LibLog and SeriLog
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2017-01-25T23:00:00+00:00"> Wed 25 January 2017</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/code.html">code</a>
+        /
+	<a href="http://grbd.github.io/tag/dotnet.html">dotnet</a>
+        /
+	<a href="http://grbd.github.io/tag/liblog.html">liblog</a>
+        /
+	<a href="http://grbd.github.io/tag/serilog.html">serilog</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>For a while now I have been looking into the best way to implement logging within C# Projects.
+A while back, I used to be a big fan of NLog, but more recently, I've moved to using LibLog and Serilog</p>
+<ul>
+<li><a href="https://serilog.net/">https://serilog.net/</a></li>
+<li><a href="https://github.com/damianh/LibLog/wiki">https://github.com/damianh/LibLog/wiki</a></li>
+</ul>
+<p>I've put some examples in the below link on github</p>
+<ul>
+<li><a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/LibLog">https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/LibLog</a></li>
+</ul>
+<h2>LibLog</h2>
+<p>When it comes to libraries, you do not always know who is going to be using the library, if it's part of a large team or open to the world.
+So ideally, you want to avoid a dependency on a specific Logging library in case someone wants to use a different Logging implementation
+Alternatively, if it needs to change later to a different logging framework.</p>
+<p>One of the first abstractions in use was Common.Logging, however it lacks support for outputting structured data such as Serilog.
+Next is liblog, with liblog you actually embed a blob of code into the library.
+This code then picks up which logging abstraction is in use by the application and writes to it via some clever reflection code.
+Below are some links that also explore using liblog with Serilog</p>
+<ul>
+<li><a href="https://tonytalks.technology/logging-with-serilog-liblog-and-seq-a68f9fca7301#.e40211sux">https://tonytalks.technology/logging-with-serilog-liblog-and-seq-a68f9fca7301#.e40211sux</a></li>
+<li><a href="http://lunarfrog.com/blog/net-open-source-netstandard-logging-using-liblog">http://lunarfrog.com/blog/net-open-source-netstandard-logging-using-liblog</a></li>
+</ul>
+<p>From what I can gather, the reason for including the liblog code directly into the library instead of as an external reference is to avoid dependencies on different versions of liblog between different libraries that might be part of a larger project.</p>
+<h3>Setup .Net</h3>
+<p>With traditional .csproj projects, we can use a NuGet package to incorporate the code into the project
+This uses a feature of NuGet called ContentFiles to copy the code.
+This method seems to be the simplest way to set things up, also it allows for the code to be auto namespaced and be upgradable via NuGet.</p>
+<ul>
+<li><a href="https://www.nuget.org/packages/LibLog/">https://www.nuget.org/packages/LibLog/</a></li>
+</ul>
+<h3>Setup .Net Core</h3>
+<p>For .xproj type projects, the setup is a little more involved.
+Currently there is no support for NuGet ContentFiles with .xproj / project.json based projects at the moment so we need to copy in the code manually.
+Once Visual Studio 2017 comes out and everything moves back to .csproj type projects this might change.</p>
+<ul>
+<li><a href="https://github.com/damianh/LibLog/issues/35">https://github.com/damianh/LibLog/issues/35</a></li>
+</ul>
+<p>First, we need to add a definition to out project.json file to allow LibLog to work with this type of framework</p>
+<div class="highlight"><pre><span></span>  <span class="s2">&quot;buildOptions&quot;</span><span class="err">:</span> <span class="p">{</span>
+    <span class="nt">&quot;define&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="s2">&quot;LIBLOG_PORTABLE&quot;</span> <span class="p">]</span>
+  <span class="p">}</span><span class="err">,</span>
+</pre></div>
+
+
+<p>Next, we need to copy in the liblog source code manually into the project. <br>
+The latest version of the liblog source can be located here</p>
+<ul>
+<li><a href="https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs">https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs</a></li>
+</ul>
+<p>Copy this file into a location within the project; typically, Nuget installs it into <br>
+<strong>App_Packages/LibLog.4.2/LibLog.cs</strong></p>
+<p>Next, we need to make some modifications to the namespace within the Liblog.cs file. <br>
+Replace <strong>YourRootNamespace</strong> with the namespace of the library / application.</p>
+<p>At the top of the file</p>
+<div class="highlight"><pre><span></span><span class="c1">// If you copied this file manually, you need to change all &quot;YourRootNameSpace&quot; so not to clash with other libraries</span>
+<span class="c1">// that use LibLog</span>
+<span class="cp">#if LIBLOG_PROVIDERS_ONLY</span>
+<span class="k">namespace</span> <span class="nn">YourRootNamespace.LibLog</span>
+<span class="cp">#else</span>
+<span class="k">namespace</span> <span class="nn">YourRootNamespace.Logging</span>
+<span class="cp">#endif</span>
+<span class="p">{</span>
+    <span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+    <span class="k">using</span> <span class="nn">System.Diagnostics.CodeAnalysis</span><span class="p">;</span>
+<span class="cp">#if LIBLOG_PROVIDERS_ONLY</span>
+    <span class="k">using</span> <span class="nn">YourRootNamespace.LibLog.LogProviders</span><span class="p">;</span>
+<span class="cp">#else</span>
+    <span class="k">using</span> <span class="nn">YourRootNamespace.Logging.LogProviders</span><span class="p">;</span>
+<span class="cp">#endif</span>
+</pre></div>
+
+
+<p>Mid way down the file as well</p>
+<div class="highlight"><pre><span></span><span class="cp">#if LIBLOG_PROVIDERS_ONLY</span>
+<span class="k">namespace</span> <span class="nn">YourRootNamespace.LibLog.LogProviders</span>
+<span class="cp">#else</span>
+<span class="k">namespace</span> <span class="nn">YourRootNamespace.Logging.LogProviders</span>
+<span class="cp">#endif</span>
+</pre></div>
+
+
+<h3>Example</h3>
+<p>For an example of how to call LibLog within code.</p>
+<div class="highlight"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">MyClass</span>
+    <span class="p">{</span>
+        <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">ILog</span> <span class="n">Logger</span> <span class="p">=</span> <span class="n">LogProvider</span><span class="p">.</span><span class="n">GetCurrentClassLogger</span><span class="p">();</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">DoSomething</span><span class="p">()</span>
+        <span class="p">{</span>
+        <span class="c1">// Basic Logging</span>
+            <span class="n">Logger</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">&quot;Method &#39;DoSomething&#39; in progress&quot;</span><span class="p">);</span>
+
+            <span class="c1">// To take advantage of Serilog&#39;s Structured data logging</span>
+            <span class="kt">var</span> <span class="n">position</span> <span class="p">=</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Latitude</span> <span class="p">=</span> <span class="m">25</span><span class="p">,</span> <span class="n">Longitude</span> <span class="p">=</span> <span class="m">134</span> <span class="p">};</span>
+            <span class="kt">var</span> <span class="n">elapsedMs</span> <span class="p">=</span> <span class="m">34</span><span class="p">;</span>
+            <span class="n">Logger</span><span class="p">.</span><span class="n">InfoFormat</span><span class="p">(</span><span class="s">&quot;Liblog {MethodName} Entry&quot;</span><span class="p">,</span> <span class="n">nameof</span><span class="p">(</span><span class="n">Program</span><span class="p">));</span>
+            <span class="n">Logger</span><span class="p">.</span><span class="n">InfoFormat</span><span class="p">(</span><span class="s">&quot;Liblog: {@Position} .. {Elapsed:000}&quot;</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">elapsedMs</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>One thing to be aware of when using LibLog is that when calling</p>
+<div class="highlight"><pre><span></span><span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> <span class="n">ILog</span> <span class="n">LibLogger</span> <span class="p">=</span> <span class="n">LogProvider</span><span class="p">.</span><span class="n">GetCurrentClassLogger</span><span class="p">();</span>
+</pre></div>
+
+
+<p>It is important that the Serilog Configuration is setup before this is called.
+Therefore, if the above property is located within the main Program class and Serilog has not yet been setup then no logging can be done via the LibLogger property.</p>
+<h2>Serilog</h2>
+<p>When it comes to outputting the logs to the outside world, we need some sort of logging framework to handle this.
+Liblog is setup in such a way that the library it is a part of does not need to care which logging system the end user is using.
+So the general gist of it is, is that you reference Serilog (or another logging framework) within the Application or website that is actually using the library.
+This way Serilog handles the actual output to the outside world.</p>
+<h3>Structured Data</h3>
+<p>There is a few different logging environments available.
+Serilog is a new contender in that it has the advantage of logging fields instead of just a string; they tend to refer to this as Structured Data.</p>
+<div class="highlight"><pre><span></span><span class="kt">var</span> <span class="n">position</span> <span class="p">=</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Latitude</span> <span class="p">=</span> <span class="m">25</span><span class="p">,</span> <span class="n">Longitude</span> <span class="p">=</span> <span class="m">134</span> <span class="p">};</span>
+<span class="kt">var</span> <span class="n">elapsedMs</span> <span class="p">=</span> <span class="m">34</span><span class="p">;</span>
+<span class="n">log</span><span class="p">.</span><span class="n">Information</span><span class="p">(</span><span class="s">&quot;Processed {@Position} in {Elapsed:000} ms.&quot;</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">elapsedMs</span><span class="p">);</span>
+</pre></div>
+
+
+<p>At a later stage, we can capture the fields such as Elapsed or Position and insert them into a database table as one example.
+This can come in handy as it avoids the need to manipulate strings when extracting information from a single log entry.</p>
+<h3>Sinks</h3>
+<p>Serilog has the concept of sinks; a Sink is a destination for the logged output. One example might be a coloured console output, another a database table or a syslog server.</p>
+<p>For console output the two main ones are</p>
+<ul>
+<li><strong>Serilog.Sinks.Literate</strong></li>
+<li><strong>Serilog.Sinks.ColoredConsole</strong></li>
+</ul>
+<p>(My preference tends to be the literate one)</p>
+<h3>Example</h3>
+<p>This is an example of logging directly via Serilog, although any log entries generated by liblog should also pick up on the Serilog logger that's been setup.</p>
+<div class="highlight"><pre><span></span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Serilog</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">TestApp1</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Program</span> <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span> <span class="p">=</span> <span class="k">new</span> <span class="n">LoggerConfiguration</span><span class="p">()</span>
+                <span class="p">.</span><span class="n">MinimumLevel</span><span class="p">.</span><span class="n">Verbose</span><span class="p">()</span>
+                <span class="p">.</span><span class="n">WriteTo</span><span class="p">.</span><span class="n">LiterateConsole</span><span class="p">()</span>
+                <span class="p">.</span><span class="n">CreateLogger</span><span class="p">();</span>
+
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Verbose</span><span class="p">(</span><span class="s">&quot;Test Verbose Message...&quot;</span><span class="p">);</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Information</span><span class="p">(</span><span class="s">&quot;Test Info Message...&quot;</span><span class="p">);</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&quot;Test Debug Message...&quot;</span><span class="p">);</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Warning</span><span class="p">(</span><span class="s">&quot;Test Warning Message...&quot;</span><span class="p">);</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="s">&quot;Test Error Message...&quot;</span><span class="p">);</span>
+            <span class="n">Log</span><span class="p">.</span><span class="n">Logger</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">&quot;Test Fatal Message...&quot;</span><span class="p">);</span>
+
+            <span class="n">Console</span><span class="p">.</span><span class="n">ReadKey</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>Capturing Logs</h2>
+<p>I haven't really explored this one yet but one way to capture log entries in a nice GUI is the use of GetSeq</p>
+<ul>
+<li><a href="https://getseq.net/">https://getseq.net/</a></li>
+</ul>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/projects.html"><i class="fa fa-projects-square fa-lg"></i> Projects</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2017 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

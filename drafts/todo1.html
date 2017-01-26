@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns# fb: https://www.facebook.com/2008/fbml">
+<head>
+    <title>todo1 - The Grbd Blog</title>
+    <!-- Using the latest rendering mode for IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<link rel="canonical" href="http://grbd.github.io/drafts/todo1.html">
+
+        <meta name="author" content="Grbd" />
+        <meta name="keywords" content="micro,mbed,mbed-cli" />
+        <meta name="description" content="Uploading firmware with Openocd and a JLink or CMSIS-DAP Interface" />
+
+        <meta property="og:site_name" content="The Grbd Blog" />
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="todo1"/>
+        <meta property="og:url" content="http://grbd.github.io/drafts/todo1.html"/>
+        <meta property="og:description" content="Uploading firmware with Openocd and a JLink or CMSIS-DAP Interface"/>
+        <meta property="article:published_time" content="2016-11-23" />
+            <meta property="article:section" content="micro" />
+            <meta property="article:tag" content="micro" />
+            <meta property="article:tag" content="mbed" />
+            <meta property="article:tag" content="mbed-cli" />
+            <meta property="article:author" content="Grbd" />
+
+
+    <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://grbd.github.io/theme/css/bootstrap.cyborg.min.css" type="text/css"/>
+    <link href="http://grbd.github.io/theme/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="http://grbd.github.io/theme/css/pygments/native.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://grbd.github.io/theme/css/style.css" type="text/css"/>
+
+        <link href="http://grbd.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog ATOM Feed"/>
+
+
+
+        <link href="http://grbd.github.io/feeds/micro.atom.xml" type="application/atom+xml" rel="alternate"
+              title="The Grbd Blog micro ATOM Feed"/>
+
+    <link href="http://grbd.github.io/theme/css/bootstrap-custom.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="http://grbd.github.io/" class="navbar-brand">
+The Grbd Blog            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                        <li >
+                            <a href="http://grbd.github.io/category/code.html">Code</a>
+                        </li>
+                        <li class="active">
+                            <a href="http://grbd.github.io/category/micro.html">Micro</a>
+                        </li>
+                        <li >
+                            <a href="http://grbd.github.io/category/personal.html">Personal</a>
+                        </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+</div> <!-- /.navbar -->
+<!-- Banner -->
+<style>
+	#banner{
+	    background-image:url("http://grbd.github.io/images/backdrops/backdrop1.jpg");
+	}
+</style>
+
+<div id="banner">
+	<div class="container">
+		<div class="copy">
+			<h1>The Grbd Blog</h1>
+		</div>
+	</div>
+</div><!-- End Banner -->
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9">
+    <section id="content">
+        <article>
+            <header class="page-header">
+                <h1>
+                    <a href="http://grbd.github.io/drafts/todo1.html"
+                       rel="bookmark"
+                       title="Permalink to todo1">
+                        todo1
+                    </a>
+                </h1>
+            </header>
+            <div class="entry-content">
+                <div class="panel">
+                    <div class="panel-body">
+<footer class="post-info">
+    <span class="label label-default">Date</span>
+    <span class="published">
+        <i class="fa fa-calendar"></i><time datetime="2016-11-23T18:00:00+00:00"> Wed 23 November 2016</time>
+    </span>
+
+
+
+
+
+<span class="label label-default">Tags</span>
+	<a href="http://grbd.github.io/tag/micro.html">micro</a>
+        /
+	<a href="http://grbd.github.io/tag/mbed.html">mbed</a>
+        /
+	<a href="http://grbd.github.io/tag/mbed-cli.html">mbed-cli</a>
+    
+</footer><!-- /.post-info -->                    </div>
+                </div>
+                <h2>Overview</h2>
+<p>I've recently been looking into programming ARM based boards using Jtag / SWD and Openocd</p>
+<p>TODO add image</p>
+<ul>
+<li>https://www.embeddedartists.com/products/lpcxpresso/lpc1769_cmsis_xpr.php</li>
+</ul>
+<p>The above board is a LPC1769 xpresso, this appears to be a new version of the board with a CMSIS-DAP USB to SWD Adapter instead of the original LPC-Link.
+One of the problems with LPC-Link is that its not supported by the open source openocd app for programming.
+CMSIS-DAP is a new cross platform standard for connecting a USB cable to a SWD port for programming.
+it makes the device appear as a HID Input device which means it doesn't need special hardware or drivers to program or debug any ARM based IC.</p>
+<p>I'm going to go through the process of programming this board 3 different ways</p>
+<ul>
+<li>Using openocd and the USB / CMSIS-DAP connection</li>
+<li>Using openocd and a JLink Segger</li>
+<li>Using the JLink Segger JFlash Lite software and a JLink Segger</li>
+</ul>
+<p>A couple of reasons as to why I'm interested in using the JLink adapter instead of the inbuilt CMSIS-DAP adapter includes</p>
+<ul>
+<li>JLink software has the ability to use unlimited breakpoints using GDB via some fancy messing with break instructions and logging instructions in flash.
+    https://www.segger.com/jlink-unlimited-flash-breakpoints.html</li>
+<li>You can get the educational version of the JLink (the white one) reasonably cheap at around 60 Pounds plus delivery
+    http://uk.farnell.com/segger/8-08-90-j-link-edu/jtag-emulator-j-link-edu-usb/dp/2098545</li>
+<li>The number of supported ARM chips is likley to be much greater than openocd (the drivers and firmware are constantly being updated)</li>
+</ul>
+<p>From a speed point of view I managed to get around 2.3 seconds with the frequency set to 500Khz in the config for both the Segger and the CMSIS-DAP Inteface</p>
+<p>One word of warning with this board, there's a small jumper to disable the CMSIS-DAP Programmer.
+This jumper is not soldered via a thru-hole, instead it's just surface mounted soldered to the board (strange considering all the other jumpers have through hole pads).
+This makes it very easy to break off the jumper pins from the top of the board (which is what happened to mine).
+Fortunatley I've found that I don't need to disable the CMSIS-DAP adapter in order to use the JLink on the SWD Pins, both seem to co-exist quite happily</p>
+<h2>CMSIS-DAP Interface / Openocd Software</h2>
+<p>First I'm going to cover the simplest option which is just a USB cable between the board and the PC</p>
+<p>TODO add image</p>
+<p>First we need to download a copy of openocd, the latest version (which is quite old but working) is 0.9.0 <br>
+In my case I just downloaded the zip file and extracted it to <strong>C:\Apps\OpenOCD-20160901</strong></p>
+<ul>
+<li>https://sourceforge.net/projects/openocd/files/openocd/0.9.0/</li>
+</ul>
+<p>Usualy openocd reads in ether one or multiple config files, each config file is just a list of commands run in the software.
+The default is to read in openocd.cfg although you can specify which config files to load in with the -f option</p>
+<h3>Main.cpp</h3>
+<p>First I've included a very simple block of code compiled in mbed via the LPC1768 target to flash the led different colours</p>
+<p><strong>main.cpp</strong></p>
+<div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&quot;mbed.h&quot;</span><span class="cp"></span>
+
+<span class="n">DigitalOut</span> <span class="nf">led1</span><span class="p">(</span><span class="n">P0_22</span><span class="p">);</span>
+<span class="n">DigitalOut</span> <span class="nf">led2</span><span class="p">(</span><span class="n">P3_26</span><span class="p">);</span>
+<span class="n">DigitalOut</span> <span class="nf">led3</span><span class="p">(</span><span class="n">P3_25</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">blink</span><span class="p">(</span><span class="n">DigitalOut</span> <span class="n">ledval</span><span class="p">);</span>
+
+<span class="c1">// main() runs in its own thread in the OS</span>
+<span class="c1">// (note the calls to Thread::wait below for delays)</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">led1</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+  <span class="n">led2</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+  <span class="n">led3</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">blink</span><span class="p">(</span><span class="n">led1</span><span class="p">);</span>
+    <span class="n">blink</span><span class="p">(</span><span class="n">led2</span><span class="p">);</span>
+    <span class="n">blink</span><span class="p">(</span><span class="n">led3</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">blink</span><span class="p">(</span><span class="n">DigitalOut</span> <span class="n">ledval</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ledval</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">Thread</span><span class="o">::</span><span class="n">wait</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="n">ledval</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">Thread</span><span class="o">::</span><span class="n">wait</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>Adapter / CPU Config file</h3>
+<p>First lets create a config file to specify the interface, the cpu and the speed / options we want to use for connecting to the board</p>
+<p><strong>boardconf.cfg</strong></p>
+<div class="highlight"><pre><span></span># Note reference one of the configuration files for the physical interface to connect to the board
+# https://github.com/ntfreak/openocd/tree/master/tcl/interface
+
+# ARM CMSIS-DAP compliant adapter
+# http://www.keil.com/support/man/docs/dapdebug/
+source [find interface/cmsis-dap.cfg]
+
+# Add the cpu
+source [find target/lpc17xx.cfg]
+
+# Set the Speed
+adapter_khz 500
+</pre></div>
+
+
+<p>I've found it's best to set the interface first, then the cpu type then the speed.</p>
+<ul>
+<li>Sometimes the cpu configuration (lpc17xx.cfg) will override the speed setting so it's best to set the speed after this option</li>
+<li>Sometimes before sourcing the cpu configuration file you need to set the CPU with <strong>set chipname</strong>. in this case the lpc17xx.cfg already does this for us.</li>
+<li>see https://github.com/ntfreak/openocd/tree/master/tcl/interface for interfaces</li>
+<li>see https://github.com/ntfreak/openocd/tree/master/tcl/target for target devices</li>
+</ul>
+<p>The speed defaults to around 10Khz unless specified, this can take anywhere 1 - 2 minuites depending on the interfaces used to upload the firmware.
+With a higher setting that can be reduced to around 2 seconds.
+Also unless you have the speed set to something higher this can cause timeouts with the JLink with the SWD interface.</p>
+<h3>Firmware Program Config file</h3>
+<p>This configuration file is just a series of commands to send to openocd to flash a binary firmware file to the device</p>
+<p><strong>progconf.cfg</strong></p>
+<div class="highlight"><pre><span></span># Make the initial connection and halt the board, Test with this first
+init
+targets
+reset halt
+
+# Upload the firmware
+program BlinkyTest1.bin verify
+
+# Reset the Board
+reset
+# Exit OpenOCD
+shutdown
+</pre></div>
+
+
+<h3>Connecting with Putty</h3>
+<p>First lets try connecting to the board using a terminal such as putty</p>
+<div class="highlight"><pre><span></span>openocd --search C:\Apps\OpenOCD-20160901\share\openocd\scripts -f boardconf.cfg
+</pre></div>
+
+
+<p>This should launch openocd, specify the interface, board and speed. <br>
+Since there's no shutdown command in this configuration file openocd will continue to run unless you hit Ctrl-C or issue a shutdown from the terminal. <br>
+If we now run putty and select localhost / port 4444 we can now connect to openocd's terminal and issue other commands.</p>
+<p>TODO add image</p>
+<p>It's also possible to use GDB (the exe included with the GCC toolchain you used to compile the code) to connect to openocd on localhost / port 3333</p>
+<p>TODO commands for gdb</p>
+<ul>
+<li>http://openocd.org/doc/html/GDB-and-OpenOCD.html</li>
+</ul>
+<h3>Flashing the Binary File</h3>
+<p>If we add the progconf.cfg file in to the end of the command line.
+we can trigger openocd to upload a binary blob to the device.
+since the last command in progconf.cfg is <strong>shutdown</strong> openocd will quit once the upload is complete</p>
+<p>This assumes BlinkyTest1.bin is in your current directory.</p>
+<div class="highlight"><pre><span></span>openocd --search C:\Apps\OpenOCD-20160901\share\openocd\scripts -f boardconf.cfg -f progconf.cfg
+</pre></div>
+
+
+<h2>JLink Interface / Openocd Software</h2>
+<p>Next I'm going to do the same as before using the JLink and openocd</p>
+<h3>Setting up JLink for Openocd</h3>
+<p>In order to use the JLink Segger interface with openocd we first need to switch it's driver with a WinUSB one so that openocd can access the device. <br></p>
+<p>First run C:\Apps\OpenOCD-20160901\drivers\UsbDriverTool.exe <br>
+and select the JLink device in the list</p>
+<p>TODO image</p>
+<p>Select <strong>Change driver type</strong> and change it to <strong>WinUSB</strong></p>
+<p>TODO image</p>
+<p>At this point I find it's best to unplug / replug the segger / board into the PC. <br>
+If you need to switch the device back to use the JLink software instead of openocd, just do the same as before but select the JLink driver instead in the list.</p>
+<h3>Connecting to the board</h3>
+<p>Next we need to connect the JLink to the board.
+the red wire should match up with the small arrow on the board.
+If in doubt one side of the 10 pin header is mostly ground pins which you can test with a multimeter</p>
+<p>TODO image connected board</p>
+<p>TODO image 10 pin header</p>
+<h3>SWD Connector</h3>
+<p>Typically SWD only uses about 2 data pins for connecting to the ARM chip (SWDIO and SWDCLK).</p>
+<ul>
+<li>SWDIO - Input / Output Data</li>
+<li>SWCLK - Data clock</li>
+<li>nRST - Reset device pin</li>
+<li>GND - device ground pin</li>
+<li>SWIO - Optional debug output pin (similar to a printf output)</li>
+<li>VDD - Optional power from the programmer to the device</li>
+</ul>
+<p>In this example the JLink defaults to Jtag mode, although it also works in SWD mode as long as the speed is high enough.
+Jtag mode seems to need more reset pins typically, although it seems to work with the 10 pin connector without problems.</p>
+<p>ST based arm devices have something called STLink which is basically the same thing but with a different pin arrangement.</p>
+<p>The closest I've found to a socket for the 10 pin header connection is</p>
+<ul>
+<li>https://makersify.com/products/dfrobot-gadgeteer-socket-smt-10pcs (pins flat against the board)</li>
+<li>http://www.digikey.com/product-search/en?x=-1289&amp;y=-73&amp;lang=en&amp;site=us&amp;KeyWords=3220-10-0100-00 (thru hole)</li>
+</ul>
+<p>For the JTAG adapter to connect the Segger, I've found the best source is adafuit</p>
+<ul>
+<li>https://www.adafruit.com/product/1675</li>
+<li>https://www.adafruit.com/products/2094</li>
+<li>https://www.adafruit.com/products/2743</li>
+</ul>
+<p>I've found with this board that disabling the CMSIS-DAP adapter with a jumper doesn't need to be done for this to work.</p>
+<h3>Changing the config</h3>
+<p>To tell openocd to use a JLink instead of CMSIS-DAP adapter just replace this line in boardconf.cfg</p>
+<div class="highlight"><pre><span></span>source [find interface/cmsis-dap.cfg]
+</pre></div>
+
+
+<p>With</p>
+<div class="highlight"><pre><span></span>source [find interface/jlink.cfg]
+transport select swd
+</pre></div>
+
+
+<h3>Flashing the firmware</h3>
+<p>At this point it should be possible to flash the firmware via the JLink exactly the same way as before</p>
+<div class="highlight"><pre><span></span>openocd --search C:\Apps\OpenOCD-20160901\share\openocd\scripts -f boardconf.cfg -f progconf.cfg
+</pre></div>
+
+
+<h2>JLink Interface / JLink Software</h2>
+<p>Next I'm going to try using the native JLink software to upload the firmware. <br>
+First make sure the driver for the JLink adapter is set back to it's original driver if it's been changed for openocd.</p>
+<h3>JFlash Lite</h3>
+<p>TODO</p>
+<h3>JLink Commander</h3>
+<p>TODO</p>
+            </div>
+            <!-- /.entry-content -->
+        </article>
+    </section>
+
+        </div>
+        <div class="col-sm-3" id="sidebar">
+            <aside>
+
+<section class="well well-sm">
+    <ul class="list-group list-group-flush">
+            <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
+              <ul class="list-group" id="social">
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/aboutme.html"><i class="fa fa-about-me-square fa-lg"></i> About Me</a></li>
+                <li class="list-group-item"><a href="https://github.com/grbd"><i class="fa fa-github-personal-square fa-lg"></i> Github Personal</a></li>
+                <li class="list-group-item"><a href="https://github.com/ASoftTech"><i class="fa fa-github-company-square fa-lg"></i> Github Company</a></li>
+                <li class="list-group-item"><a href="http://grbd.github.io/pages/profile/projects.html"><i class="fa fa-projects-square fa-lg"></i> Projects</a></li>
+              </ul>
+            </li>
+
+
+
+
+
+    <li class="list-group-item"><h4><i class="fa fa-external-link-square fa-lg"></i><span class="icon-label">Links</span></h4>
+      <ul class="list-group" id="links">
+        <li class="list-group-item">
+            <a href="https://hacman.org.uk/" target="_blank">
+                Manchester Hacspace
+            </a>
+        </li>
+      </ul>
+    </li>
+    </ul>
+</section>
+            </aside>
+        </div>
+    </div>
+</div>
+<footer>
+   <div class="container">
+      <hr>
+      <div class="row">
+         <div class="col-xs-10">&copy; 2017 Grbd
+            &middot; Powered by <a href="https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
+            <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
+            <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>         </div>
+         <div class="col-xs-2"><p class="pull-right"><i class="fa fa-arrow-up"></i> <a href="#">Back to top</a></p></div>
+      </div>
+   </div>
+</footer>
+<script src="http://grbd.github.io/theme/js/jquery.min.js"></script>
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://grbd.github.io/theme/js/bootstrap.min.js"></script>
+
+<!-- Enable responsive features in IE8 with Respond.js (https://github.com/scottjehl/Respond) -->
+<script src="http://grbd.github.io/theme/js/respond.min.js"></script>
+
+    <script src="http://grbd.github.io/theme/js/bodypadding.js"></script>
+
+</body>
+</html>

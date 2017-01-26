@@ -1,5 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2016-07-27T18:53:00+01:00</updated><entry><title>SCons builds with Visual Studio</title><link href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><updated>2016-07-27T18:53:00+01:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-07-27:/posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;p&gt;SCons builds with Visual Studio&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>The Grbd Blog - code</title><link href="http://grbd.github.io/" rel="alternate"></link><link href="http://grbd.github.io/feeds/code.atom.xml" rel="self"></link><id>http://grbd.github.io/</id><updated>2017-01-25T23:00:00+00:00</updated><entry><title>Logging with LibLog and SeriLog</title><link href="http://grbd.github.io/posts/2017/01/25/logging-with-liblog-and-serilog/" rel="alternate"></link><published>2017-01-25T23:00:00+00:00</published><updated>2017-01-25T23:00:00+00:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2017-01-25:/posts/2017/01/25/logging-with-liblog-and-serilog/</id><summary type="html">&lt;p&gt;Logging with LibLog and SeriLog&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;For a while now I have been looking into the best way to implement logging within C# Projects.
+A while back, I used to be a big fan of NLog, but more recently, I've moved to using LibLog and Serilog&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://serilog.net/"&gt;https://serilog.net/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/damianh/LibLog/wiki"&gt;https://github.com/damianh/LibLog/wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I've put some examples in the below link on github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/LibLog"&gt;https://github.com/grbd/GBD.Blog.Examples/tree/master/Source/LibLog&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;LibLog&lt;/h2&gt;
+&lt;p&gt;When it comes to libraries, you do not always know who is going to be using the library, if it's part of a large team or open to the world.
+So ideally, you want to avoid a dependency on a specific Logging library in case someone wants to use a different Logging implementation
+Alternatively, if it needs to change later to a different logging framework.&lt;/p&gt;
+&lt;p&gt;One of the first abstractions in use was Common.Logging, however it lacks support for outputting structured data such as Serilog.
+Next is liblog, with liblog you actually embed a blob of code into the library.
+This code then picks up which logging abstraction is in use by the application and writes to it via some clever reflection code.
+Below are some links that also explore using liblog with Serilog&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://tonytalks.technology/logging-with-serilog-liblog-and-seq-a68f9fca7301#.e40211sux"&gt;https://tonytalks.technology/logging-with-serilog-liblog-and-seq-a68f9fca7301#.e40211sux&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://lunarfrog.com/blog/net-open-source-netstandard-logging-using-liblog"&gt;http://lunarfrog.com/blog/net-open-source-netstandard-logging-using-liblog&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;From what I can gather, the reason for including the liblog code directly into the library instead of as an external reference is to avoid dependencies on different versions of liblog between different libraries that might be part of a larger project.&lt;/p&gt;
+&lt;h3&gt;Setup .Net&lt;/h3&gt;
+&lt;p&gt;With traditional .csproj projects, we can use a NuGet package to incorporate the code into the project
+This uses a feature of NuGet called ContentFiles to copy the code.
+This method seems to be the simplest way to set things up, also it allows for the code to be auto namespaced and be upgradable via NuGet.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.nuget.org/packages/LibLog/"&gt;https://www.nuget.org/packages/LibLog/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Setup .Net Core&lt;/h3&gt;
+&lt;p&gt;For .xproj type projects, the setup is a little more involved.
+Currently there is no support for NuGet ContentFiles with .xproj / project.json based projects at the moment so we need to copy in the code manually.
+Once Visual Studio 2017 comes out and everything moves back to .csproj type projects this might change.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/damianh/LibLog/issues/35"&gt;https://github.com/damianh/LibLog/issues/35&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;First, we need to add a definition to out project.json file to allow LibLog to work with this type of framework&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;  &lt;span class="s2"&gt;&amp;quot;buildOptions&amp;quot;&lt;/span&gt;&lt;span class="err"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;define&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;LIBLOG_PORTABLE&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;]&lt;/span&gt;
+  &lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="err"&gt;,&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Next, we need to copy in the liblog source code manually into the project. &lt;br&gt;
+The latest version of the liblog source can be located here&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs"&gt;https://github.com/damianh/LibLog/blob/v4.2.6/src/LibLog/LibLog.cs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Copy this file into a location within the project; typically, Nuget installs it into &lt;br&gt;
+&lt;strong&gt;App_Packages/LibLog.4.2/LibLog.cs&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Next, we need to make some modifications to the namespace within the Liblog.cs file. &lt;br&gt;
+Replace &lt;strong&gt;YourRootNamespace&lt;/strong&gt; with the namespace of the library / application.&lt;/p&gt;
+&lt;p&gt;At the top of the file&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="c1"&gt;// If you copied this file manually, you need to change all &amp;quot;YourRootNameSpace&amp;quot; so not to clash with other libraries&lt;/span&gt;
+&lt;span class="c1"&gt;// that use LibLog&lt;/span&gt;
+&lt;span class="cp"&gt;#if LIBLOG_PROVIDERS_ONLY&lt;/span&gt;
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.LibLog&lt;/span&gt;
+&lt;span class="cp"&gt;#else&lt;/span&gt;
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.Logging&lt;/span&gt;
+&lt;span class="cp"&gt;#endif&lt;/span&gt;
+&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System.Collections.Generic&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+    &lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System.Diagnostics.CodeAnalysis&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="cp"&gt;#if LIBLOG_PROVIDERS_ONLY&lt;/span&gt;
+    &lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.LibLog.LogProviders&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="cp"&gt;#else&lt;/span&gt;
+    &lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.Logging.LogProviders&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="cp"&gt;#endif&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Mid way down the file as well&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;#if LIBLOG_PROVIDERS_ONLY&lt;/span&gt;
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.LibLog.LogProviders&lt;/span&gt;
+&lt;span class="cp"&gt;#else&lt;/span&gt;
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;YourRootNamespace.Logging.LogProviders&lt;/span&gt;
+&lt;span class="cp"&gt;#endif&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3&gt;Example&lt;/h3&gt;
+&lt;p&gt;For an example of how to call LibLog within code.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MyClass&lt;/span&gt;
+    &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ILog&lt;/span&gt; &lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LogProvider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetCurrentClassLogger&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+        &lt;span class="k"&gt;public&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;DoSomething&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// Basic Logging&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Info&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Method &amp;#39;DoSomething&amp;#39; in progress&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+            &lt;span class="c1"&gt;// To take advantage of Serilog&amp;#39;s Structured data logging&lt;/span&gt;
+            &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;position&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;Latitude&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;25&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Longitude&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;134&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+            &lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;elapsedMs&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;34&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;InfoFormat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Liblog {MethodName} Entry&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nameof&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Program&lt;/span&gt;&lt;span class="p"&gt;));&lt;/span&gt;
+            &lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;InfoFormat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Liblog: {@Position} .. {Elapsed:000}&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;position&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;elapsedMs&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;One thing to be aware of when using LibLog is that when calling&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;private&lt;/span&gt; &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;readonly&lt;/span&gt; &lt;span class="n"&gt;ILog&lt;/span&gt; &lt;span class="n"&gt;LibLogger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LogProvider&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;GetCurrentClassLogger&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It is important that the Serilog Configuration is setup before this is called.
+Therefore, if the above property is located within the main Program class and Serilog has not yet been setup then no logging can be done via the LibLogger property.&lt;/p&gt;
+&lt;h2&gt;Serilog&lt;/h2&gt;
+&lt;p&gt;When it comes to outputting the logs to the outside world, we need some sort of logging framework to handle this.
+Liblog is setup in such a way that the library it is a part of does not need to care which logging system the end user is using.
+So the general gist of it is, is that you reference Serilog (or another logging framework) within the Application or website that is actually using the library.
+This way Serilog handles the actual output to the outside world.&lt;/p&gt;
+&lt;h3&gt;Structured Data&lt;/h3&gt;
+&lt;p&gt;There is a few different logging environments available.
+Serilog is a new contender in that it has the advantage of logging fields instead of just a string; they tend to refer to this as Structured Data.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;position&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;Latitude&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;25&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Longitude&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;134&lt;/span&gt; &lt;span class="p"&gt;};&lt;/span&gt;
+&lt;span class="kt"&gt;var&lt;/span&gt; &lt;span class="n"&gt;elapsedMs&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="m"&gt;34&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Information&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Processed {@Position} in {Elapsed:000} ms.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;position&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;elapsedMs&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;At a later stage, we can capture the fields such as Elapsed or Position and insert them into a database table as one example.
+This can come in handy as it avoids the need to manipulate strings when extracting information from a single log entry.&lt;/p&gt;
+&lt;h3&gt;Sinks&lt;/h3&gt;
+&lt;p&gt;Serilog has the concept of sinks; a Sink is a destination for the logged output. One example might be a coloured console output, another a database table or a syslog server.&lt;/p&gt;
+&lt;p&gt;For console output the two main ones are&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.Literate&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Serilog.Sinks.ColoredConsole&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;(My preference tends to be the literate one)&lt;/p&gt;
+&lt;h3&gt;Example&lt;/h3&gt;
+&lt;p&gt;This is an example of logging directly via Serilog, although any log entries generated by liblog should also pick up on the Serilog logger that's been setup.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;System&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="k"&gt;using&lt;/span&gt; &lt;span class="nn"&gt;Serilog&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;namespace&lt;/span&gt; &lt;span class="nn"&gt;TestApp1&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Program&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="k"&gt;static&lt;/span&gt; &lt;span class="k"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;Main&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;string&lt;/span&gt;&lt;span class="p"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;LoggerConfiguration&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;MinimumLevel&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Verbose&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WriteTo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;LiterateConsole&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CreateLogger&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Verbose&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Verbose Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Information&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Info Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Debug&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Debug Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Warning&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Warning Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Error&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Error Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+            &lt;span class="n"&gt;Log&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Logger&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Fatal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Test Fatal Message...&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+
+            &lt;span class="n"&gt;Console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ReadKey&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Capturing Logs&lt;/h2&gt;
+&lt;p&gt;I haven't really explored this one yet but one way to capture log entries in a nice GUI is the use of GetSeq&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://getseq.net/"&gt;https://getseq.net/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="code"></category><category term="dotnet"></category><category term="liblog"></category><category term="serilog"></category></entry><entry><title>SCons builds with Visual Studio</title><link href="http://grbd.github.io/posts/2016/07/27/scons-builds-with-visual-studio/" rel="alternate"></link><published>2016-07-27T18:53:00+01:00</published><updated>2016-07-27T18:53:00+01:00</updated><author><name>Grbd</name></author><id>tag:grbd.github.io,2016-07-27:/posts/2016/07/27/scons-builds-with-visual-studio/</id><summary type="html">&lt;p&gt;SCons builds with Visual Studio&lt;/p&gt;</summary><content type="html">&lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;For a while now I've been looking for a decent build system with a language I can easily write and debug.&lt;/p&gt;
 &lt;p&gt;During the very old days of Linux the main go to for a build system typically was &lt;em&gt;make&lt;/em&gt; and &lt;em&gt;configure&lt;/em&gt;.
 Configure would check the system to see if a library was present and its location,
